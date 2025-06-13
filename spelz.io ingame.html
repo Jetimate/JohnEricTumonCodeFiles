@@ -114,17 +114,18 @@
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-			/*
+			
             addSpellBook(spikeBook, 1);
             addSpellBook(smashBook, 2);
             addSpellBook(luminousEnergyBook, 3);
-			addSpellBook(glowShardBook, 4);
-			*/
-
+            addSpellBook(specterHandBook, 4);
+			
+			/*
 			addSpellBook(lightningBoltBook, 1);
 			addSpellBook(lightningBoltBook, 2);
             addSpellBook(lightningBoltBook, 3);
             addSpellBook(lightningBoltBook, 4);
+			*/
 
             addSpellBook(energyBallBook, null);
             addSpellBook(specterBook, null);
@@ -598,7 +599,7 @@
 				if (distance < radii) {
 					// Apply knockback
 					const angle = Math.atan2(dy, dx);
-					const knockbackDistance = (radii - distance) * 4; // Prevent overlap
+					const knockbackDistance = (radii - distance) * 1; // Prevent overlap
 					if (!player.ignoreMobCollision) {
 						player.x -= Math.cos(angle) * knockbackDistance;
 						player.y -= Math.sin(angle) * knockbackDistance;
@@ -676,10 +677,12 @@
                             evaluatePlayerDamage(player, spell);
 
 							// Apply knockback to both spell and player
+							/*
 							const dx = player.x - spell.x;
 							const dy = player.y - spell.y;
 							const angle = Math.atan2(dy, dx);
 							const knockbackDistance = 2;
+							*/
 
 							/*
 							if (!spell.ignoreMobCollision) {
@@ -785,22 +788,25 @@
 									spell.destroy();
 								}
 								// Apply knockback to both spell and mob
-								const dx = mob.x - spell.x;
-								const dy = mob.y - spell.y;
-								const angle = Math.atan2(dy, dx);
-								const knockbackDistance = 2;
+								if (spell.shape == "circle") {
+									const dx = mob.x - spell.x;
+									const dy = mob.y - spell.y;
+									const angle = Math.atan2(dy, dx);
+									const knockbackDistance = 10;
 
-								if (!spell.ignoreMobCollision) {
-									spell.x -= Math.cos(angle) * knockbackDistance;
-									spell.y -= Math.sin(angle) * knockbackDistance;
-								}
-								if (!mob.ignoreSpellCollision) {
-									mob.x += Math.cos(angle) * knockbackDistance;
-									mob.y += Math.sin(angle) * knockbackDistance;
-									if (mob.x < mob.radius) mob.x = mob.radius;
-									if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
-									if (mob.y < mob.radius) mob.y = mob.radius;
-									if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
+									if (!spell.ignoreMobCollision) {
+										spell.x -= Math.cos(angle) * knockbackDistance;
+										spell.y -= Math.sin(angle) * knockbackDistance;
+									}
+									if (!mob.ignoreSpellCollision) {
+                                        console.log("haha");
+										mob.x += Math.cos(angle) * knockbackDistance;
+										mob.y += Math.sin(angle) * knockbackDistance;
+										if (mob.x < mob.radius) mob.x = mob.radius;
+										if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
+										if (mob.y < mob.radius) mob.y = mob.radius;
+										if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
+									}
 								}
 							}
 						}
@@ -815,7 +821,6 @@
 		}
 		/*
 		tasks:
-		7). add a notification type of feature when a skill is used to show when player has insufficient mana
 		8). add upgrades points. you can earn ugrade points when leveling up
 		12). add a way to access spell books in game
 		13). add a notification type of feature when a skill is used to show when player has insufficient mana

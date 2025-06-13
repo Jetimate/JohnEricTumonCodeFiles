@@ -26,7 +26,7 @@ const spikeBook = {
 		respawnTime: 500
 	},
 	spellCore: spikeCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "spikeCore",
 		art: "books",
@@ -74,7 +74,7 @@ const luminousEnergyBook = {
 		respawnTime: 1000
 	},
 	spellCore: luminousEnergyCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "luminousEnergyCore",
 		art: "books",
@@ -122,7 +122,7 @@ const glowShardBook = {
 		respawnTime: 1000
 	},
 	spellCore: glowShardCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "glowShardCore",
 		art: "books",
@@ -170,7 +170,7 @@ const luminousShieldBook = {
 		respawnTime: 1000
 	},
 	spellCore: luminousShieldCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "luminousShieldCore",
 		art: "books",
@@ -218,7 +218,7 @@ const luminousSpiritBook = {
 		respawnTime: 1000
 	},
 	spellCore: luminousSpiritCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "luminousSpiritCore",
 		art: "books",
@@ -266,7 +266,7 @@ const specterBook = {
 		respawnTime: 1500
 	},
 	spellCore: specterCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "specterCore",
 		art: "books",
@@ -314,7 +314,7 @@ const specterHandBook = {
 		respawnTime: 1500
 	},
 	spellCore: specterHandCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "specterHandCore",
 		art: "books",
@@ -362,7 +362,7 @@ const teleportBook = {
 		respawnTime: 500
 	},
 	spellCore: teleportCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "teleportCore",
 		art: "books",
@@ -398,7 +398,7 @@ const smashBook = {
 		castAmount: 15,
 		maxAmount: 0,
 		ignoreSpellCollision: true,
-		ignoreMobCollision: false,
+		ignoreMobCollision: true,
 		index: 1,
 		health: 1,
 		defense: 100,
@@ -410,7 +410,7 @@ const smashBook = {
 		respawnTime: 500
 	},
 	spellCore: smashCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "smashCore",
 		art: "books",
@@ -458,7 +458,7 @@ const beamBook = {
 		respawnTime: 500
 	},
 	spellCore: beamCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "beamCore",
 		art: "books",
@@ -506,7 +506,7 @@ const lightningBoltBook = {
 		respawnTime: 500
 	},
 	spellCore: lightningBoltCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "lightningBoltCore",
 		art: "books",
@@ -554,7 +554,7 @@ const energyBallBook = {
 		respawnTime: 500
 	},
 	spellCore: energyBallCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "energyBallCore",
 		art: "books",
@@ -602,7 +602,7 @@ const treeBook = {
 		respawnTime: 1500
 	},
 	spellCore: treeCore = {
-		radius: 12,
+		radius: 25,
 		FOVRadius: 0,
 		name: "treeCore",
 		art: "books",

@@ -35,7 +35,7 @@ class Spell {
 		this.hasTarget = false;
 		this.lifeTimer = 0;
 		this.turn = "clockwise";
-		this.orbitRadius = 5;
+		this.orbitRadius = 10;
 		this.radiusIncrease = 0;
 		this.orbitRadiusIncrease = 0;
 		this.damageIncrease = 0;
@@ -88,6 +88,7 @@ class Spell {
 					simulateCollision(spellA, spellB);
 				}
 			}
+			/*
 			// If one is a circle and the other is a line, handle circle-line collision
 			else if ((spellA.shape === "circle" && spellB.shape === "line") ||
 				(spellA.shape === "line" && spellB.shape === "circle")) {
@@ -135,6 +136,7 @@ class Spell {
 					simulateCollision(circle, line);
 				}
 			}
+			*/
 		}
 	}
 
@@ -257,7 +259,7 @@ class Spell {
 			let totalSpellBookCountArray = spellsArray.filter(element => element.art == "books");
 			// Check if the index is odd or even
 			totalSpellBookCountArray.forEach((spellBook, index) => {
-				spellBook.orbitRadius = 2 + index;
+				spellBook.orbitRadius = 5 + (index * 2);
 				if ((index + 1) % 2 === 0) {
 					spellBook.turn = "counterclockwise"; // Even index: counterclockwise
 				} else {
