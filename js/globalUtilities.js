@@ -73,14 +73,15 @@ let toBeCraftedMap = new Map();
 let maxExperience = 100;
 let manaBuildUp = 0;
 
-let lootSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.025;
-let slotSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.03;
-let slotMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
-let radiiSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.002;
-let miniButtonSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.015;
-let buttonMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
-let lineThickness = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.0008;
-let fontSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.00575;
+let baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
+let lootSize = baseSize * 0.025;
+let slotSize = baseSize * 0.03;
+let slotMargin = baseSize * 0.005;
+let radiiSize = baseSize * 0.002;
+let miniButtonSize = baseSize * 0.015;
+let buttonMargin = baseSize * 0.005;
+let lineThickness = baseSize * 0.0008;
+let fontSize = baseSize * 0.00575;
 
 let statsBarX = window.innerWidth * 0.004;
 let statsBarY = window.innerHeight * 0.008;

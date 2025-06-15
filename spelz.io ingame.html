@@ -5,15 +5,14 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
-		html, body {
-			height: 100%;
-			margin: 0;
-		}
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+        }
         #mycanvas {
-            border: 1px solid #d3d3d3;
-            background-color: #f1f1f1;
-            position: absolute;
-            z-index: -1;
+            display: block;
         }
 	</style>
 </head>
@@ -114,10 +113,10 @@
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-			
-            addSpellBook(spikeBook, 1);
-            addSpellBook(smashBook, 2);
-            addSpellBook(luminousEnergyBook, 3);
+
+            addSpellBook(lightningBoltBook, 1);
+			addSpellBook(smashBook, 2);
+            addSpellBook(specterBook, 3);
             addSpellBook(specterHandBook, 4);
 			
 			/*
@@ -129,8 +128,9 @@
 
             addSpellBook(energyBallBook, null);
             addSpellBook(specterBook, null);
-            addSpellBook(teleportBook, null);
-            addSpellBook(lightningBoltBook, null);
+			addSpellBook(teleportBook, null);
+            addSpellBook(luminousEnergyBook, null);
+            addSpellBook(spikeBook, null);
             addSpellBook(specterHandBook, null);
             addSpellBook(treeBook, null);
 		}
@@ -162,21 +162,22 @@
 		function resizeCanvas() {
 			
             const canvas = myGame.canvas;
-            const newWidth = window.innerWidth - 3;
-            const newHeight = window.innerHeight - 3;
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
 
             if (canvas.width !== newWidth || canvas.height !== newHeight) {
                 canvas.width = newWidth;
                 canvas.height = newHeight;
 			}
-            lootSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.025;
-			slotSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.03;
-            slotMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
-            radiiSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.002;
-            miniButtonSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.015;
-            buttonMargin = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.005;
-            lineThickness = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.0008;
-			fontSize = (((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4)) * 0.00575;
+			baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
+            lootSize = baseSize * 0.025;
+            slotSize = baseSize * 0.03;
+            slotMargin = baseSize * 0.005;
+            radiiSize = baseSize * 0.002;
+            miniButtonSize = baseSize * 0.015;
+            buttonMargin = baseSize * 0.005;
+            lineThickness = baseSize * 0.0008;
+            fontSize = baseSize * 0.00575;
 
             statsBarX = window.innerWidth * 0.004;
             statsBarY = window.innerHeight * 0.008;

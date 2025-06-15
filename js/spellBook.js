@@ -82,7 +82,7 @@ class SpellBook {
 			radiiSize);
 
 		ctx.strokeStyle = this.borderColor;
-		ctx.lineWidth = lineThickness;
+		ctx.lineWidth = lineThickness * 2;
 		ctx.stroke();
 
 		ctx.font = fontSize + "px ubuntu";
