@@ -13,6 +13,8 @@
         }
         #mycanvas {
             display: block;
+            width: 100vw;
+            height: 100vh;
         }
 	</style>
 </head>
@@ -159,17 +161,23 @@
 
             requestAnimationFrame(updateCanvas);
         }
-		function resizeCanvas() {
-			
+        function resizeCanvas() {
             const canvas = myGame.canvas;
             const newWidth = window.innerWidth;
             const newHeight = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
 
-            if (canvas.width !== newWidth || canvas.height !== newHeight) {
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-			}
-			baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
+            if (canvas.width !== newWidth * dpr || canvas.height !== newHeight * dpr) {
+                canvas.width = newWidth * dpr;
+                canvas.height = newHeight * dpr;
+                canvas.style.width = newWidth + "px";
+                canvas.style.height = newHeight + "px";
+            }
+
+            myGame.context.setTransform(1, 0, 0, 1, 0, 0);
+            myGame.context.scale(dpr, dpr);
+
+            baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
             lootSize = baseSize * 0.025;
             slotSize = baseSize * 0.03;
             slotMargin = baseSize * 0.005;
@@ -192,7 +200,7 @@
             mouseWorldY = (mouseY / camera.zoom) + camera.y;
 
 			// Update camera to follow the player
-			camera.follow(myGameCharacter, myGame.context.canvas.width, myGame.context.canvas.height);
+            camera.follow(myGameCharacter, window.innerWidth, window.innerHeight);
 
             ctx.save();           // Save context state
             shake.apply(ctx);     // Apply screen shake
