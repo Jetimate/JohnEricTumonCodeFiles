@@ -64,6 +64,7 @@ let playerTargetY = null;
 let mobsArray = [];
 let lootsArray = [];
 let inventoryArray = [];
+
 let buttonsMap = new Map();
 let spellBooksArray = [];
 let spellsArray = [];
@@ -90,6 +91,18 @@ let statsBarHeight = ((screen.height * 0.6) + (window.innerHeight * 0.4)) / 24;
 
 const canvas = document.getElementById("mycanvas");
 const ctx = canvas.getContext("2d");
+
+// set this atleast once
+// TODO fix this code... it is not working as intended. it must make the screen load
+// with the gray background expanding throughout the whole screen at the beginning
+let newWidth = window.innerWidth;
+let newHeight = window.innerHeight;
+let dpr = window.devicePixelRatio || 1;
+
+canvas.width = newWidth * dpr;
+canvas.height = newHeight * dpr;
+canvas.style.width = newWidth + "px";
+canvas.style.height = newHeight + "px";
 
 window.addEventListener('contextmenu', event => {
 	event.preventDefault();

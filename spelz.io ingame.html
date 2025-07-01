@@ -68,7 +68,6 @@
 		}
 
 		function startGame() {
-			castSpellTimeout = [];
 			buttonsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
@@ -147,9 +146,9 @@
                 resizePending = false;
             }
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, myGame.canvas.width, myGame.canvas.height);
             ctx.fillStyle = "gray";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, myGame.canvas.width, myGame.canvas.height);
 
             if (gameplayScreen) {
                 if (!gameStarted) {
@@ -163,9 +162,9 @@
         }
         function resizeCanvas() {
             const canvas = myGame.canvas;
-            const newWidth = window.innerWidth;
-            const newHeight = window.innerHeight;
-            const dpr = window.devicePixelRatio || 1;
+            newWidth = window.innerWidth;
+            newHeight = window.innerHeight;
+            dpr = window.devicePixelRatio || 1;
 
             if (canvas.width !== newWidth * dpr || canvas.height !== newHeight * dpr) {
                 canvas.width = newWidth * dpr;
@@ -379,8 +378,6 @@
 		}
 		function playerDeath() {
 			alert("game over");
-			myGame.stop();
-			castSpellTimeout = [];
 			buttonsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
@@ -388,6 +385,9 @@
 			lootsArray = [];
 			inventoryArray = [];
 			toBeCraftedMap.clear();
+            for (let key in keys) {
+                keys[key] = false;
+            }
 			startGame();
 		}
 		function levelUp() {
