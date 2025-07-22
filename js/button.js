@@ -7,7 +7,7 @@ const buttonLibrary = {
 	2 spellBookSlots
 	3 display crafting and settings
 	4 crafting slots and settings buttons
-	5 display inventory
+	5 display inventory and play button
 	*/
 	spellBookSlot1: {
 		x: 0,
@@ -193,6 +193,20 @@ const buttonLibrary = {
 		index: 3
 	},
 	// clickable buttons
+	playButton: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#6cd649",
+		name: "playButton",
+		group: null,
+		classification: "clickable",
+		text: "play",
+		zIndex: 5,
+		index: null
+	},
 	inventoryButton: {
 		x: 0,
 		y: 0,
@@ -442,6 +456,14 @@ class Button {
 		}
 
 		// buttons
+		if (this.name == "playButton") {
+			this.x = centerX - ((statsBarWidth * 0.5) / 2);
+			this.y = centerY - (statsBarHeight / 2);
+			this.width = statsBarWidth * 0.5;
+			this.height = statsBarHeight;
+			this.text = "play";
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
 		if (this.name == "inventoryButton") {
 			this.x = statsBarX;
 			this.y = (statsBarY * 5) + statsBarHeight * 4;
@@ -807,6 +829,9 @@ class Button {
 				}
 			}
 			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
+			if (this.name == "playButton") {
+				gameplayScreen = true;
+			}
 			if (this.name == "settingsButton" && !this.toggle) {
 				this.toggle = true;
 				// settings buttons

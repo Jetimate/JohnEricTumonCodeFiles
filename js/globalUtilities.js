@@ -2,8 +2,12 @@ const constantPlayerSpeed = 7.5; //5
 let keyMovement = true;
 let mouseMovement = false;
 let followMouseMovement = false;
+
+let startMenuScreen = true;
+let startMenuButtons = false;
 let gameplayScreen = false;
 let gameStarted = false;
+
 let resizePending = false;
 const keys = {
 	KeyW: false,
@@ -84,6 +88,9 @@ let buttonMargin = baseSize * 0.005;
 let lineThickness = baseSize * 0.0008;
 let fontSize = baseSize * 0.00575;
 
+let centerX = window.innerWidth / 2;
+let centerY = window.innerHeight / 2;
+
 let statsBarX = window.innerWidth * 0.004;
 let statsBarY = window.innerHeight * 0.008;
 let statsBarWidth = ((screen.width * 0.6) + (window.innerWidth * 0.4)) / 8;
@@ -122,8 +129,6 @@ window.addEventListener("resize", () => {
 	resizePending = true;
 });
 window.addEventListener('click', function (event) {
-	gameplayScreen = true;
-	
 	const rect = canvas.getBoundingClientRect();
 	mouseReleaseX = event.clientX - rect.left;
 	mouseReleaseY = event.clientY - rect.top;
@@ -145,19 +150,29 @@ window.addEventListener('mousedown', (event) => {
 		myGameCharacter.hasTarget = true;
 	}
 	const rect = canvas.getBoundingClientRect();
+
 	mouseClickX = event.clientX - rect.left;
 	mouseClickY = event.clientY - rect.top;
 
-	worldMouseClickX = ((mouseClickX / camera.zoom) + camera.x) - biome1.x;
-	worldMouseClickY = ((mouseClickY / camera.zoom) + camera.y) - biome1.y;
-
-	buttonsMap.forEach(button => {
-		button.clickButton();
+	if (gameplayScreen) {
+		worldMouseClickX = ((mouseClickX / camera.zoom) + camera.x) - biome1.x;
+		worldMouseClickY = ((mouseClickY / camera.zoom) + camera.y) - biome1.y;
+	} else {
+		console.warn("Camera not set. Skipping worldMouseClick calculations.");
+	}
+	
+	buttonsMap.forEach((value, key) => {
+		value.clickButton();
 	});
 	spellBooksArray.forEach(spellBook => {
 		spellBook.clickButton();
 	})
-	biome1.clickImage(biome1);
+
+	if (gameplayScreen) {
+		biome1.clickImage(biome1);
+	} else {
+		console.warn("biome not set. skipping line of code.");
+	}
 });
 
 window.addEventListener('mouseup', (event) => {

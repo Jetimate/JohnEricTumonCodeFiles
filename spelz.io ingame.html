@@ -150,12 +150,38 @@
             ctx.fillStyle = "gray";
             ctx.fillRect(0, 0, myGame.canvas.width, myGame.canvas.height);
 
-            if (gameplayScreen) {
+			if (startMenuScreen) {
+				if (!startMenuButtons) {
+					startMenuButtons = true;
+                    buttonsMap.clear();
+                    addButton(buttonLibrary.playButton, null);
+				}
+			}
+
+			if (gameplayScreen) {
                 if (!gameStarted) {
                     startGame();
-                    gameStarted = true;
+					gameStarted = true;
+					startMenuScreen = false;
                 }
                 updateGameplayScreen();
+			}
+			//console.log(buttonsMap);
+
+            buttonsMap.forEach(button => {
+                if (button.isShaking) {
+                    button.updateShake(performance.now());
+                }
+            });
+            // Step 1: Get all buttons as an array
+            const buttonsArray = Array.from(buttonsMap.values());
+
+            // Step 2: Sort by zIndex (lowest to highest)
+            buttonsArray.sort((a, b) => a.zIndex - b.zIndex);
+
+            // Step 3: Draw each button in order
+            for (const button of buttonsArray) {
+                button.draw(ctx);
             }
 
             requestAnimationFrame(updateCanvas);
@@ -186,6 +212,8 @@
             lineThickness = baseSize * 0.0008;
             fontSize = baseSize * 0.00575;
 
+			centerX = window.innerWidth / 2;
+			centerY = window.innerHeight / 2;
             statsBarX = window.innerWidth * 0.004;
             statsBarY = window.innerHeight * 0.008;
             statsBarWidth = ((screen.width * 0.6) + (window.innerWidth * 0.4)) / 8;
@@ -228,21 +256,7 @@
             spellBooksArray.forEach(spellBook => {
                 spellBook.update();
             });
-            buttonsMap.forEach(button => {
-                if (button.isShaking) {
-                    button.updateShake(performance.now());
-				}
-			});
-            // Step 1: Get all buttons as an array
-            const buttonsArray = Array.from(buttonsMap.values());
-			
-            // Step 2: Sort by zIndex (lowest to highest)
-            buttonsArray.sort((a, b) => a.zIndex - b.zIndex);
-
-            // Step 3: Draw each button in order
-            for (const button of buttonsArray) {
-                button.draw(ctx);
-			}
+           
 
 			// player and mob collision
 			playerCrashWith(myGameCharacter, mobsArray);
