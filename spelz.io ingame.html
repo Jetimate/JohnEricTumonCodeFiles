@@ -154,8 +154,21 @@
 				if (!startMenuButtons) {
 					startMenuButtons = true;
                     buttonsMap.clear();
-                    addButton(buttonLibrary.playButton, null);
+					addButton(buttonLibrary.playButton, null);
+                    addButton(buttonLibrary.nameInput, null);
 				}
+				const nameInputButton = buttonsMap.get("nameInput");
+
+                if (lastKeyPressed && typeof lastKeyPressed === 'string' && keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`]) {
+                    const match = lastKeyPressed.match(/[a-zA-Z0-9]/);
+                    if (match) {
+                        nameInputButton.text = nameInputButton.text + match[0];
+                    }
+				}
+
+                for (const code in keyPressedOnce) {
+                    keyPressedOnce[code] = false;
+                }
 			}
 
 			if (gameplayScreen) {
@@ -168,7 +181,7 @@
 			}
 			//console.log(buttonsMap);
 
-            buttonsMap.forEach(button => {
+			buttonsMap.forEach(button => {
                 if (button.isShaking) {
                     button.updateShake(performance.now());
                 }

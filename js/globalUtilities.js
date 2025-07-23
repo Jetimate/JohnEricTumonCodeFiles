@@ -32,6 +32,7 @@ const keys = {
 	Space: false,
 	KeyB: false
 };
+let lastKeyPressed = null;
 
 // Track if the key has already fired a "pressed once" event
 const keyPressedOnce = {};
@@ -158,7 +159,7 @@ window.addEventListener('mousedown', (event) => {
 		worldMouseClickX = ((mouseClickX / camera.zoom) + camera.x) - biome1.x;
 		worldMouseClickY = ((mouseClickY / camera.zoom) + camera.y) - biome1.y;
 	} else {
-		console.warn("Camera not set. Skipping worldMouseClick calculations.");
+		//console.warn("Camera not set. Skipping worldMouseClick calculations.");
 	}
 	
 	buttonsMap.forEach((value, key) => {
@@ -171,7 +172,7 @@ window.addEventListener('mousedown', (event) => {
 	if (gameplayScreen) {
 		biome1.clickImage(biome1);
 	} else {
-		console.warn("biome not set. skipping line of code.");
+		//console.warn("biome not set. skipping line of code.");
 	}
 });
 
@@ -214,10 +215,7 @@ window.addEventListener('keydown', (event) => {
 		}
 		keys[event.code] = true; // mark key as pressed
 	}
-	//console.log(event);
-	if (event.code in keys) {
-		keys[event.code] = true;
-	}
+	lastKeyPressed = event.key;
 });
 
 // Key up event listener

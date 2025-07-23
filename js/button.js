@@ -7,7 +7,7 @@ const buttonLibrary = {
 	2 spellBookSlots
 	3 display crafting and settings
 	4 crafting slots and settings buttons
-	5 display inventory and play button
+	5 display inventory, play button, and name input
 	*/
 	spellBookSlot1: {
 		x: 0,
@@ -193,6 +193,20 @@ const buttonLibrary = {
 		index: 3
 	},
 	// clickable buttons
+	nameInput: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#d0def5",
+		name: "nameInput",
+		group: "textInputButton",
+		classification: "clickable",
+		text: "name",
+		zIndex: 5,
+		index: null
+	},
 	playButton: {
 		x: 0,
 		y: 0,
@@ -455,7 +469,14 @@ class Button {
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 
-		// buttons
+		// buttons 
+		if (this.name == "nameInput") {
+			this.x = centerX - ((statsBarWidth * 0.5) / 2);
+			this.y = centerY - (statsBarHeight / 2) - (statsBarHeight * 1.25);
+			this.width = statsBarWidth * 0.5;
+			this.height = statsBarHeight;
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
 		if (this.name == "playButton") {
 			this.x = centerX - ((statsBarWidth * 0.5) / 2);
 			this.y = centerY - (statsBarHeight / 2);
@@ -829,6 +850,15 @@ class Button {
 				}
 			}
 			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
+			if (this.name == "nameInput" && !this.toggle) {
+				this.toggle = true;
+				this.color = "#8f97a6";
+				this.text = "";
+			} else if (this.name == "nameInput" && this.toggle) {
+				this.toggle = false;
+				this.color = "#d0def5";
+				this.text = "name";
+			}
 			if (this.name == "playButton") {
 				gameplayScreen = true;
 			}
