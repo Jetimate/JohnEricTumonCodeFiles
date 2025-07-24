@@ -14,10 +14,12 @@ const keys = {
 	KeyA: false,
 	KeyS: false,
 	KeyD: false,
+
 	ArrowUp: false,
 	ArrowDown: false,
 	ArrowLeft: false,
 	ArrowRight: false,
+
 	Digit1: false,
 	Digit2: false,
 	Digit3: false,
@@ -27,10 +29,34 @@ const keys = {
 	Digit7: false,
 	Digit8: false,
 	Digit9: false,
+	Digit0: false,
+
 	ShiftLeft: false,
 	ShiftRight: false,
+
 	Space: false,
-	KeyB: false
+	KeyB: false,
+	KeyC: false,
+	KeyE: false,
+	KeyF: false,
+	KeyG: false,
+	KeyH: false,
+	KeyI: false,
+	KeyJ: false,
+	KeyK: false,
+	KeyL: false,
+	KeyM: false,
+	KeyN: false,
+	KeyO: false,
+	KeyP: false,
+	KeyQ: false,
+	KeyR: false,
+	KeyT: false,
+	KeyU: false,
+	KeyV: false,
+	KeyX: false,
+	KeyY: false,
+	KeyZ: false
 };
 let lastKeyPressed = null;
 
@@ -215,6 +241,7 @@ window.addEventListener('keydown', (event) => {
 		}
 		keys[event.code] = true; // mark key as pressed
 	}
+	console.log(event);
 	lastKeyPressed = event.key;
 });
 

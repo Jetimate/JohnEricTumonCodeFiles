@@ -159,11 +159,17 @@
 				}
 				const nameInputButton = buttonsMap.get("nameInput");
 
-                if (lastKeyPressed && typeof lastKeyPressed === 'string' && keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`]) {
-                    const match = lastKeyPressed.match(/[a-zA-Z0-9]/);
-                    if (match) {
-                        nameInputButton.text = nameInputButton.text + match[0];
-                    }
+				if (nameInputButton.toggle) {
+					if (lastKeyPressed &&
+						typeof lastKeyPressed === 'string' &&
+						(keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`] ||
+						keyPressedOnce[`Digit${lastKeyPressed}`] ||
+                        keyPressedOnce['Space']) &&
+						/^[a-zA-Z0-9 ]$/.test(lastKeyPressed)) {
+
+                        console.log(lastKeyPressed);
+						nameInputButton.text += lastKeyPressed;
+					}
 				}
 
                 for (const code in keyPressedOnce) {
