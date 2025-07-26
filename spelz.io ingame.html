@@ -160,18 +160,26 @@
 				const nameInputButton = buttonsMap.get("nameInput");
 
 				if (nameInputButton.toggle) {
-					if (lastKeyPressed &&
-						typeof lastKeyPressed === 'string' &&
-						(keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`] ||
-						keyPressedOnce[`Digit${lastKeyPressed}`] ||
-                        keyPressedOnce['Space']) &&
-						/^[a-zA-Z0-9 ]$/.test(lastKeyPressed)) {
+					if (lastKeyPressed && typeof lastKeyPressed === 'string') {
+						if (keyPressedOnce['Backspace']) {
+                            nameInputButton.text = nameInputButton.text.slice(0, -1);
+						}
+						if ((keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`] ||
+							keyPressedOnce[`Digit${lastKeyPressed}`] || 
+                            keyPressedOnce['Space']) &&
+							/^[a-zA-Z0-9 ]$/.test(lastKeyPressed)) {
 
-                        console.log(lastKeyPressed);
-						nameInputButton.text += lastKeyPressed;
+							//console.log(lastKeyPressed);
+							nameInputButton.text += lastKeyPressed;
+						}
 					}
 				}
 
+				// enter the game via enter button
+                if (keyPressedOnce['Enter']) {
+                    gameplayScreen = true;
+				}
+                
                 for (const code in keyPressedOnce) {
                     keyPressedOnce[code] = false;
                 }

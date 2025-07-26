@@ -203,7 +203,7 @@ const buttonLibrary = {
 		name: "nameInput",
 		group: "textInputButton",
 		classification: "clickable",
-		text: "name",
+		text: "type your name here:",
 		zIndex: 5,
 		index: null
 	},
@@ -471,16 +471,16 @@ class Button {
 
 		// buttons 
 		if (this.name == "nameInput") {
-			this.x = centerX - ((statsBarWidth * 0.5) / 2);
+			this.x = centerX - ((statsBarWidth * 0.8) / 2);
 			this.y = centerY - (statsBarHeight / 2) - (statsBarHeight * 1.25);
-			this.width = statsBarWidth * 0.5;
+			this.width = statsBarWidth * 0.8;
 			this.height = statsBarHeight;
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "playButton") {
-			this.x = centerX - ((statsBarWidth * 0.5) / 2);
+			this.x = centerX - ((statsBarWidth * 0.25) / 2);
 			this.y = centerY - (statsBarHeight / 2);
-			this.width = statsBarWidth * 0.5;
+			this.width = statsBarWidth * 0.25;
 			this.height = statsBarHeight;
 			this.text = "play";
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
@@ -857,7 +857,7 @@ class Button {
 			} else if (this.name == "nameInput" && this.toggle) {
 				this.toggle = false;
 				this.color = "#d0def5";
-				this.text = "name";
+				this.text = "type your name here:";
 			}
 			if (this.name == "playButton") {
 				gameplayScreen = true;

@@ -35,6 +35,9 @@ const keys = {
 	ShiftRight: false,
 
 	Space: false,
+	Backspace: false,
+	Enter: false,
+
 	KeyB: false,
 	KeyC: false,
 	KeyE: false,
