@@ -68,6 +68,10 @@
 		}
 
 		function startGame() {
+			let nameInputButtonText = buttonsMap.get("nameInput").text;
+            if (nameInputButtonText == "" || nameInputButtonText == "type your name here:") {
+				nameInputButtonText = "unnamed player";
+			}
 			buttonsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
@@ -83,7 +87,7 @@
 			//original stats
 //			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.0005); //mana regen = 0.0005
 			// test stats
-			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 20, 0, 0, 0.01, 0.005); //mana regen = 0.0005
+            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, nameInputButtonText, 20, 0, 0, 0.01, 0.005); //mana regen = 0.0005
 			camera = new Camera(canvas.width, canvas.height);
 			shake = new ScreenShake();
 

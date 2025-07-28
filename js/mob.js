@@ -88,6 +88,17 @@
 		ctx.rect(this.x - this.health, this.y - (this.radius + this.radiusAdjust + 15), this.health * 2, 10);
 		ctx.stroke();
 
+		if (this.name) {
+			ctx.font = "16px Trebuchet MS"; // You can change the font and size here
+			ctx.fillStyle = "white"; // Text color
+			ctx.textAlign = "center";
+			ctx.fillText(
+				this.name,
+				this.x,
+				this.y - (this.radius + this.radiusAdjust + 20) // Slightly above the health bar
+			);
+		}
+
 		ctx.save();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);	
