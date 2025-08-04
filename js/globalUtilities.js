@@ -234,6 +234,10 @@ window.addEventListener('mousemove', (event) => {
 		playerTargetX = mouseWorldX - biome1.x;
 		playerTargetY = mouseWorldY - biome1.y;
 	}
+
+	buttonsMap.forEach((value, key) => {
+		value.hoverButton();
+	});
 });
 // Key down event listener
 window.addEventListener('keydown', (event) => {
@@ -261,4 +265,24 @@ window.addEventListener('keyup', (event) => {
 function generateID() {
 	//console.log(generatedID + 1);
 	return generatedID++;
+}
+
+function darkenHexColor(hex, percent) {
+	// Remove "#" if present
+	hex = hex.replace(/^#/, '');
+
+	// Parse r, g, b values
+	let r = parseInt(hex.substring(0, 2), 16);
+	let g = parseInt(hex.substring(2, 4), 16);
+	let b = parseInt(hex.substring(4, 6), 16);
+
+	// Calculate the darkened values
+	r = Math.max(0, Math.min(255, Math.floor(r * (1 - percent / 100))));
+	g = Math.max(0, Math.min(255, Math.floor(g * (1 - percent / 100))));
+	b = Math.max(0, Math.min(255, Math.floor(b * (1 - percent / 100))));
+
+	// Convert back to hex with padding
+	const toHex = (value) => value.toString(16).padStart(2, '0');
+
+	return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }

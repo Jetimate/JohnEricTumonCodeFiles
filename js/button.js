@@ -431,6 +431,7 @@ class Button {
 		this.originalX = this.x;
 		this.originalY = this.y;
 		this.originalColor = this.color;
+		this.isHovered = false;
     }
 
 	draw(ctx) {
@@ -794,7 +795,25 @@ class Button {
 		}
         ctx.closePath();
 	}
-	
+
+	hoverButton() {
+		if (mouseX >= this.x &&
+			mouseX <= this.x + this.width &&
+			mouseY >= this.y &&
+			mouseY <= this.y + this.height
+		) {
+			if (this.classification == "clickable" && !this.isHovered) {
+				console.log("i ran first");
+				this.isHovered = true;
+				this.color = darkenHexColor(this.color, 20);
+			}
+		} else if (this.isHovered) {
+			console.log("i ran");
+			this.isHovered = false;
+			this.color = this.originalColor;
+		}
+	}
+
 	clickButton() {
 		if (leftClick &&
 			mouseClickX >= this.x &&
@@ -852,7 +871,7 @@ class Button {
 			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
 			if (this.name == "nameInput" && !this.toggle) {
 				this.toggle = true;
-				this.color = "#8f97a6";
+				this.color = darkenHexColor("#d0def5", 20);
 				this.text = "";
 			} else if (this.name == "nameInput" && this.toggle) {
 				this.toggle = false;
