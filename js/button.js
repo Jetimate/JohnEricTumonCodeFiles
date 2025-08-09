@@ -327,7 +327,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "gray",
+		color: "#808080",
 		name: "activateCraft",
 		group: "craftSlot",
 		classification: "clickable",
@@ -369,7 +369,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#bab6bf",
 		name: "keyMovementButton",
 		group: "movementButtons",
 		classification: "clickable",
@@ -443,8 +443,12 @@ class Button {
 			ctx.fill();
 		}
 
-		ctx.strokeStyle = "black";
-		ctx.lineWidth = lineThickness;
+		if (this.group == "spellBookSlot") {
+			ctx.strokeStyle = "#000000";
+		} else {
+			ctx.strokeStyle = darkenHexColor(this.color, 60);
+		}
+		ctx.lineWidth = lineThickness * 1.2;
 		ctx.stroke();
 
 		ctx.font = fontSize + "px 'Trebuchet MS'";
@@ -543,48 +547,68 @@ class Button {
 			this.width = miniButtonSize;
 			this.height = miniButtonSize;
 
+			if (this.name == "keyMovementButton" && keyMovement && this.toggle) {
+				this.toggle = false;
+				this.originalColor = "#000000";
+				this.color = "#000000";
+			}
+
+			if (this.name == "mouseMovementButton" && mouseMovement && this.toggle) {
+				this.toggle = false;
+				this.originalColor = "#000000";
+				this.color = "#000000";
+			}
+
+			if (this.name == "followMouseMovementButton" && followMouseMovement && this.toggle) {
+				this.toggle = false;
+				this.originalColor = "#000000";
+				this.color = "#000000";
+			}
+
 			if (leftClick) {
 				let distance = mouseX >= this.x && mouseX < miniButtonSize + this.x && mouseY >= this.y && mouseY < miniButtonSize + this.y;
 
 				let totalMovementButtonsArray = Array.from(buttonsMap.values()).filter(element => element.group == "movementButtons");
-				if (distance && this.name == "keyMovementButton" && !this.toggle) {
+				if (distance && this.name == "keyMovementButton") {
 					// shut off the other buttons
 					totalMovementButtonsArray.forEach(button => {
 						button.toggle = false;
+						button.originalColor = "#bab6bf";
 						button.color = "#bab6bf";
-						mouseMovement = false;
-						followMouseMovement = false;
+						
 					});
-
 					// toggles itself
 					this.toggle = true;
-					this.color = "black";
 					keyMovement = true;
+					mouseMovement = false;
+					followMouseMovement = false;
 				}
 
-				if (distance && this.name == "mouseMovementButton" && !this.toggle) {
+				if (distance && this.name == "mouseMovementButton") {
 
 					totalMovementButtonsArray.forEach(button => {
 						button.toggle = false;
+						button.originalColor = "#bab6bf";
 						button.color = "#bab6bf";
-						keyMovement = false;
-						followMouseMovement = false;
+						
 					});
 					this.toggle = true;
-					this.color = "black";
+					keyMovement = false;
 					mouseMovement = true;
+					followMouseMovement = false;
 				}
 
-				if (distance && this.name == "followMouseMovementButton" && !this.toggle) {
+				if (distance && this.name == "followMouseMovementButton") {
 
 					totalMovementButtonsArray.forEach(button => {
 						button.toggle = false;
+						button.originalColor = "#bab6bf";
 						button.color = "#bab6bf";
-						keyMovement = false;
-						mouseMovement = false;
+						
 					});
 					this.toggle = true;
-					this.color = "black";
+					keyMovement = false;
+					mouseMovement = false;
 					followMouseMovement = true;
 				}
 			}
@@ -752,16 +776,30 @@ class Button {
 				this.y = yDistance + (lootSize / 2) - (this.height / 2);
 				textX = xDistance + (lootSize / 2) - (this.width / 4)
 				textY = yDistance + (lootSize / 2) + (this.height / 5);
-				this.color = "gray";
+				//this.color = "gray";
 
 				const page = toBeCraftedMap.get("page");
 				const essence = toBeCraftedMap.get("essence");
 
-				if (page && essence) {
+				if (!this.toggle && page && essence) {
 					if (page.amount >= page.pagesToCraft &&
 						essence.name === page.essenceName &&
 						essence.amount >= page.essenceToCraft) {
-						this.color = "green";
+						this.toggle = true;
+						this.originalColor = "#008000";
+						this.color = "#008000";
+					}
+				} else if (this.toggle && (!page || !essence)) {
+					this.toggle = false;
+					this.originalColor = "#808080";
+					this.color = "#808080";
+				} else if (page && essence) {
+					if (page.amount < page.pagesToCraft ||
+						essence.name !== page.essenceName ||
+						essence.amount < page.essenceToCraft) {
+						this.toggle = false;
+						this.originalColor = "#808080";
+						this.color = "#808080";
 					}
 				}
 			}
@@ -803,7 +841,7 @@ class Button {
 			mouseY <= this.y + this.height
 		) {
 			if (this.classification == "clickable" && !this.isHovered) {
-				console.log("i ran first");
+				console.log(this.color, darkenHexColor(this.color, 20),  "i ran first");
 				this.isHovered = true;
 				this.color = darkenHexColor(this.color, 20);
 			}

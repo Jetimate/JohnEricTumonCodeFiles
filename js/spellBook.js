@@ -492,11 +492,11 @@ class SpellBook {
 				manaBuildUp += this.spell.manaCost;
 			}
 			this.spellActive = true;
-			this.borderColor = "green";
+			this.borderColor = "#008000";
 		} else if (leftClick && this.spellActive) {
 			manaBuildUp -= this.spell.manaCost;
 			myGameCharacter.mana -= this.spell.manaCost;
-			this.borderColor = "black";
+			this.borderColor = "#000000";
 			this.interact();
 			this.spellActive = false;
 			this.spellReady = false;

@@ -7,6 +7,7 @@ class Loot {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
+		this.borderColor = "#000000";
 		this.name = name;
 		this.spellBookName = spellBookName;
 		this.rarity = rarity;
