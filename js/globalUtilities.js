@@ -100,6 +100,7 @@ let lootsArray = [];
 let inventoryArray = [];
 
 let buttonsMap = new Map();
+let textsMap = new Map();
 let spellBooksArray = [];
 let spellsArray = [];
 let mouseHeldItem = [];

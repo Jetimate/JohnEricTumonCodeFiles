@@ -26,6 +26,7 @@
 	<script type="text/javascript" src="js/spellBook.js"></script>
 	<script type="text/javascript" src="js/spell.js"></script>
 	<script type="text/javascript" src="js/button.js"></script>
+	<script type="text/javascript" src="js/text.js"></script>
 	<script type="text/javascript" src="js/background.js"></script>
 	<script type="text/javascript" src="js/camera.js"></script>
 	<script type="text/javascript" src="js/libraries/spellBooksLibrary.js"></script>
@@ -73,6 +74,7 @@
 				nameInputButtonText = "unnamed player";
 			}
 			buttonsMap.clear();
+			textsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
@@ -158,9 +160,14 @@
 			if (startMenuScreen) {
 				if (!startMenuButtons) {
 					startMenuButtons = true;
-                    buttonsMap.clear();
+					buttonsMap.clear();
+					textsMap.clear();
+					console.log(textsMap, buttonsMap);
+					addText(textLibrary.gameTitle);
+                    console.log(textsMap);
 					addButton(buttonLibrary.playButton, null);
-                    addButton(buttonLibrary.nameInput, null);
+					addButton(buttonLibrary.nameInput, null);
+                    console.log(buttonsMap);
 				}
 				const nameInputButton = buttonsMap.get("nameInput");
 
@@ -214,6 +221,15 @@
             // Step 3: Draw each button in order
             for (const button of buttonsArray) {
                 button.draw(ctx);
+			}
+
+			// texts
+			const textsArray = Array.from(textsMap.values());
+
+			textsArray.sort((a, b) => a.zIndex - b.zIndex);
+
+            for (const text of textsArray) {
+                text.draw(ctx);
             }
 
             requestAnimationFrame(updateCanvas);
@@ -425,6 +441,7 @@
 		function playerDeath() {
 			alert("game over");
 			buttonsMap.clear();
+			textsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
@@ -528,6 +545,10 @@
             } else {
                 inventoryArray.push(newSpellBook);
             }
+		}
+		function addText(text) {
+            let newText = new Text(text.x, text.y, text.text, text.fontSize, text.fillColor, text.strokeColor, text.border, text.fontFamily, text.name, text.group, text.classification, text.zIndex, text.textInRect);
+			textsMap.set(text.name, newText);
 		}
 		function dropLoot(loot) {
 			let newLoot = new Loot(loot.x, loot.y, loot.radius, loot.name, loot.spellBookName, loot.rarity, loot.dropChance, loot.appearance, loot.form, loot.type, loot.essenceName, loot.pagesToCraft, loot.essenceToCraft, loot.ignoreCollision, loot.amount, loot.stackLimit, loot.text)
