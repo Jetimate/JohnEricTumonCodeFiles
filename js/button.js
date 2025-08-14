@@ -8,6 +8,7 @@ const buttonLibrary = {
 	3 display crafting and settings
 	4 crafting slots and settings buttons
 	5 display inventory, play button, and name input
+	10 exit button
 	*/
 	spellBookSlot1: {
 		x: 0,
@@ -15,7 +16,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot1",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -29,7 +30,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot2",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -43,7 +44,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot3",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -57,7 +58,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot4",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -71,7 +72,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot5",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -85,7 +86,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot6",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -99,7 +100,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot7",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -113,7 +114,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot8",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -127,7 +128,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "spellBookSlot9",
 		group: "spellBookSlot",
 		classification: "slot",
@@ -263,6 +264,20 @@ const buttonLibrary = {
 		zIndex: 1,
 		index: null
 	},
+	exitButton: {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		radii: 0,
+		color: "#ff5d70",
+		name: "exitButton",
+		group: null,
+		classification: "clickable",
+		text: "exit",
+		zIndex: 10,
+		index: null
+	},
 	// display inventory
 	displayInventory: {
 		x: 0,
@@ -299,7 +314,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "pageSlot",
 		group: "craftSlot",
 		classification: "slot",
@@ -313,7 +328,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "essenceSlot",
 		group: "craftSlot",
 		classification: "slot",
@@ -341,7 +356,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "black",
+		color: "#000000",
 		name: "craftedItemSlot",
 		group: "craftSlot",
 		classification: "slot",
@@ -452,7 +467,7 @@ class Button {
 		ctx.stroke();
 
 		ctx.font = fontSize + "px 'Trebuchet MS'";
-		ctx.fillStyle = "black";
+		ctx.fillStyle = "#000000";
 
 		if (this.classification == "bar") {
 			this.x = statsBarX;
@@ -512,6 +527,14 @@ class Button {
 			this.x = statsBarX;
 			this.y = window.innerHeight - this.height - slotMargin;
 			this.text = "settings";
+			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
+		}
+		if (this.name == "exitButton") {
+			this.width = statsBarWidth * 0.25;
+			this.height = statsBarHeight * 0.75;
+			this.x = window.innerWidth - this.width - statsBarX;
+			this.y = statsBarY;
+			this.text = "exit";
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "displaySettings") {
@@ -614,7 +637,7 @@ class Button {
 			}
 
 			ctx.font = fontSize + "px 'Trebuchet MS'";
-			ctx.fillStyle = "black";
+			ctx.fillStyle = "#000000";
 			ctx.fillText(
 				this.text,
 				this.x + miniButtonSize + buttonMargin,
@@ -660,7 +683,7 @@ class Button {
 				ctx.lineWidth = lineThickness;
 				ctx.stroke();
 				ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
-				ctx.fillStyle = "black";
+				ctx.fillStyle = "#000000";
 
 				ctx.drawImage(
 					item.image,
@@ -732,7 +755,7 @@ class Button {
 				ctx.lineWidth = lineThickness;
 				ctx.stroke();
 				ctx.font = (fontSize * 0.8) + "px 'Trebuchet MS'";
-				ctx.fillStyle = "black";
+				ctx.fillStyle = "#000000";
 
 				ctx.drawImage(
 					inventoryArray[i].image,
@@ -776,7 +799,6 @@ class Button {
 				this.y = yDistance + (lootSize / 2) - (this.height / 2);
 				textX = xDistance + (lootSize / 2) - (this.width / 4)
 				textY = yDistance + (lootSize / 2) + (this.height / 5);
-				//this.color = "gray";
 
 				const page = toBeCraftedMap.get("page");
 				const essence = toBeCraftedMap.get("essence");
@@ -805,7 +827,7 @@ class Button {
 			}
 
 			ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
-			ctx.fillStyle = "black";
+			ctx.fillStyle = "#000000";
 			ctx.fillText(
 				this.text,
 				textX,
@@ -825,7 +847,7 @@ class Button {
 				this.text = "slot " + this.index;
 			}
 			ctx.font = (fontSize * 0.8) + "px Trebuchet MS";
-			ctx.fillStyle = "black";
+			ctx.fillStyle = "#000000";
 			ctx.fillText(
 				this.text,
 				this.x,
@@ -841,12 +863,12 @@ class Button {
 			mouseY <= this.y + this.height
 		) {
 			if (this.classification == "clickable" && !this.isHovered) {
-				console.log(this.color, darkenHexColor(this.color, 20),  "i ran first");
+				//console.log(this.color, darkenHexColor(this.color, 20),  "i ran first");
 				this.isHovered = true;
 				this.color = darkenHexColor(this.color, 20);
 			}
 		} else if (this.isHovered) {
-			console.log("i ran");
+			//console.log("i ran");
 			this.isHovered = false;
 			this.color = this.originalColor;
 		}
@@ -932,6 +954,13 @@ class Button {
 				buttonsMap.delete("keyMovementButton");
 				buttonsMap.delete("mouseMovementButton");
 				buttonsMap.delete("followMouseMovementButton");
+			}
+			if (this.name == "exitButton") {
+				gameStarted = false;
+				gameplayScreen = false;
+				startMenuButtons = false;
+				startMenuScreen = true;
+
 			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
@@ -1063,7 +1092,7 @@ class Button {
 						}
 						// crafts a spell book
 						let spellBook = page.spellBookName;
-						let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text);
+						let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "#000000", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text);
 
 						// places the spell book inside the crafted item slot
 						craftedSpellBook.index = craftedItemSlot.index;
@@ -1106,7 +1135,7 @@ class Button {
 		this.originalX = this.x;
 		this.originalY = this.y;
 		if (reason == "insufficientMana") {
-			this.color = "red";
+			this.color = "#800000";
 			this.originalColor = buttonLibrary.manaBar.color;
 		}
 	}

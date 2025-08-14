@@ -248,7 +248,7 @@ window.addEventListener('keydown', (event) => {
 		}
 		keys[event.code] = true; // mark key as pressed
 	}
-	console.log(event);
+	//console.log(event);
 	lastKeyPressed = event.key;
 });
 
