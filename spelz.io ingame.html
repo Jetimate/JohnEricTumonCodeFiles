@@ -89,7 +89,7 @@
 			//original stats
 //			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.0005); //mana regen = 0.0005
 			// test stats
-            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, nameInputButtonText, 20, 0, 0, 0.01, 0.005); //mana regen = 0.0005
+            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, nameInputButtonText, 20, 0, 0, 0.01, 0.005, "alive"); //mana regen = 0.0005
 			camera = new Camera(canvas.width, canvas.height);
 			shake = new ScreenShake();
 
@@ -162,12 +162,9 @@
 					startMenuButtons = true;
 					buttonsMap.clear();
 					textsMap.clear();
-					console.log(textsMap, buttonsMap);
 					addText(textLibrary.gameTitle);
-                    console.log(textsMap);
 					addButton(buttonLibrary.playButton, null);
 					addButton(buttonLibrary.nameInput, null);
-                    console.log(buttonsMap);
 				}
 				const nameInputButton = buttonsMap.get("nameInput");
 
@@ -269,6 +266,7 @@
         }
 
 		function updateGameplayScreen() {
+            console.log(myGameCharacter.score);
 			//console.log(gameTime, performance.now());
 			// Calculate world coordinates
 			mouseWorldX = (mouseX / camera.zoom) + camera.x;
@@ -416,7 +414,8 @@
 
 			// checks if damage is from a mob
             if (entity.codeClass == "mob" && entity.health <= 0) {
-                player.experience += entity.experienceDrop;
+				player.experience += entity.experienceDrop;
+				player.score += entity.experienceDrop
                 levelUp();
                 entity.spawn();
                 entity.die();
@@ -439,9 +438,13 @@
             }
 		}
 		function playerDeath() {
-			alert("game over");
+			//alert("game over");
+			myGameCharacter.state = "dead";
+			addText(textLibrary.gameOverText);
+            addText(textLibrary.playerScoreText);
 			buttonsMap.clear();
-			textsMap.clear();
+            addButton(buttonLibrary.exitButton, null);
+			//textsMap.clear();
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
@@ -451,9 +454,10 @@
             for (let key in keys) {
                 keys[key] = false;
             }
-			startGame();
+			//startGame();
 		}
 		function levelUp() {
+
 			if (myGameCharacter.experience >= maxExperience) {
 				do {
 					myGameCharacter.experience -= maxExperience;
@@ -852,7 +856,8 @@
 
 								// Check if the mob should die and be removed
 								if (mob.health <= 0) {
-                                    myGameCharacter.experience += mob.experienceDrop;
+									myGameCharacter.experience += mob.experienceDrop;
+									myGameCharacter.score += mob.experienceDrop;
 									levelUp();
 									mob.spawn();
 									mob.die();

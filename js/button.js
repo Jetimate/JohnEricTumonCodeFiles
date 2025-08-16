@@ -270,7 +270,7 @@ const buttonLibrary = {
 		width: 0,
 		height: 0,
 		radii: 0,
-		color: "#ff5d70",
+		color: "#870125",
 		name: "exitButton",
 		group: null,
 		classification: "clickable",

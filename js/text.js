@@ -7,13 +7,43 @@ const textLibrary = {
         fillColor: "#FFFFFF",
         strokeColor: "#000000",
         border: true,
-        fontFamily: "Trebuchet MS",
+        fontFamily: "sans serif",
         name: "gameTitle",
         group: null,
         classification: "header",
         zIndex: 10,
         textInRect: false
-        }
+    },
+    gameOverText: {
+        x: 0,
+        y: 0,
+        text: "GAME OVER",
+        fontSize: 100,
+        fillColor: "#0b0414",
+        strokeColor: "#0b0414",
+        border: false,
+        fontFamily: "sans serif",
+        name: "gameOverText",
+        group: null,
+        classification: "header",
+        zIndex: 10,
+        textInRect: false
+    },
+    playerScoreText: {
+        x: 0,
+        y: 0,
+        text: "score: null",
+        fontSize: 20,
+        fillColor: "#0b0414",
+        strokeColor: "#0b0414",
+        border: false,
+        fontFamily: "sans serif",
+        name: "playerScoreText",
+        group: null,
+        classification: "normal",
+        zIndex: 10,
+        textInRect: false
+    }
 }
 class Text {
     constructor(x, y, text, fontSize, fillColor, strokeColor, border, fontFamily, name, group, classification, zIndex, textInRect = false) {
@@ -38,14 +68,32 @@ class Text {
     }
 
     draw(ctx) {
-        ctx.font = this.fontSize + "px " + this.fontFamily;
+
+        if (this.classification == "header") {
+            ctx.font = "bold " + this.fontSize + "px " + this.fontFamily;
+        } else {
+            ctx.font = this.fontSize + "px " + this.fontFamily;
+        }
 
         // Responsive centering
         if (this.name === "gameTitle") {
             const metrics = ctx.measureText(this.text);
-            this.x = (window.innerWidth - metrics.width) / 2;
             const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            this.x = (window.innerWidth - metrics.width) / 2;
             this.y = (window.innerHeight + height) / 3.5;
+        }
+        if (this.name === "gameOverText") {
+            const metrics = ctx.measureText(this.text);
+            const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            this.x = (window.innerWidth - metrics.width) / 2;
+            this.y = (window.innerHeight + height) / 3.5;
+        }
+        if (this.name === "playerScoreText") {
+            const metrics = ctx.measureText(this.text);
+            const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            this.x = (window.innerWidth - metrics.width) * 0.5;
+            this.y = (window.innerHeight + height) * 0.40;
+            this.text = "score: " + myGameCharacter.score;
         }
 
         if (this.textInRect) {

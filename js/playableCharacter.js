@@ -1,9 +1,10 @@
 class PlayableCharacter extends Mob {
-	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, name, mana, experience, level, healthRegen, manaRegen) {
+	constructor(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust, name, mana, experience, level, healthRegen, manaRegen, state) {
 		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust,);
 		this.name = name;
 		this.mana = mana;
 		this.manaRegen = manaRegen;
+		this.state = state;
 		this.experience = experience;
 		this.level = level;
 		this.healthRegen = healthRegen;
@@ -20,8 +21,12 @@ class PlayableCharacter extends Mob {
 		this.spellBookSlotsUnlocked = 4;
 		this.codeClass = "playableCharacter";
 		this.hasTarget = false;
+		this.score = 0;
 	}		
 	playerNewPos() {
+		if (this.state === "dead") {
+			return;
+		}
 		if (keyMovement) {
 			this.angle += this.moveAngle * Math.PI / 180;
 			this.x += this.newSpeed * Math.sin(this.angle);
@@ -36,11 +41,17 @@ class PlayableCharacter extends Mob {
 		}
 	}
 	regenerateHealth() {
+		if (this.state === "dead") {
+			return;
+		}
 		if (this.maxHealth > this.health) {
 			this.health += this.healthRegen; // remove 1 after debug
 		}
 	}
 	regenerateMana() {
+		if (this.state === "dead") {
+			return;
+		}
 		if (this.maxMana > this.mana) {
 			this.mana += this.manaRegen;
 		}
