@@ -22,6 +22,7 @@ class PlayableCharacter extends Mob {
 		this.codeClass = "playableCharacter";
 		this.hasTarget = false;
 		this.score = 0;
+		this.lastDamageTime = 0;
 	}		
 	playerNewPos() {
 		if (this.state === "dead") {

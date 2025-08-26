@@ -413,7 +413,19 @@
 		function shakeScreen(magnitude, duration) {
             shake.start(magnitude, duration);
 		}
-        function evaluatePlayerDamage(player, entity) {
+		function evaluatePlayerDamage(player, entity) {
+            const now = performance.now();
+
+            // give each mob its own damage cooldown
+            if (!entity.lastDamageTime) {
+                entity.lastDamageTime = 0;
+            }
+
+            // only allow damage every 50ms per mob (20x/sec)
+            if (now - entity.lastDamageTime < 500) return;
+
+			entity.lastDamageTime = now;
+
 			//TODO: rearrange the lines of code
             // Apply damage
             let entityDamage = Math.max(0, entity.damage - player.defense);
@@ -757,34 +769,31 @@
 							const distance = Math.sqrt(dx * dx + dy * dy);
 
 							if (distance < player.radius) {
-								simulateCollision();
+                                evaluatePlayerDamage(player, spell);
 							}
 						}
 						function simulateCollision() {
-                            evaluatePlayerDamage(player, spell);
+                            
 
 							// Apply knockback to both spell and player
-							/*
+							
 							const dx = player.x - spell.x;
 							const dy = player.y - spell.y;
 							const angle = Math.atan2(dy, dx);
-							const knockbackDistance = 2;
-							*/
-
-							/*
+							
 							if (!spell.ignoreMobCollision) {
-								spell.x -= Math.cos(angle) * knockbackDistance;
-								spell.y -= Math.sin(angle) * knockbackDistance;
+                                spell.x -= Math.cos(angle) * spellKnockbackDistance;
+                                spell.y -= Math.sin(angle) * spellKnockbackDistance;
 							}
 							if (!player.ignoreSpellCollision) {
-								player.x += Math.cos(angle) * knockbackDistance;
-								player.y += Math.sin(angle) * knockbackDistance;
+                                player.x += Math.cos(angle) * spellKnockbackDistance;
+                                player.y += Math.sin(angle) * spellKnockbackDistance;
 								if (player.x < player.radius) player.x = player.radius;
 								if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
 								if (player.y < player.radius) player.y = player.radius;
 								if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 							}
-							*/
+                            evaluatePlayerDamage(player, spell);
 						}
 					}
 				}
@@ -880,16 +889,15 @@
 									const dx = mob.x - spell.x;
 									const dy = mob.y - spell.y;
 									const angle = Math.atan2(dy, dx);
-									const knockbackDistance = 10;
 
 									if (!spell.ignoreMobCollision) {
-										spell.x -= Math.cos(angle) * knockbackDistance;
-										spell.y -= Math.sin(angle) * knockbackDistance;
+                                        spell.x -= Math.cos(angle) * spellKnockbackDistance;
+                                        spell.y -= Math.sin(angle) * spellKnockbackDistance;
 									}
 									if (!mob.ignoreSpellCollision) {
                                         console.log("haha");
-										mob.x += Math.cos(angle) * knockbackDistance;
-										mob.y += Math.sin(angle) * knockbackDistance;
+                                        mob.x += Math.cos(angle) * spellKnockbackDistance;
+                                        mob.y += Math.sin(angle) * spellKnockbackDistance;
 										if (mob.x < mob.radius) mob.x = mob.radius;
 										if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
 										if (mob.y < mob.radius) mob.y = mob.radius;

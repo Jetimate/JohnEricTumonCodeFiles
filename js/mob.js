@@ -75,6 +75,7 @@
 		this.secondsTracker = 0;
 		this.side = side;
 		this.codeClass = "mob";
+		this.lastDamageTime = 0;
 	}		
 	draw(ctx) {
 		if (this.isDead) {

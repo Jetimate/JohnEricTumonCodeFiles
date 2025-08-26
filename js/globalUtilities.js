@@ -108,6 +108,7 @@ let toBeCraftedMap = new Map();
 
 let maxExperience = 100;
 let manaBuildUp = 0;
+const spellKnockbackDistance = 5;
 
 let baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
 let lootSize = baseSize * 0.025;
