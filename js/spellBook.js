@@ -45,14 +45,13 @@ class SpellBook {
 				mouseClickY < slotSize + this.y
 				// activates when a spellBook is dragged away from a slot
 			if (distance && mouseHeldItem.length < 1) {
-				console.log("spellBook is getting dragged away from the slot right now");
+				//console.log("spellBook is getting dragged away from the slot right now");
 				this.held = true;
 				mouseHeldItem.push(this);
 
 				buttonsMap.get(`spellBookSlot${this.index}`).slotActive = false;
 			}
 			if (this.held) {
-				console.log(this.from);
 				// centers the spell book into the cursor
 				this.from = "spellBookSlot";
 				this.x = mouseX - (slotSize / 2);
@@ -66,7 +65,6 @@ class SpellBook {
 			this.spawned = false;
 			inventoryArray.push(this);
 			mouseHeldItem.splice(0, mouseHeldItem.length);
-			console.log("i was called");
 
 			let spellCoreIndex = spellsArray.findIndex(element => element.name == this.spellCore.name && element.spellBookID == this.uniqueID);
 			spellsArray.splice(spellCoreIndex, 1);
@@ -485,8 +483,10 @@ class SpellBook {
 			this.spellReady &&
 			keyPressed &&
 			keyPressedOnce[digitKey] &&
-			myGameCharacter.mana - manaBuildUp >= this.spell.manaCost
+			myGameCharacter.mana - manaBuildUp >= this.spell.manaCost &&
+			myGameCharacter.currentActiveSpellAmount < myGameCharacter.activeSpellAmountLimit
 		) {
+			myGameCharacter.currentActiveSpellAmount++;
 			keyPressedOnce[digitKey] = false;
 			if (!this.spellActive) {
 				manaBuildUp += this.spell.manaCost;
@@ -496,6 +496,7 @@ class SpellBook {
 		} else if (leftClick && this.spellActive) {
 			manaBuildUp -= this.spell.manaCost;
 			myGameCharacter.mana -= this.spell.manaCost;
+			myGameCharacter.currentActiveSpellAmount = 0;
 			this.borderColor = "#000000";
 			this.interact();
 			this.spellActive = false;

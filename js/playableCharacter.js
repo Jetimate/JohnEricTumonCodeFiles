@@ -23,6 +23,8 @@ class PlayableCharacter extends Mob {
 		this.hasTarget = false;
 		this.score = 0;
 		this.lastDamageTime = 0;
+		this.currentActiveSpellAmount = 0;
+		this.activeSpellAmountLimit = 1;
 	}		
 	playerNewPos() {
 		if (this.state === "dead") {

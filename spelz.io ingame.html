@@ -269,8 +269,6 @@
    //     const logicInterval = 1000 / 20; // 20fps = every 50ms
 
 		function updateGameplayScreen() {
-            console.log(myGameCharacter.score);
-			//console.log(gameTime, performance.now());
 			// Calculate world coordinates
 			mouseWorldX = (mouseX / camera.zoom) + camera.x;
             mouseWorldY = (mouseY / camera.zoom) + camera.y;
@@ -307,7 +305,7 @@
            
 			// logic part
 			// --- Logic only every 50ms (20fps) ---
-            console.log(gameTime);
+            //console.log(gameTime);
 			//if (gameTime - lastLogicUpdate >= logicInterval) {
 				// player and mob collision
 				playerCrashWith(myGameCharacter, mobsArray);
@@ -421,8 +419,8 @@
                 entity.lastDamageTime = 0;
             }
 
-            // only allow damage every 50ms per mob (20x/sec)
-            if (now - entity.lastDamageTime < 500) return;
+            // only allow damage every 250ms per mob (4x/sec)
+            if (now - entity.lastDamageTime < 250) return;
 
 			entity.lastDamageTime = now;
 
@@ -447,7 +445,6 @@
 
 			// checks if opponent damage is equal to 5% of player health
             if (entityDamage >= player.health * 0.05) {
-				console.log("ha");
 				shake.start(5, 200);
 			}
             entity.health = Math.max(0, entity.health - playerDamage);
@@ -895,7 +892,6 @@
                                         spell.y -= Math.sin(angle) * spellKnockbackDistance;
 									}
 									if (!mob.ignoreSpellCollision) {
-                                        console.log("haha");
                                         mob.x += Math.cos(angle) * spellKnockbackDistance;
                                         mob.y += Math.sin(angle) * spellKnockbackDistance;
 										if (mob.x < mob.radius) mob.x = mob.radius;

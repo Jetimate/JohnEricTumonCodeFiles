@@ -62,6 +62,7 @@ class Spell {
 			myGameCharacter.summonSpace -= 1 * this.summonCost;
 		}
 		let spellIndex = spellsArray.indexOf(this);
+		console.log(this.name);
 		if (spellIndex > -1) {
 			//console.log(this); isMouseDown
 			spellsArray.splice(spellIndex, 1);
