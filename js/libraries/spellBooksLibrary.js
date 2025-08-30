@@ -251,8 +251,8 @@ const specterBook = {
 		art: "summoning",
 		shape: "circle",
 		appearance: "mob/specter.svg",
-		castAmount: 4,
-		maxAmount: 4,
+		castAmount: 10, // 4 
+		maxAmount: 10, // 4
 		ignoreSpellCollision: false,
 		ignoreMobCollision: false,
 		index: 1,

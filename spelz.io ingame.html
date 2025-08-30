@@ -86,10 +86,8 @@
 			// -------
 
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
-			//original stats
-//			myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, "player1", 10, 0, 0, 0.01, 0.0005); //mana regen = 0.0005
 			// test stats
-            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, nameInputButtonText, 20, 0, 0, 0.01, 0.005, "alive"); //mana regen = 0.0005
+            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, nameInputButtonText, 20, 0, 0, "alive");
 			camera = new Camera(canvas.width, canvas.height);
 			shake = new ScreenShake();
 
@@ -271,7 +269,11 @@
 		function updateGameplayScreen() {
 			// Calculate world coordinates
 			mouseWorldX = (mouseX / camera.zoom) + camera.x;
-            mouseWorldY = (mouseY / camera.zoom) + camera.y;
+			mouseWorldY = (mouseY / camera.zoom) + camera.y;
+
+			// variable mostly used in the spell file but also in the followMouseMovement function here
+            castMouseX = mouseWorldX - biome1.x;
+            castMouseY = mouseWorldY - biome1.y;
 
 			// Update camera to follow the player
             camera.follow(myGameCharacter, window.innerWidth, window.innerHeight);
@@ -388,8 +390,6 @@
                 }
             }
             if (followMouseMovement) {
-                let castMouseX = mouseWorldX - biome1.x;
-                let castMouseY = mouseWorldY - biome1.y;
                 let dx = castMouseX - myGameCharacter.x;
                 let dy = castMouseY - myGameCharacter.y;
 
@@ -412,6 +412,9 @@
             shake.start(magnitude, duration);
 		}
 		function evaluatePlayerDamage(player, entity) {
+			// The player’s attack rate is tied to the number of mobs — the more mobs around, the more often the player can “swing.”
+			// The system right now is more like a damage exchange trigger per mob, not a universal player attack cooldown.
+
             const now = performance.now();
 
             // give each mob its own damage cooldown
@@ -424,10 +427,11 @@
 
 			entity.lastDamageTime = now;
 
-			//TODO: rearrange the lines of code
             // Apply damage
             let entityDamage = Math.max(0, entity.damage - player.defense);
             let playerDamage = Math.max(0, player.damage - entity.defense);
+            entity.health = Math.max(0, entity.health - playerDamage);
+			player.health = Math.max(0, player.health - entityDamage);
 
 			// checks if damage is from a mob
             if (entity.codeClass == "mob" && entity.health <= 0) {
@@ -447,8 +451,7 @@
             if (entityDamage >= player.health * 0.05) {
 				shake.start(5, 200);
 			}
-            entity.health = Math.max(0, entity.health - playerDamage);
-            player.health = Math.max(0, player.health - entityDamage);
+            
             if (player.health <= 0) {
                 playerDeath();
             }
@@ -905,11 +908,6 @@
 					}
 				}
 			});
-		}
-		function getDistance(circle1, circle2) {
-			let a = circle2.y - circle1.y;
-			let b = circle2.x - circle1.x;
-			return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		}
 		/*
 		tasks:

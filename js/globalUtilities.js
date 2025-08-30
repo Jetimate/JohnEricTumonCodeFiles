@@ -82,8 +82,6 @@ let mouseX = null;
 let mouseY = null;
 let mouseDownMoveX = null;
 let mouseDownMoveY = null;
-let castMouseX = null;
-let castMouseY = null;
 let mouseClickX = null;
 let mouseClickY = null;
 let worldMouseClickX = null;
@@ -94,6 +92,8 @@ let mouseWorldX = null;
 let mouseWorldY = null;
 let playerTargetX = null;
 let playerTargetY = null;
+let castMouseX = null;
+let castMouseY = null;
 
 let mobsArray = [];
 let lootsArray = [];
@@ -232,10 +232,6 @@ window.addEventListener('mousemove', (event) => {
 		mouseDownMoveX = event.clientX - rect.left;
 		mouseDownMoveY = event.clientY - rect.top;
 	}
-	if (followMouseMovement) {
-		playerTargetX = mouseWorldX - biome1.x;
-		playerTargetY = mouseWorldY - biome1.y;
-	}
 
 	buttonsMap.forEach((value, key) => {
 		value.hoverButton();
@@ -287,4 +283,13 @@ function darkenHexColor(hex, percent) {
 	const toHex = (value) => value.toString(16).padStart(2, '0');
 
 	return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function getDistance(circle1, circle2) {
+	let a = circle2.y - circle1.y;
+	let b = circle2.x - circle1.x;
+	return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+}
+function clamp(value, min, max) {
+	return Math.max(min, Math.min(max, value));
 }

@@ -86,7 +86,19 @@ class Spell {
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
 				if (distance < spellA.radius + spellB.radius) {
-					simulateCollision(spellA, spellB);
+					// Apply knockback
+					const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
+
+					if (!spellA.ignoreSpellCollision) {
+						spellA.x -= (dx / distance) * knockbackDistance;
+						spellA.y -= (dy / distance) * knockbackDistance;
+					}
+					if (!spellB.ignoreSpellCollision) {
+						spellB.x += (dx / distance) * knockbackDistance;
+						spellB.y += (dy / distance) * knockbackDistance;
+					}
+
+					evaluateDamage(spellA, spellB);
 				}
 			}
 			/*
@@ -134,7 +146,7 @@ class Spell {
 				const distance = Math.sqrt(dx * dx + dy * dy);
 
 				if (distance < circle.radius) {
-					simulateCollision(circle, line);
+					evaluateDamage(circle, line);
 				}
 			}
 			*/
@@ -142,22 +154,7 @@ class Spell {
 	}
 
 	// Function to handle collision simulation
-	function simulateCollision(spellA, spellB) {
-
-		// Apply knockback
-		const dx = spellB.x - spellA.x;
-		const dy = spellB.y - spellA.y;
-		const distance = Math.sqrt(dx * dx + dy * dy);
-		const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
-
-		if (!spellA.ignoreSpellCollision) {
-			spellA.x -= (dx / distance) * knockbackDistance;
-			spellA.y -= (dy / distance) * knockbackDistance;
-		}
-		if (!spellB.ignoreSpellCollision) {
-			spellB.x += (dx / distance) * knockbackDistance;
-			spellB.y += (dy / distance) * knockbackDistance;
-		}
+	function evaluateDamage(spellA, spellB) {
 
 		// Handle spell damage if on opposing sides
 		if (spellA.side !== spellB.side) {
@@ -183,8 +180,8 @@ class Spell {
 			ctx.translate(this.x, this.y);
 
 			// Calculate the difference and angle
-			let dx = (mouseWorldX - biome1.x) - myGameCharacter.x;
-			let dy = (mouseWorldY - biome1.y) - myGameCharacter.y;
+			let dx = castMouseX - myGameCharacter.x;
+			let dy = castMouseY - myGameCharacter.y;
 			this.angle = Math.atan2(dy, dx);
 
 			// Rotate the context to face the target angle
@@ -300,15 +297,15 @@ class Spell {
 			}
 		}
 		if (this.ability === "summon1") {
+
 			if (this.hasTarget) {
-				let summoningSpells = spellsArray.filter(element => element.ability === "summon1");
-				summoningSpells.forEach(spell => spell.setTarget(mouseWorldX - biome1.x, mouseWorldY - biome1.y));
+				this.setTarget(castMouseX, castMouseY);
 
 				if (!leftClick && this.side == myGameCharacter.side) {
 					this.hasTarget = false;
 				} else if (leftClick && this.side == myGameCharacter.side) {
-					let dx = (mouseWorldX - biome1.x) - this.x;
-					let dy = (mouseWorldY - biome1.y) - this.y;
+					let dx = castMouseX - this.x;
+					let dy = castMouseY - this.y;
 					this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 					this.x += this.speed * Math.sin(this.angle);
 					this.y -= this.speed * Math.cos(this.angle);
@@ -321,7 +318,7 @@ class Spell {
 					this.y -= this.speed * Math.cos(this.angle);
 				}
 
-			} else if (!this.hasTarget) {
+			} else {
 				// Calculate target orbit position
 				let targetX = this.caster.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (this.caster.radius * this.orbitRadius);
 				let targetY = this.caster.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (this.caster.radius * this.orbitRadius);
@@ -359,14 +356,13 @@ class Spell {
 						let dx = this.target.x - this.x;
 						let dy = this.target.y - this.y;
 						this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
-						// Ensure the entity stays within the canvas boundaries
-						if (this.x < this.radius) this.x = this.radius;
-						if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-						if (this.y < this.radius) this.y = this.radius;
-						if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 					}
 				}
 			}
+			/* Ensure the entity stays within the canvas boundaries
+			this.x = clamp(this.x, this.radius, biome1.width - this.radius);
+			this.y = clamp(this.y, this.radius, biome1.height - this.radius);
+			*/
 		}
 		if (this.ability === "summon2") {
 			// Ensure the entity stays within the canvas boundaries
@@ -380,8 +376,8 @@ class Spell {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
 				if (this.side == myGameCharacter.side) {
-					this.newTargetX = mouseWorldX - biome1.x;
-					this.newTargetY = mouseWorldY - biome1.y;
+					this.newTargetX = castMouseX;
+					this.newTargetY = castMouseY;
 				} else if (this.side != myGameCharacter.side) {
 					this.newTargetX = myGameCharacter.x;
 					this.newTargetY = myGameCharacter.y;
@@ -440,8 +436,6 @@ class Spell {
 						this.orbitRadiusIncrease = 0;
 						this.damageIncrease = 0;
 						if (leftClick && !this.hasTarget) {
-							castMouseX = mouseWorldX - biome1.x;
-							castMouseY = mouseWorldY - biome1.y;
 							let dx = castMouseX - this.x;
 							let dy = castMouseY - this.y;
 							this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
@@ -473,8 +467,8 @@ class Spell {
 			}
 			if (!this.hasTarget) {
 				if (this.side == myGameCharacter.side) {
-					this.newTargetX = mouseWorldX - biome1.x;
-					this.newTargetY = mouseWorldY - biome1.y;
+					this.newTargetX = castMouseX;
+					this.newTargetY = castMouseY;
 				} else if (this.side != myGameCharacter.side) {
 					this.newTargetX = myGameCharacter.x;
 					this.newTargetY = myGameCharacter.y;
@@ -501,8 +495,6 @@ class Spell {
 		if (this.ability === "teleport") {
 			// Calculate the angle only once, if it hasn't been calculated yet
 			if (!this.hasTarget) {
-				castMouseX = mouseWorldX - biome1.x;
-				castMouseY = mouseWorldY - biome1.y;
 				let dx = castMouseX - this.x;
 				let dy = castMouseY - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);

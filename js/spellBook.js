@@ -422,9 +422,6 @@ class SpellBook {
 			}, 15);
 		}
 		if (this.spell.ability === "beam2") {
-			castMouseX = mouseWorldX - biome1.x;
-			castMouseY = mouseWorldY - biome1.y;
-
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < this.spell.castAmount) {
