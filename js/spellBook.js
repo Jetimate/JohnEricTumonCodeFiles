@@ -462,8 +462,10 @@ class SpellBook {
 	}
 
 	update() {
-		// level up spell Book
+		/* level up spell Book
 		let totalSpellPageCount = inventoryArray.filter(element => element.name == this.spell.name).length;
+		//console.log(inventoryArray);
+		console.log(this.name, totalSpellPageCount, this.maxPages, this.spell.name);
 		if (totalSpellPageCount >= this.maxPages) {
 			let spellPageIndex = inventoryArray.findIndex(element => element.name == this.spell.name);
 			if (spellPageIndex !== -1) {
@@ -472,6 +474,21 @@ class SpellBook {
 			this.maxPages += 3;
 			this.level++;
 		}
+		*/
+		this.draw(ctx);
+		// console.log(keyDown, this.spellActive, !this.spellReady);
+		if (keyDown || this.spellActive || !this.spellReady) {
+			this.cast();
+		}
+		
+		if (this.spawned == false && this.onSlot == true) {
+			// activate only if the spell is on a slot.
+			this.activate();
+		}
+		
+	}
+
+	cast() {
 		// Handle spell input (1–9)
 		const digitKey = `Digit${this.index}`;
 		const keyPressed = keys[digitKey];
@@ -506,60 +523,18 @@ class SpellBook {
 
 			keyPressedOnce[digitKey] = false;
 
-			 buttonsMap.get("manaBar").startShaking("insufficientMana", 300, 5);
-			 shakeScreen();
+			buttonsMap.get("manaBar").startShaking("insufficientMana", 300, 5);
+			shakeScreen();
 		}
 
 		if (!this.spellReady) {
 			this.cooldownTimer++;
-			this.borderColor = "red";
+			this.borderColor = "#800000";
 			if (this.cooldownTimer >= this.cooldown) {
-				this.borderColor = "black";
+				this.borderColor = "#000000";
 				this.spellReady = true;  // Skill becomes ready again
 				this.cooldownTimer = 0;  // Reset the cooldown timer
 			}
 		}
-		this.draw(ctx);
-		if (this.spawned == false && this.onSlot == true) {
-			// activate only if the spell is on a slot.
-			this.activate();
-		}
-
-		else {
-		}
-
-	}
-
-	clickButton() {
-			/*
-			if (this.index === 1) {
-				keys.Digit1 = true;
-			}
-			if (this.index === 2) {
-				keys.Digit2 = true;
-			}
-			if (this.index === 3) {
-				keys.Digit3 = true;
-			}
-			if (this.index === 4) {
-				keys.Digit4 = true;
-			}
-			if (this.index === 5) {
-				keys.Digit5 = true;
-			}
-			if (this.index === 6) {
-				keys.Digit1 = true;
-			}
-			if (this.index === 7) {
-				keys.Digit2 = true;
-			}
-			if (this.index === 8) {
-				keys.Digit3 = true;
-			}
-			if (this.index === 9) {
-				keys.Digit4 = true;
-			}
-			*/
-			//console.log(this.name + " was clicked");
 	}
 }

@@ -71,6 +71,9 @@ for (const key in keys) {
 	keyPressedOnce[key] = false;
 }
 
+let keyDown = false;
+let keyUp = true;
+
 let generatedID = 0;
 let gameTime = 0;
 
@@ -196,9 +199,6 @@ window.addEventListener('mousedown', (event) => {
 	buttonsMap.forEach((value, key) => {
 		value.clickButton();
 	});
-	spellBooksArray.forEach(spellBook => {
-		spellBook.clickButton();
-	})
 
 	if (gameplayScreen) {
 		biome1.clickImage(biome1);
@@ -239,6 +239,7 @@ window.addEventListener('mousemove', (event) => {
 });
 // Key down event listener
 window.addEventListener('keydown', (event) => {
+	keyDown = true;
 	if (keys.hasOwnProperty(event.code)) {
 		if (!keys[event.code]) {
 			// Key was not previously pressed, so register a "pressed once"
@@ -252,6 +253,7 @@ window.addEventListener('keydown', (event) => {
 
 // Key up event listener
 window.addEventListener('keyup', (event) => {
+	keyDown = false;
 	if (keys.hasOwnProperty(event.code)) {
 		keys[event.code] = false;          // mark key as released
 		keyPressedOnce[event.code] = false; // reset pressed once flag on release

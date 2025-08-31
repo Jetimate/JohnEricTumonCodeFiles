@@ -94,7 +94,7 @@ const specter = {
     radiusAdjust: 0,
     movementSpeed: 3,
     turnSpeed: null,
-    FOVRadius: 10,// 1000
+    FOVRadius: 1000,
     maxAmount: 10,
     name: "specter",
     side: "gloomForest",
