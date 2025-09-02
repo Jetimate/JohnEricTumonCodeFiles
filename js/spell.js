@@ -62,7 +62,7 @@ class Spell {
 			myGameCharacter.summonSpace -= 1 * this.summonCost;
 		}
 		let spellIndex = spellsArray.indexOf(this);
-		console.log(this.name);
+		//console.log(this.name);
 		if (spellIndex > -1) {
 			//console.log(this); isMouseDown
 			spellsArray.splice(spellIndex, 1);
@@ -81,21 +81,35 @@ class Spell {
 
 			// If both are circles, handle circle-circle collision
 			if (spellA.shape === "circle" && spellB.shape === "circle") {
-				const dx = spellB.x - spellA.x;
-				const dy = spellB.y - spellA.y;
-				const distance = Math.sqrt(dx * dx + dy * dy);
+				let dx = spellB.x - spellA.x;
+				let dy = spellB.y - spellA.y;
+				let distance = Math.sqrt(dx * dx + dy * dy);
 
 				if (distance < spellA.radius + spellB.radius) {
-					// Apply knockback
-					const knockbackDistance = (spellA.radius + spellB.radius - distance) / 2;
+					// this part prevents this: dx = 0, dy = 0, distance = 0 Then dx / distance and dy / distance = division by zero NaN
+					// it happens when the different spells spawn at the exact same position as the other spell which causes it to bug and delete itself
+					if (distance === 0) {
+						// Random unit vector
+						const angleAsRandomizer = Math.random() * 2 * Math.PI;
+						dx = Math.cos(angleAsRandomizer);
+						dy = Math.sin(angleAsRandomizer);
+						distance = 1; // prevent division by zero
+					}
+
+					const overlap = spellA.radius + spellB.radius - distance;
+
+					// Weight displacement: bigger radius moves less, smaller radius moves more
+					const totalRadius = spellA.radius + spellB.radius;
+					const weightA = spellB.radius / totalRadius; // how much A moves
+					const weightB = spellA.radius / totalRadius; // how much B moves
 
 					if (!spellA.ignoreSpellCollision) {
-						spellA.x -= (dx / distance) * knockbackDistance;
-						spellA.y -= (dy / distance) * knockbackDistance;
+						spellA.x -= (dx / distance) * overlap * weightA;
+						spellA.y -= (dy / distance) * overlap * weightA;
 					}
 					if (!spellB.ignoreSpellCollision) {
-						spellB.x += (dx / distance) * knockbackDistance;
-						spellB.y += (dy / distance) * knockbackDistance;
+						spellB.x += (dx / distance) * overlap * weightB;
+						spellB.y += (dy / distance) * overlap * weightB;
 					}
 
 					evaluateDamage(spellA, spellB);
@@ -399,62 +413,63 @@ class Spell {
 			}
 		}
 		// orbits the petal and takes time before you're able to aim the shot
+		if (this.art !== "books") {
+			console.log(this.ability, this);
+		}
 		if (this.ability === "shoot2") {
-			switch (this.state) {
-				case 0:
-					let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-					let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-					
-					if (!this.isCasted) {		
-						this.radiusIncrease = this.radius / 50; //0.1
-						this.orbitRadiusIncrease = this.orbitRadius / 500; //0.01
-						this.damageIncrease = this.damage / 30; //0.03
-						this.isCasted = true;
+			if (this.state === 0) {
+				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+
+				if (!this.isCasted) {
+					this.radiusIncrease = this.radius / 50; //0.1
+					this.orbitRadiusIncrease = this.orbitRadius / 500; //0.01
+					this.damageIncrease = this.damage / 30; //0.03
+					this.isCasted = true;
+				}
+
+				const dx = targetX - this.x;
+				const dy = targetY - this.y;
+				const distance = Math.sqrt(dx * dx + dy * dy);
+
+				const minSpeed = this.speed / 10;
+				const maxSpeed = this.speed;
+				const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
+				const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
+
+				this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
+				this.positionIndex += 0.008;
+				this.x += adjustedSpeed * Math.sin(this.angle);
+				this.y -= adjustedSpeed * Math.cos(this.angle);
+
+				this.radius += this.radiusIncrease;
+				this.orbitRadius += this.orbitRadiusIncrease;
+				this.damage += this.damageIncrease;
+
+				if (this.radius >= 15) {
+					//console.log(this.radius + " " + this.damage);
+					this.radiusIncrease = 0;
+					this.orbitRadiusIncrease = 0;
+					this.damageIncrease = 0;
+					if (leftClick && !this.hasTarget) {
+						let dx = castMouseX - this.x;
+						let dy = castMouseY - this.y;
+						this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+						this.hasTarget = true;  // Mark that the target has been set
+						this.state = 1;
 					}
+				}
+			}
+			else if (this.state === 1) {
+				this.x += this.speed * Math.sin(this.angle);
+				this.y -= this.speed * Math.cos(this.angle);
+				this.lifeTimer++;
 
-					const dx = targetX - this.x;
-					const dy = targetY - this.y;
-					const distance = Math.sqrt(dx * dx + dy * dy);
-
-					const minSpeed = this.speed / 10;
-					const maxSpeed = this.speed;
-					const speedFactor = Math.min(distance / 10, maxSpeed); // Scale speed based on distance
-					const adjustedSpeed = Math.max(speedFactor, minSpeed); // Ensure speed is not too slow
-
-					this.angle = Math.atan2(targetY - this.y, targetX - this.x) - (1.5 * Math.PI);
-					this.positionIndex += 0.008;
-					this.x += adjustedSpeed * Math.sin(this.angle);
-					this.y -= adjustedSpeed * Math.cos(this.angle);
-					
-					this.radius += this.radiusIncrease;
-					this.orbitRadius += this.orbitRadiusIncrease;
-					this.damage += this.damageIncrease;
-
-					if (this.radius >= 15) {
-						//console.log(this.radius + " " + this.damage);
-						this.radiusIncrease = 0;
-						this.orbitRadiusIncrease = 0;
-						this.damageIncrease = 0;
-						if (leftClick && !this.hasTarget) {
-							let dx = castMouseX - this.x;
-							let dy = castMouseY - this.y;
-							this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
-							this.hasTarget = true;  // Mark that the target has been set
-							this.state = 1;
-						}
-					}
-					break;
-				case 1:
-					this.x += this.speed * Math.sin(this.angle);
-					this.y -= this.speed * Math.cos(this.angle);
-					this.lifeTimer++;
-
-					// If lifeTimer exceeds maxLife, this entity will be removed
-					if (this.lifeTimer >= 120) {
-						// Call the function to remove this entity from the array
-						this.destroy();
-					}
-					break;
+				// If lifeTimer exceeds maxLife, this entity will be removed
+				if (this.lifeTimer >= 120) {
+					// Call the function to remove this entity from the array
+					this.destroy();
+				}
 			}
 		}
 		// inreases size and speed drastically upon attack

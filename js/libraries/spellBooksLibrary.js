@@ -301,7 +301,7 @@ const specterHandBook = {
 		appearance: "spell/specterHand.png",
 		castAmount: 1,
 		maxAmount: 1,
-		ignoreSpellCollision: false,
+		ignoreSpellCollision: true,
 		ignoreMobCollision: false,
 		index: 1,
 		health: 30,
