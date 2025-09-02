@@ -413,9 +413,6 @@ class Spell {
 			}
 		}
 		// orbits the petal and takes time before you're able to aim the shot
-		if (this.art !== "books") {
-			console.log(this.ability, this);
-		}
 		if (this.ability === "shoot2") {
 			if (this.state === 0) {
 				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
