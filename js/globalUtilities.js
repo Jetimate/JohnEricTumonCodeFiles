@@ -88,8 +88,8 @@ let isMouseDown = false;
 let leftClick = false;
 let rightClick = false;
 
-let mouseX = null;
-let mouseY = null;
+let mouseMoveX = null;
+let mouseMoveY = null;
 let mouseDownMoveX = null;
 let mouseDownMoveY = null;
 let mouseClickX = null;
@@ -232,8 +232,8 @@ window.addEventListener('mouseup', (event) => {
 window.addEventListener('mousemove', (event) => {
 	//console.log("mousemove");
 	const rect = canvas.getBoundingClientRect();
-	mouseX = event.clientX - rect.left;
-	mouseY = event.clientY - rect.top;
+	mouseMoveX = event.clientX - rect.left;
+	mouseMoveY = event.clientY - rect.top;
 
 	if (isMouseDown) {
 		mouseDownMoveX = event.clientX - rect.left;

@@ -280,8 +280,8 @@
             //console.log(spellBooksArray, JSON.parse(localStorage.getItem("savedSpellBooksArray")));
 
 			// Calculate world coordinates
-			mouseWorldX = (mouseX / camera.zoom) + camera.x;
-			mouseWorldY = (mouseY / camera.zoom) + camera.y;
+            mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
+            mouseWorldY = (mouseMoveY / camera.zoom) + camera.y;
 
 			// variable mostly used in the spell file but also in the followMouseMovement function here
             castMouseX = mouseWorldX - biome1.x;

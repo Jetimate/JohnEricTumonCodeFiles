@@ -589,7 +589,7 @@ class Button {
 			}
 
 			if (leftClick) {
-				let distance = mouseX >= this.x && mouseX < miniButtonSize + this.x && mouseY >= this.y && mouseY < miniButtonSize + this.y;
+				let distance = mouseMoveX >= this.x && mouseMoveX < miniButtonSize + this.x && mouseMoveY >= this.y && mouseMoveY < miniButtonSize + this.y;
 
 				let totalMovementButtonsArray = Array.from(buttonsMap.values()).filter(element => element.group == "movementButtons");
 				if (distance && this.name == "keyMovementButton") {
@@ -734,8 +734,8 @@ class Button {
 						//console.log("mousehelditems", mouseHeldItem);
 					}
 					if (inventoryArray[i].held) {
-						inventoryArray[i].x = mouseX - (lootSize / 2);
-						inventoryArray[i].y = mouseY - (lootSize / 2);
+						inventoryArray[i].x = mouseMoveX - (lootSize / 2);
+						inventoryArray[i].y = mouseMoveY - (lootSize / 2);
 					}
 				} else if (!leftClick && inventoryArray[i].held && mouseHeldItem.length >= 1) {
 					inventoryArray[i].held = false;
@@ -857,10 +857,10 @@ class Button {
 	}
 
 	hoverButton() {
-		if (mouseX >= this.x &&
-			mouseX <= this.x + this.width &&
-			mouseY >= this.y &&
-			mouseY <= this.y + this.height
+		if (mouseMoveX >= this.x &&
+			mouseMoveX <= this.x + this.width &&
+			mouseMoveY >= this.y &&
+			mouseMoveY <= this.y + this.height
 		) {
 			if (this.classification == "clickable" && !this.isHovered) {
 				//console.log(this.color, darkenHexColor(this.color, 20),  "i ran first");
@@ -990,10 +990,10 @@ class Button {
 			
 		}
 		if (!leftClick &&
-			mouseX >= this.x &&
-			mouseX <= this.x + this.width &&
-			mouseY >= this.y &&
-			mouseY <= this.y + this.height
+			mouseMoveX >= this.x &&
+			mouseMoveX <= this.x + this.width &&
+			mouseMoveY >= this.y &&
+			mouseMoveY <= this.y + this.height
 		) {
 			if (this.group == "spellBookSlot") {
 				if (mouseHeldItem.length > 0 && mouseHeldItem[0].codeClass == "spellBook" && !this.slotActive) {
