@@ -1007,6 +1007,8 @@ class Button {
 						let heldItemIndex = inventoryArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
 						inventoryArray.splice(heldItemIndex, 1);
 						mouseHeldItem.splice(0, 1);
+						// Save the whole array properly
+						localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
 					}
 					else if (mouseHeldItem[0].from == "spellBookSlot") {
 						mouseHeldItem[0].index = this.index;
@@ -1018,6 +1020,8 @@ class Button {
 						let heldItemIndex = spellBooksArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
 						spellBooksArray.splice(heldItemIndex, 1);
 						mouseHeldItem.splice(0, 1);
+						// Save the whole array properly
+						localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
 					}
 				}
 			}

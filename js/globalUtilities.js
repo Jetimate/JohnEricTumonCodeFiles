@@ -1,3 +1,10 @@
+// Check if first time
+let isFirstTimePlaying = localStorage.getItem("firstTimePlaying") === null
+	? true
+	: false;
+
+console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
+
 const constantPlayerSpeed = 7.5; //5
 let keyMovement = true;
 let mouseMovement = false;
@@ -246,6 +253,14 @@ window.addEventListener('keydown', (event) => {
 			keyPressedOnce[event.code] = true;
 		}
 		keys[event.code] = true; // mark key as pressed
+		if (event.code == "KeyX") {
+			console.log(event.code, "Clearing local storage data");
+			// Remove specific data
+			localStorage.removeItem("firstTimePlaying");
+
+			// Clear all local storage
+			localStorage.clear();
+		}
 	}
 	//console.log(event);
 	lastKeyPressed = event.key;

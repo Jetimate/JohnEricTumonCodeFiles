@@ -75,7 +75,10 @@
 			}
 			buttonsMap.clear();
 			textsMap.clear();
-			spellBooksArray = [];
+            //console.log(JSON.parse(localStorage.getItem("savedSpellBooksArray")));
+			//spellBooksArray = JSON.parse(localStorage.getItem("savedSpellBooksArray")) || [];
+            buttonsKeeper();
+			setUpSpellBooks();
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
@@ -92,13 +95,21 @@
 			shake = new ScreenShake();
 
 			spawnMobs();
-			buttonsKeeper();
-			spellBooksKeeper();
-			spellsKeeper();
+            if (isFirstTimePlaying === true) {
+				spellBooksKeeper();
+			}
+
 			var mainMenuVariable = document.getElementById("mainMenu");
 			if (mainMenuVariable) {
 				mainMenuVariable.remove();
 			}
+
+			if (isFirstTimePlaying) {
+				isFirstTimePlaying = false;
+				localStorage.setItem("firstTimePlaying", "false");
+			}
+
+            console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
 		}
 
 		function buttonsKeeper() {
@@ -119,12 +130,14 @@
 		}
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-
+			addSpellBook(spikeBook, 1);
+			/*
             addSpellBook(lightningBoltBook, 1);
 			addSpellBook(smashBook, 2);
             addSpellBook(specterBook, 3);
             addSpellBook(luminousShieldBook, 4);
-			
+			*/
+
 			/*
 			addSpellBook(lightningBoltBook, 1);
 			addSpellBook(lightningBoltBook, 2);
@@ -132,6 +145,7 @@
             addSpellBook(lightningBoltBook, 4);
 			*/
 
+			/*
             addSpellBook(energyBallBook, null);
             addSpellBook(specterBook, null);
 			addSpellBook(teleportBook, null);
@@ -139,10 +153,9 @@
             addSpellBook(spikeBook, null);
             addSpellBook(specterHandBook, null);
             addSpellBook(treeBook, null);
+			*/
 		}
-		function spellsKeeper() {
-		}
-
+		
 		function updateCanvas(time) {
 			gameTime = time;
 
@@ -263,10 +276,9 @@
             statsBarHeight = ((screen.height * 0.6) + (window.innerHeight * 0.4)) / 24;
 		}
 
- //       let lastLogicUpdate = 0;
-   //     const logicInterval = 1000 / 20; // 20fps = every 50ms
-
 		function updateGameplayScreen() {
+            //console.log(spellBooksArray, JSON.parse(localStorage.getItem("savedSpellBooksArray")));
+
 			// Calculate world coordinates
 			mouseWorldX = (mouseX / camera.zoom) + camera.x;
 			mouseWorldY = (mouseY / camera.zoom) + camera.y;
@@ -457,14 +469,12 @@
             }
 		}
 		function playerDeath() {
-			//alert("game over");
 			myGameCharacter.state = "dead";
 			addText(textLibrary.gameOverText);
             addText(textLibrary.playerScoreText);
 			buttonsMap.clear();
-            addButton(buttonLibrary.exitButton, null);
-			//textsMap.clear();
-			spellBooksArray = [];
+			addButton(buttonLibrary.exitButton, null);
+            spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
@@ -472,8 +482,8 @@
 			toBeCraftedMap.clear();
             for (let key in keys) {
                 keys[key] = false;
-            }
-			//startGame();
+			}
+            //localStorage.clear();
 		}
 		function levelUp() {
 
@@ -554,20 +564,48 @@
             let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.zIndex, index);
             buttonsMap.set(button.name, newButton);
 		}
-		function addSpellBook(spellBook, index) {
-            let newSpellBook = new SpellBook(spellBook.x, spellBook.y, index, spellBook.width, spellBook.height, spellBook.radii, "black", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text)
+		function addSpellBook(spellBook, index, id = generateID()) {
+			let newSpellBook = new SpellBook(
+				spellBook.x,
+				spellBook.y,
+				index,
+				spellBook.width,
+				spellBook.height,
+				spellBook.radii,
+				"black",
+				spellBook.appearance,
+				spellBook.name,
+                id,
+				spellBook.spell,
+				spellBook.spellCore,
+				spellBook.cooldown,
+				spellBook.text);
 
 			if (index != null) {
 				let slot = buttonsMap.get(`spellBookSlot${index}`);
-               
 				if (!slot.slotActive) {
 					slot.slotActive = true;
 					newSpellBook.onSlot = true;
 					spellBooksArray.push(newSpellBook);
+
+                    // Save the whole array properly
+                    localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
 				} 
             } else {
                 inventoryArray.push(newSpellBook);
-            }
+			}
+		}
+        function setUpSpellBooks() {
+            //console.log("check 1", spellBooksArray, JSON.parse(localStorage.getItem("savedSpellBooksArray")));
+
+            // Load back from storage
+			let saved = JSON.parse(localStorage.getItem("savedSpellBooksArray")) || [];
+
+			saved.map(data => {
+				addSpellBook(data, data.index, data.uniqueID)
+			});
+
+            //console.log("check 2", spellBooksArray, saved);
 		}
 		function addText(text) {
             let newText = new Text(text.x, text.y, text.text, text.fontSize, text.fillColor, text.strokeColor, text.border, text.fontFamily, text.name, text.group, text.classification, text.zIndex, text.textInRect);
@@ -773,8 +811,6 @@
 							}
 						}
 						function simulateCollision() {
-                            
-
 							// Apply knockback to both spell and player
 							
 							const dx = player.x - spell.x;
