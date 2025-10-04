@@ -274,7 +274,7 @@ const buttonLibrary = {
 		name: "exitButton",
 		group: null,
 		classification: "clickable",
-		text: "exit",
+		text: "save & exit",
 		zIndex: 10,
 		index: null
 	},
@@ -530,11 +530,11 @@ class Button {
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "exitButton") {
-			this.width = statsBarWidth * 0.25;
+			this.width = statsBarWidth * 0.45;
 			this.height = statsBarHeight * 0.75;
 			this.x = window.innerWidth - this.width - statsBarX;
 			this.y = statsBarY;
-			this.text = "exit";
+			this.text = "save & exit";
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 		if (this.name == "displaySettings") {
@@ -926,6 +926,10 @@ class Button {
 					buttonsMap.delete("activateCraft");
 					buttonsMap.delete("craftedItemSlot");
 					buttonsMap.delete("displayCrafting");
+
+					// Save the whole array properly
+					localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
+					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 				}
 			}
 			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
@@ -956,11 +960,12 @@ class Button {
 				buttonsMap.delete("followMouseMovementButton");
 			}
 			if (this.name == "exitButton") {
+				properlyRemoveCraftSlots();
+
 				gameStarted = false;
 				gameplayScreen = false;
 				startMenuButtons = false;
 				startMenuScreen = true;
-
 			}
 			if (this.name == "inventoryButton" && !this.toggle) {
 				this.toggle = true;
@@ -1007,8 +1012,10 @@ class Button {
 						let heldItemIndex = inventoryArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
 						inventoryArray.splice(heldItemIndex, 1);
 						mouseHeldItem.splice(0, 1);
+
 						// Save the whole array properly
 						localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
+						localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 					}
 					else if (mouseHeldItem[0].from == "spellBookSlot") {
 						mouseHeldItem[0].index = this.index;
@@ -1020,8 +1027,10 @@ class Button {
 						let heldItemIndex = spellBooksArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
 						spellBooksArray.splice(heldItemIndex, 1);
 						mouseHeldItem.splice(0, 1);
+
 						// Save the whole array properly
 						localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
+						localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 					}
 				}
 			}
@@ -1037,6 +1046,9 @@ class Button {
 					let lootIndex = inventoryArray.findIndex(element => element.index == mouseHeldItem[0].index && element.location == mouseHeldItem[0].location);
 					inventoryArray.splice(lootIndex, 1);
 					mouseHeldItem.splice(0, 1);
+
+					// Save the whole InventoryArray properly
+					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
 					let page = toBeCraftedMap.get("page");
 					page.index = null;
@@ -1045,6 +1057,9 @@ class Button {
 
 					inventoryArray.push(page);
 					toBeCraftedMap.delete("page");
+
+					// Save the whole InventoryArray properly
+					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 				}
 			}
 			if (this.name == "essenceSlot") {
@@ -1059,6 +1074,9 @@ class Button {
 					let lootIndex = inventoryArray.findIndex(element => element.index == mouseHeldItem[0].index && element.location == mouseHeldItem[0].location);
 					inventoryArray.splice(lootIndex, 1);
 					mouseHeldItem.splice(0, 1);
+
+					// Save the whole InventoryArray properly
+					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
 
 					let essence = toBeCraftedMap.get("essence");
@@ -1067,6 +1085,9 @@ class Button {
 					this.slotActive = false;
 					inventoryArray.push(essence);
 					toBeCraftedMap.delete("essence");
+
+					// Save the whole InventoryArray properly
+					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 				}
 			}
 			if (this.name == "activateCraft") {
@@ -1082,7 +1103,8 @@ class Button {
 
 						let craftedItemSlot = buttonsMap.get("craftedItemSlot");
 
-						// checks if there's an item at the craftedItemSlot
+						/* checks if there's an item at the craftedItemSlot and properly places the current item back to the inventory 
+						so that there is space for the new crafted item */
 						if (craftedItemSlot.slotActive) {
 							let spellBook = toBeCraftedMap.get("spellBook");
 
@@ -1093,6 +1115,9 @@ class Button {
 							toBeCraftedMap.delete("spellBook");
 
 							craftedItemSlot.slotActive = false;
+
+							// Save the whole InventoryArray properly
+							localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 						}
 						// crafts a spell book
 						let spellBook = page.spellBookName;
@@ -1125,6 +1150,9 @@ class Button {
 
 					inventoryArray.push(spellBook);
 					toBeCraftedMap.delete("spellBook");
+
+					// Save the whole InventoryArray properly
+					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 				}
 			}
 		}

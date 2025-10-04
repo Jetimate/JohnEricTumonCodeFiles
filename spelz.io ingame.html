@@ -75,18 +75,16 @@
 			}
 			buttonsMap.clear();
 			textsMap.clear();
-            //console.log(JSON.parse(localStorage.getItem("savedSpellBooksArray")));
-			//spellBooksArray = JSON.parse(localStorage.getItem("savedSpellBooksArray")) || [];
+
+			spellBooksArray = [];
+            spellsArray = [];
+            mobsArray = [];
+            lootsArray = [];
+			inventoryArray = [];
+
             buttonsKeeper();
 			setUpSpellBooks();
-			spellsArray = [];
-			mobsArray = [];
-			lootsArray = [];
-			inventoryArray = [];
-			// ------- for debug, delete later
-            addLootToInventory(spikePage, 64);
-			addLootToInventory(gloomEssence, 64);
-			// -------
+			setUpInventory();
 
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 			// test stats
@@ -95,18 +93,19 @@
 			shake = new ScreenShake();
 
 			spawnMobs();
-            if (isFirstTimePlaying === true) {
+			if (isFirstTimePlaying === true) {
 				spellBooksKeeper();
+                // ------- for debug, delete later
+                //addLootToInventory(spikePage, 64);
+                //addLootToInventory(gloomEssence, 64);
+				// -------
+                isFirstTimePlaying = false;
+                localStorage.setItem("firstTimePlaying", "false");
 			}
 
 			var mainMenuVariable = document.getElementById("mainMenu");
 			if (mainMenuVariable) {
 				mainMenuVariable.remove();
-			}
-
-			if (isFirstTimePlaying) {
-				isFirstTimePlaying = false;
-				localStorage.setItem("firstTimePlaying", "false");
 			}
 
             console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
@@ -277,7 +276,7 @@
 		}
 
 		function updateGameplayScreen() {
-            //console.log(spellBooksArray, JSON.parse(localStorage.getItem("savedSpellBooksArray")));
+            //console.log("inventory: " + inventoryArray, "storage: " + JSON.parse(localStorage.getItem("savedInventoryArray")));
 
 			// Calculate world coordinates
             mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -557,7 +556,10 @@
               loot.essenceName, loot.pagesToCraft, loot.essenceToCraft,
               loot.ignoreCollision, amount, loot.stackLimit, loot.text
            );
-           inventoryArray.push(newLoot);
+			inventoryArray.push(newLoot);
+
+            // Save the whole InventoryArray properly
+            localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
         }
 
 		function addButton(button, index) {
@@ -592,7 +594,10 @@
                     localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
 				} 
             } else {
-                inventoryArray.push(newSpellBook);
+				inventoryArray.push(newSpellBook);
+
+                // Save the whole InventoryArray properly
+                localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 			}
 		}
         function setUpSpellBooks() {
@@ -607,6 +612,23 @@
 
             //console.log("check 2", spellBooksArray, saved);
 		}
+		function setUpInventory() {
+            // Load back from storage
+            let saved = JSON.parse(localStorage.getItem("savedInventoryArray")) || [];
+			//console.log("saved: " + saved);
+			saved.map(data => {
+				//console.log("I exist");
+				if (data.codeClass == "loot") {
+                    //console.log("I exist too");
+					addLootToInventory(data, data.amount);
+				}
+                if (data.codeClass == "spellBook") {
+                    //console.log("I exist too");
+                    addSpellBook(data, data.index, data.uniqueID)
+                }
+            });
+		}
+
 		function addText(text) {
             let newText = new Text(text.x, text.y, text.text, text.fontSize, text.fillColor, text.strokeColor, text.border, text.fontFamily, text.name, text.group, text.classification, text.zIndex, text.textInRect);
 			textsMap.set(text.name, newText);
@@ -722,6 +744,9 @@
 						} else {
 							inventoryArray.push(loot);
 						}
+
+                        // Save the whole InventoryArray properly
+                        localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
 					}
 					lootsArray.splice(index, 1); // Remove loot from the array
 				}
