@@ -940,9 +940,9 @@ class Button {
 			} else if (this.name == "nameInput" && this.toggle) {
 				this.toggle = false;
 				this.color = "#d0def5";
-				this.text = "type your name here:";
 			}
 			if (this.name == "playButton") {
+				setUpPlayerName();
 				gameplayScreen = true;
 			}
 			if (this.name == "settingsButton" && !this.toggle) {

@@ -69,10 +69,6 @@
 		}
 
 		function startGame() {
-			let nameInputButtonText = buttonsMap.get("nameInput").text;
-            if (nameInputButtonText == "" || nameInputButtonText == "type your name here:") {
-				nameInputButtonText = "unnamed player";
-			}
 			buttonsMap.clear();
 			textsMap.clear();
 
@@ -88,7 +84,7 @@
 
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 			// test stats
-            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, nameInputButtonText, 20, 0, 0, "alive");
+            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, localStorage.getItem("savedPlayerName"), 20, 0, 0, "alive");
 			camera = new Camera(canvas.width, canvas.height);
 			shake = new ScreenShake();
 
@@ -181,21 +177,27 @@
 				if (nameInputButton.toggle) {
 					if (lastKeyPressed && typeof lastKeyPressed === 'string') {
 						if (keyPressedOnce['Backspace']) {
-                            nameInputButton.text = nameInputButton.text.slice(0, -1);
+							nameInputButton.text = nameInputButton.text.slice(0, -1);
 						}
 						if ((keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`] ||
-							keyPressedOnce[`Digit${lastKeyPressed}`] || 
-                            keyPressedOnce['Space']) &&
+							keyPressedOnce[`Digit${lastKeyPressed}`] ||
+							keyPressedOnce['Space']) &&
 							/^[a-zA-Z0-9 ]$/.test(lastKeyPressed)) {
 
 							//console.log(lastKeyPressed);
 							nameInputButton.text += lastKeyPressed;
 						}
 					}
+				} else {
+                    if (localStorage.getItem("savedPlayerName") == null) {
+                        localStorage.setItem("savedPlayerName", "unnamed player");
+                    }
+                    nameInputButton.text = localStorage.getItem("savedPlayerName");
 				}
 
 				// enter the game via enter button
-                if (keyPressedOnce['Enter']) {
+				if (keyPressedOnce['Enter']) {
+					setUpPlayerName();
                     gameplayScreen = true;
 				}
                 
@@ -205,12 +207,12 @@
 			}
 
 			if (gameplayScreen) {
-                if (!gameStarted) {
-                    startGame();
+				if (!gameStarted) {
+					startGame();
 					gameStarted = true;
 					startMenuScreen = false;
-                }
-                updateGameplayScreen();
+				}
+				updateGameplayScreen();
 			}
 			//console.log(buttonsMap);
 
@@ -277,6 +279,7 @@
 
 		function updateGameplayScreen() {
             //console.log("inventory: " + inventoryArray, "storage: " + JSON.parse(localStorage.getItem("savedInventoryArray")));
+			//console.log(localStorage.getItem("savedPlayerName"));
 
 			// Calculate world coordinates
             mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -627,6 +630,26 @@
                     addSpellBook(data, data.index, data.uniqueID)
                 }
             });
+		}
+		function setUpPlayerName() {
+            let nameInputButtonText = buttonsMap.get("nameInput").text;
+
+            if (localStorage.getItem("savedPlayerName") == null) {
+                if (nameInputButtonText == "") {
+                    nameInputButtonText = "unnamed player";
+                }
+            } else {
+                if (nameInputButtonText == "") {
+                    nameInputButtonText = "unnamed player";
+                }
+                if (localStorage.getItem("savedPlayerName") == "") {
+                    nameInputButtonText = "unnamed player";
+                }
+            }
+
+            if (nameInputButtonText != "") {
+                localStorage.setItem("savedPlayerName", nameInputButtonText);
+            }
 		}
 
 		function addText(text) {
