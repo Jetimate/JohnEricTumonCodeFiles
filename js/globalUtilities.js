@@ -4,20 +4,17 @@ let isFirstTimePlaying = localStorage.getItem("firstTimePlaying") === null
 	: false;
 
 //console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
-
 let savedData = JSON.parse(localStorage.getItem("savedPlayerData")) || {};
 
-let playerStarterData = {
-	health: savedData.health ?? 100,
-	mana: savedData.mana ?? 5,
-	name: savedData.name ?? "unnamed player",
-	experience: savedData.experience ?? 0,
-	maxExperience: savedData.maxExperience ?? 100,
-	level: savedData.level ?? 0,
-	score: savedData.score ?? 0
-};
+savedData.health ??= 100;
+savedData.mana ??= 5;
+savedData.name = savedData.name?.trim() || "unnamed player";
+savedData.experience ??= 0;
+savedData.maxExperience ??= 100;
+savedData.level ??= 0;
+savedData.score ??= 0;
 
-localStorage.setItem("savedPlayerData", JSON.stringify(playerStarterData));
+localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
 
 const constantPlayerSpeed = 7.5; //5
 let keyMovement = true;

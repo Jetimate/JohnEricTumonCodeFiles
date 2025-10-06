@@ -82,6 +82,13 @@
 			setUpSpellBooks();
 			setUpInventory();
 
+            if (!savedData.name || savedData.name.trim() === "") {
+                savedData.name = "unnamed player";
+                localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
+			}
+
+            console.log(savedData.health, savedData.mana, savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.score);
+
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 			// test stats
 			myGameCharacter = new PlayableCharacter(
@@ -99,7 +106,7 @@
 				1,
 				20,
 				0,
-				localStorage.getItem("savedPlayerName"),
+                savedData.name,
 				5,
 				0,
 				0,
@@ -208,10 +215,12 @@
 						}
 					}
 				} else {
-                    if (localStorage.getItem("savedPlayerName") == null) {
-                        localStorage.setItem("savedPlayerName", "unnamed player");
+                    if (!savedData.name || savedData.name.trim() === "") {
+                        savedData.name = "unnamed player";
+                        localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
+                    } else {
+                        nameInputButton.text = savedData.name;
                     }
-                    nameInputButton.text = localStorage.getItem("savedPlayerName");
 				}
 
 				// enter the game via enter button
@@ -297,8 +306,8 @@
 		}
 
 		function updateGameplayScreen() {
+            console.log(savedData.health, savedData.mana, savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.score);
             //console.log("inventory: " + inventoryArray, "storage: " + JSON.parse(localStorage.getItem("savedInventoryArray")));
-			//console.log(localStorage.getItem("savedPlayerName"));
 
 			// Calculate world coordinates
             mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -629,26 +638,25 @@
                 }
             });
 		}
-		function setUpPlayerName() {
-            let nameInputButtonText = buttonsMap.get("nameInput").text;
 
-            if (localStorage.getItem("savedPlayerName") == null) {
-                if (nameInputButtonText == "") {
-                    nameInputButtonText = "unnamed player";
-                }
-            } else {
-                if (nameInputButtonText == "") {
-                    nameInputButtonText = "unnamed player";
-                }
-                if (localStorage.getItem("savedPlayerName") == "") {
-                    nameInputButtonText = "unnamed player";
-                }
+        function setUpPlayerName() {
+            let nameInputButton = buttonsMap.get("nameInput");
+            let nameInputButtonText = nameInputButton.text.trim();
+
+            // If user input is empty, fallback to unnamed player
+            if (!nameInputButtonText) {
+                nameInputButtonText = "unnamed player";
             }
 
-            if (nameInputButtonText != "") {
-                localStorage.setItem("savedPlayerName", nameInputButtonText);
-            }
-		}
+            // Update savedData with new or existing name
+            savedData.name = nameInputButtonText;
+
+            // Save to localStorage
+            localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
+
+            // Update the button text to reflect saved value
+            nameInputButton.text = savedData.name;
+        }
 
 		function addText(text) {
             let newText = new Text(text.x, text.y, text.text, text.fontSize, text.fillColor, text.strokeColor, text.border, text.fontFamily, text.name, text.group, text.classification, text.zIndex, text.textInRect);
