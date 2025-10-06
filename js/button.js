@@ -478,7 +478,7 @@ class Button {
 				this.text = `level: ${myGameCharacter.level}`;
 			}
 			if (this.name == "experienceBar") {
-				this.text = `experience: ${myGameCharacter.experience}/${maxExperience}`;
+				this.text = `experience: ${myGameCharacter.experience}/${myGameCharacter.maxExperience}`;
 			}
 			if (this.name == "healthBar") {
 				this.text = `health: ${Math.floor(myGameCharacter.health) }/${myGameCharacter.maxHealth}`;

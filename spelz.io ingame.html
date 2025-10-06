@@ -84,7 +84,26 @@
 
 			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 			// test stats
-            myGameCharacter = new PlayableCharacter(5000, 5000, 5000, 5000, 5000, 5000, "mob/player.svg", false, false, 100, 0.5, 1, 20, 0, localStorage.getItem("savedPlayerName"), 20, 0, 0, "alive");
+			myGameCharacter = new PlayableCharacter(
+				5000,
+				5000,
+				5000,
+				5000,
+				5000,
+				5000,
+				"mob/player.svg",
+				false,
+				false,
+				100,
+				0.5,
+				1,
+				20,
+				0,
+				localStorage.getItem("savedPlayerName"),
+				5,
+				0,
+				0,
+				"alive");
 			camera = new Camera(canvas.width, canvas.height);
 			shake = new ScreenShake();
 
@@ -489,37 +508,16 @@
 		}
 		function levelUp() {
 
-			if (myGameCharacter.experience >= maxExperience) {
+            if (myGameCharacter.experience >= myGameCharacter.maxExperience) {
 				do {
-					myGameCharacter.experience -= maxExperience;
-					maxExperience += 100;
+                    myGameCharacter.experience -= myGameCharacter.maxExperience;
+					myGameCharacter.maxExperience += 100;
 					myGameCharacter.level += 1;
 					myGameCharacter.maxHealth += 5;
 					myGameCharacter.maxMana += 1;
 					myGameCharacter.manaRegen += 0.00025;
 					myGameCharacter.summonLimit += 2.5;
-					/*
-					if (!slot4Active && myGameCharacter.level >= 1) {
-						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousSpirit.png", "summonSpiritBook", generateID(), summonSpirit, mainLuminousSpirit, 300, "Spirit"));
-						slot4Active = true;
-					}
-					if (!slot5Active && myGameCharacter.level >= 1) {
-						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "luminousRock.png", "castLuminousEnergyBook", generateID(), castLuminousEnergy, mainLuminousEnergy, 45, "Luminergy"));
-						slot5Active = true;
-					}
-					if (!slot6Active && myGameCharacter.level >= 2) {
-						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "specter.svg", "summonSpecterBook", generateID(), summonSpecter, mainSpecter, 300, "Specter"));
-						slot6Active = true;
-					}
-					if (!slot7Active && myGameCharacter.level >= 2) {
-						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "teleportation.png", "teleportBook", generateID(), teleport, mainTeleport, 180, "Teleport"));
-						slot7Active = true;
-					}
-					if (!slot8Active && myGameCharacter.level >= 3) {
-						addSpellBook(new SpellBook(0, 0, null, 100, 100, [5], "black", "smash.png", "smashBook", generateID(), smash, mainSmash, 15, "Smash"));
-						slot8Active = true;
-					}
-					*/
+
 					if (myGameCharacter.spellBookSlotsUnlocked < 5 && myGameCharacter.level >= 5) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
                         addButton(buttonLibrary.spellBookSlot5, 5);
@@ -547,7 +545,7 @@
 					}
                     //console.log(myGameCharacter.spellBookSlotsUnlocked);
 				}
-				while (myGameCharacter.experience >= maxExperience);
+                while (myGameCharacter.experience >= myGameCharacter.maxExperience);
 			}
 		}
         // add loot to inventory for debugging purposes

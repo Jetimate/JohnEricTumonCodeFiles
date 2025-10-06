@@ -4,12 +4,13 @@ class PlayableCharacter extends Mob {
 		this.name = name;
 		this.mana = mana;
 		this.manaRegen = 0.005;
-		this.state = state;
 		this.experience = experience;
+		this.maxExperience = 100;
 		this.level = level;
+		this.state = state;
 		this.healthRegen = 0.01;
 		this.maxHealth = 100;
-		this.maxMana = 20; // 10
+		this.maxMana = 5; // 5
 		this.movementX = 0;
 		this.movementY = 0;
 		this.speed = constantPlayerSpeed;	

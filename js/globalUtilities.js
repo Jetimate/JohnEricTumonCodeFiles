@@ -3,7 +3,21 @@ let isFirstTimePlaying = localStorage.getItem("firstTimePlaying") === null
 	? true
 	: false;
 
-console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
+//console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
+
+let savedData = JSON.parse(localStorage.getItem("savedPlayerData")) || {};
+
+let playerStarterData = {
+	health: savedData.health ?? 100,
+	mana: savedData.mana ?? 5,
+	name: savedData.name ?? "unnamed player",
+	experience: savedData.experience ?? 0,
+	maxExperience: savedData.maxExperience ?? 100,
+	level: savedData.level ?? 0,
+	score: savedData.score ?? 0
+};
+
+localStorage.setItem("savedPlayerData", JSON.stringify(playerStarterData));
 
 const constantPlayerSpeed = 7.5; //5
 let keyMovement = true;
@@ -116,7 +130,6 @@ let spellsArray = [];
 let mouseHeldItem = [];
 let toBeCraftedMap = new Map();
 
-let maxExperience = 100;
 let manaBuildUp = 0;
 const spellKnockbackDistance = 5;
 
