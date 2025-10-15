@@ -20,6 +20,7 @@
 </head>
 <body>
 	<canvas id="mycanvas"></canvas>
+	<script type="text/javascript" src="js/storageManager.js"></script>
 	<script type="text/javascript" src="js/globalUtilities.js"></script>
 	<script type="text/javascript" src="js/mob.js"></script>
 	<script type="text/javascript" src="js/playableCharacter.js"></script>
@@ -44,7 +45,7 @@
 
 
 		other possibly useless reminder:
-		1. performace.now() can reach billions of numbers. 
+		1. performace.now() can reach billions of numbers.
 		   if this increases too much, it can cause lag to the game.
 		   add a way to reset it overtime.
 		*/
@@ -68,126 +69,124 @@
 
 		}
 
-		function startGame() {
-			buttonsMap.clear();
-			textsMap.clear();
-
-			spellBooksArray = [];
+        function startGame() {
+            // Reset game state
+            buttonsMap.clear();
+            textsMap.clear();
+            spellBooksArray = [];
             spellsArray = [];
             mobsArray = [];
             lootsArray = [];
-			inventoryArray = [];
+            inventoryArray = [];
 
             buttonsKeeper();
-			setUpSpellBooks();
-			setUpInventory();
+            setUpSpellBooks();
+            setUpInventory();
 
+            // Safety checks
             if (!savedData.name || savedData.name.trim() === "") {
                 savedData.name = "unnamed player";
-                localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
-			}
+                StorageManager.save("savedPlayerData", savedData);
+            }
 
-            console.log(savedData.health, savedData.mana, savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.score);
+            // Create background
+            biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
 
-			biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
-			// test stats
-			myGameCharacter = new PlayableCharacter(
-				5000,
-				5000,
-				5000,
-				5000,
-				5000,
-				5000,
-				"mob/player.svg",
-				false,
-				false,
-				100,
-				0.5,
-				1,
-				20,
-				0,
+            // Initialize player with saved data (cleaner and direct)
+            myGameCharacter = new PlayableCharacter(
+                5000,
+                5000,
+                5000,
+                5000,
+                5000,
+                5000,
+                "mob/player.svg",
+                false,
+                false,
+                savedData.health,
+                0.5,
+                1,
+                20,
+                0,
                 savedData.name,
-				5,
-				0,
-				0,
-				"alive");
-			camera = new Camera(canvas.width, canvas.height);
-			shake = new ScreenShake();
+                savedData.mana,
+                savedData.experience,
+                savedData.level,
+                "alive"
+            );
 
-			spawnMobs();
-			if (isFirstTimePlaying === true) {
-				spellBooksKeeper();
-                // ------- for debug, delete later
-                //addLootToInventory(spikePage, 64);
-                //addLootToInventory(gloomEssence, 64);
-				// -------
+            camera = new Camera(canvas.width, canvas.height);
+            shake = new ScreenShake();
+            spawnMobs();
+
+            if (isFirstTimePlaying === true) {
+                spellBooksKeeper();
                 isFirstTimePlaying = false;
                 localStorage.setItem("firstTimePlaying", "false");
-			}
+            }
 
-			var mainMenuVariable = document.getElementById("mainMenu");
-			if (mainMenuVariable) {
-				mainMenuVariable.remove();
-			}
+            const mainMenuVariable = document.getElementById("mainMenu");
+            if (mainMenuVariable) mainMenuVariable.remove();
 
-            console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
-		}
+            //console.log("First time playing?", isFirstTimePlaying, "| localStorage:", localStorage.getItem("firstTimePlaying"));
+        }
 
 		function buttonsKeeper() {
-            // stats bar
+			// stats bar
 			addButton(buttonLibrary.levelBar, 0);
 			addButton(buttonLibrary.experienceBar, 1);
 			addButton(buttonLibrary.healthBar, 2);
 			addButton(buttonLibrary.manaBar, 3);
-            // clickable buttons
+			// clickable buttons
 			addButton(buttonLibrary.inventoryButton, null);
 			addButton(buttonLibrary.settingsButton, null);
-            addButton(buttonLibrary.exitButton, null);
+			addButton(buttonLibrary.exitButton, null);
 
-            addButton(buttonLibrary.spellBookSlot1, 1);
-            addButton(buttonLibrary.spellBookSlot2, 2);
-            addButton(buttonLibrary.spellBookSlot3, 3);
-            addButton(buttonLibrary.spellBookSlot4, 4);
+			addButton(buttonLibrary.spellBookSlot1, 1);
+			addButton(buttonLibrary.spellBookSlot2, 2);
+			addButton(buttonLibrary.spellBookSlot3, 3);
+			addButton(buttonLibrary.spellBookSlot4, 4);
 		}
+
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
 			addSpellBook(spikeBook, 1);
 			/*
-            addSpellBook(lightningBoltBook, 1);
+			addSpellBook(lightningBoltBook, 1);
 			addSpellBook(smashBook, 2);
-            addSpellBook(specterBook, 3);
-            addSpellBook(luminousShieldBook, 4);
+			addSpellBook(specterBook, 3);
+			addSpellBook(luminousShieldBook, 4);
 			*/
 
 			/*
 			addSpellBook(lightningBoltBook, 1);
 			addSpellBook(lightningBoltBook, 2);
-            addSpellBook(lightningBoltBook, 3);
-            addSpellBook(lightningBoltBook, 4);
+			addSpellBook(lightningBoltBook, 3);
+			addSpellBook(lightningBoltBook, 4);
 			*/
 
 			/*
-            addSpellBook(energyBallBook, null);
-            addSpellBook(specterBook, null);
+			addSpellBook(energyBallBook, null);
+			addSpellBook(specterBook, null);
 			addSpellBook(teleportBook, null);
-            addSpellBook(luminousEnergyBook, null);
-            addSpellBook(spikeBook, null);
-            addSpellBook(specterHandBook, null);
-            addSpellBook(treeBook, null);
+			addSpellBook(luminousEnergyBook, null);
+			addSpellBook(spikeBook, null);
+			addSpellBook(specterHandBook, null);
+			addSpellBook(treeBook, null);
 			*/
 		}
-		
+
 		function updateCanvas(time) {
 			gameTime = time;
 
-            if (resizePending) {
-                resizeCanvas();
-                resizePending = false;
-            }
+			if (resizePending) {
+				resizeCanvas();
+				resizePending = false;
+			}
 
-            ctx.clearRect(0, 0, myGame.canvas.width, myGame.canvas.height);
-            ctx.fillStyle = "gray";
-            ctx.fillRect(0, 0, myGame.canvas.width, myGame.canvas.height);
+			ctx.clearRect(0, 0, myGame.canvas.width, myGame.canvas.height);
+			ctx.fillStyle = "gray";
+			ctx.fillRect(0, 0, myGame.canvas.width, myGame.canvas.height);
 
 			if (startMenuScreen) {
 				if (!startMenuButtons) {
@@ -198,40 +197,46 @@
 					addButton(buttonLibrary.playButton, null);
 					addButton(buttonLibrary.nameInput, null);
 				}
+
 				const nameInputButton = buttonsMap.get("nameInput");
-
-				if (nameInputButton.toggle) {
-					if (lastKeyPressed && typeof lastKeyPressed === 'string') {
-						if (keyPressedOnce['Backspace']) {
-							nameInputButton.text = nameInputButton.text.slice(0, -1);
-						}
-						if ((keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`] ||
-							keyPressedOnce[`Digit${lastKeyPressed}`] ||
-							keyPressedOnce['Space']) &&
-							/^[a-zA-Z0-9 ]$/.test(lastKeyPressed)) {
-
-							//console.log(lastKeyPressed);
-							nameInputButton.text += lastKeyPressed;
-						}
-					}
-				} else {
-                    if (!savedData.name || savedData.name.trim() === "") {
-                        savedData.name = "unnamed player";
-                        localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
-                    } else {
-                        nameInputButton.text = savedData.name;
+                // If the player is editing their name
+                if (nameInputButton.toggle) {
+                    if (lastKeyPressed && typeof lastKeyPressed === 'string') {
+                        if (keyPressedOnce['Backspace']) {
+                            nameInputButton.text = nameInputButton.text.slice(0, -1);
+                        }
+                        if (
+                            (keyPressedOnce[`Key${lastKeyPressed.toUpperCase()}`] ||
+                                keyPressedOnce[`Digit${lastKeyPressed}`] ||
+                                keyPressedOnce['Space']) &&
+                            /^[a-zA-Z0-9 ]$/.test(lastKeyPressed)
+                        ) {
+                            nameInputButton.text += lastKeyPressed;
+                        }
                     }
+                } else {
+                    // Not editing — show the saved name
+                    nameInputButton.text = savedData.name;
+                }
+
+                // Save name automatically when player finishes editing
+				if (!nameInputButton.toggle && nameInputButton.text.trim() !== savedData.name.trim()) {
+                    if (!nameInputButton.text.trim()) {
+                        nameInputButton.text = "unnamed player";
+                    }
+                    savedData.name = nameInputButton.text.trim();
+                    StorageManager.save("savedPlayerData", savedData);
 				}
 
 				// enter the game via enter button
 				if (keyPressedOnce['Enter']) {
 					setUpPlayerName();
-                    gameplayScreen = true;
+					gameplayScreen = true;
 				}
-                
-                for (const code in keyPressedOnce) {
-                    keyPressedOnce[code] = false;
-                }
+
+				for (const code in keyPressedOnce) {
+					keyPressedOnce[code] = false;
+				}
 			}
 
 			if (gameplayScreen) {
@@ -245,19 +250,19 @@
 			//console.log(buttonsMap);
 
 			buttonsMap.forEach(button => {
-                if (button.isShaking) {
-                    button.updateShake(performance.now());
-                }
-            });
-            // Step 1: Get all buttons as an array
-            const buttonsArray = Array.from(buttonsMap.values());
+				if (button.isShaking) {
+					button.updateShake(performance.now());
+				}
+			});
+			// Step 1: Get all buttons as an array
+			const buttonsArray = Array.from(buttonsMap.values());
 
-            // Step 2: Sort by zIndex (lowest to highest)
-            buttonsArray.sort((a, b) => a.zIndex - b.zIndex);
+			// Step 2: Sort by zIndex (lowest to highest)
+			buttonsArray.sort((a, b) => a.zIndex - b.zIndex);
 
-            // Step 3: Draw each button in order
-            for (const button of buttonsArray) {
-                button.draw(ctx);
+			// Step 3: Draw each button in order
+			for (const button of buttonsArray) {
+				button.draw(ctx);
 			}
 
 			// texts
@@ -265,66 +270,66 @@
 
 			textsArray.sort((a, b) => a.zIndex - b.zIndex);
 
-            for (const text of textsArray) {
-                text.draw(ctx);
-            }
+			for (const text of textsArray) {
+				text.draw(ctx);
+			}
 
-            requestAnimationFrame(updateCanvas);
-        }
-        function resizeCanvas() {
-            const canvas = myGame.canvas;
-            newWidth = window.innerWidth;
-            newHeight = window.innerHeight;
-            dpr = window.devicePixelRatio || 1;
+			requestAnimationFrame(updateCanvas);
+		}
 
-            if (canvas.width !== newWidth * dpr || canvas.height !== newHeight * dpr) {
-                canvas.width = newWidth * dpr;
-                canvas.height = newHeight * dpr;
-                canvas.style.width = newWidth + "px";
-                canvas.style.height = newHeight + "px";
-            }
+		function resizeCanvas() {
+			const canvas = myGame.canvas;
+			newWidth = window.innerWidth;
+			newHeight = window.innerHeight;
+			dpr = window.devicePixelRatio || 1;
 
-            myGame.context.setTransform(1, 0, 0, 1, 0, 0);
-            myGame.context.scale(dpr, dpr);
+			if (canvas.width !== newWidth * dpr || canvas.height !== newHeight * dpr) {
+				canvas.width = newWidth * dpr;
+				canvas.height = newHeight * dpr;
+				canvas.style.width = newWidth + "px";
+				canvas.style.height = newHeight + "px";
+			}
 
-            baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
-            lootSize = baseSize * 0.025;
-            slotSize = baseSize * 0.03;
-            slotMargin = baseSize * 0.005;
-            radiiSize = baseSize * 0.002;
-            miniButtonSize = baseSize * 0.015;
-            buttonMargin = baseSize * 0.005;
-            lineThickness = baseSize * 0.0008;
-            fontSize = baseSize * 0.00575;
+			myGame.context.setTransform(1, 0, 0, 1, 0, 0);
+			myGame.context.scale(dpr, dpr);
+
+			baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
+			lootSize = baseSize * 0.025;
+			slotSize = baseSize * 0.03;
+			slotMargin = baseSize * 0.005;
+			radiiSize = baseSize * 0.002;
+			miniButtonSize = baseSize * 0.015;
+			buttonMargin = baseSize * 0.005;
+			lineThickness = baseSize * 0.0008;
+			fontSize = baseSize * 0.00575;
 
 			centerX = window.innerWidth / 2;
 			centerY = window.innerHeight / 2;
-            statsBarX = window.innerWidth * 0.004;
-            statsBarY = window.innerHeight * 0.008;
-            statsBarWidth = ((screen.width * 0.6) + (window.innerWidth * 0.4)) / 8;
-            statsBarHeight = ((screen.height * 0.6) + (window.innerHeight * 0.4)) / 24;
+			statsBarX = window.innerWidth * 0.004;
+			statsBarY = window.innerHeight * 0.008;
+			statsBarWidth = ((screen.width * 0.6) + (window.innerWidth * 0.4)) / 8;
+			statsBarHeight = ((screen.height * 0.6) + (window.innerHeight * 0.4)) / 24;
 		}
 
 		function updateGameplayScreen() {
-            console.log(savedData.health, savedData.mana, savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.score);
-            //console.log("inventory: " + inventoryArray, "storage: " + JSON.parse(localStorage.getItem("savedInventoryArray")));
+            console.log(savedData.health, savedData.mana, savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.score, savedData.spellBooksArray, savedData.inventoryArray);
 
 			// Calculate world coordinates
-            mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
-            mouseWorldY = (mouseMoveY / camera.zoom) + camera.y;
+			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
+			mouseWorldY = (mouseMoveY / camera.zoom) + camera.y;
 
 			// variable mostly used in the spell file but also in the followMouseMovement function here
-            castMouseX = mouseWorldX - biome1.x;
-            castMouseY = mouseWorldY - biome1.y;
+			castMouseX = mouseWorldX - biome1.x;
+			castMouseY = mouseWorldY - biome1.y;
 
 			// Update camera to follow the player
-            camera.follow(myGameCharacter, window.innerWidth, window.innerHeight);
+			camera.follow(myGameCharacter, window.innerWidth, window.innerHeight);
 
-            ctx.save();           // Save context state
-            shake.apply(ctx);     // Apply screen shake
-			camera.applyTransform(ctx);  
+			ctx.save();           // Save context state
+			shake.apply(ctx);     // Apply screen shake
+			camera.applyTransform(ctx);
 
-            // Draw game objects
+			// Draw game objects
 			biome1.draw(ctx);
 			mobsArray.forEach(mob => {
 				mob.draw(ctx);
@@ -338,31 +343,31 @@
 			myGameCharacter.regenerateMana();
 			updatePlayerPosition();
 
-            // Reset transformations (important!!!)
+			// Reset transformations (important!!!)
 			camera.resetTransform(ctx);
-            shake.reset(ctx);     // Reset any screen shake transforms
+			shake.reset(ctx);     // Reset any screen shake transforms
 			ctx.restore();        // Restore context state
 
-            spellBooksArray.forEach(spellBook => {
-                spellBook.update();
-            });
-           
+			spellBooksArray.forEach(spellBook => {
+				spellBook.update();
+			});
+
 			// logic part
 			// --- Logic only every 50ms (20fps) ---
-            //console.log(gameTime);
+			//console.log(gameTime);
 			//if (gameTime - lastLogicUpdate >= logicInterval) {
-				// player and mob collision
-				playerCrashWith(myGameCharacter, mobsArray);
-				// player and loot collision
-				playerCollideWithLoot(myGameCharacter, lootsArray);
-				// player and spell collision
-				playerCrashWithSpell(myGameCharacter, spellsArray);
-				// mob to mob collision
-				crashWith(mobsArray, mobsArray);
-				// mob and spell collision
-				crashWithSpell(spellsArray, mobsArray);
+			// player and mob collision
+			playerCrashWith(myGameCharacter, mobsArray);
+			// player and loot collision
+			playerCollideWithLoot(myGameCharacter, lootsArray);
+			// player and spell collision
+			playerCrashWithSpell(myGameCharacter, spellsArray);
+			// mob to mob collision
+			crashWith(mobsArray, mobsArray);
+			// mob and spell collision
+			crashWithSpell(spellsArray, mobsArray);
 
-            //    lastLogicUpdate = gameTime;
+			//    lastLogicUpdate = gameTime;
 			//}
 			myGameCharacter.playerNewPos();
 			myGameCharacter.movementX = 0;
@@ -370,156 +375,161 @@
 			myGameCharacter.moveAngle = 0;
 			myGameCharacter.newSpeed = 0;
 		}
-        function updatePlayerPosition() {
-            if (keyMovement) {
-                if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
-                    myGameCharacter.angle = (1.75 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
-                    myGameCharacter.angle = (2.25 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
-                    myGameCharacter.angle = (1.25 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
-                    myGameCharacter.angle = (0.75 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if (keys.KeyW || keys.ArrowUp) { // Up
-                    myGameCharacter.angle = (2 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if (keys.KeyS || keys.ArrowDown) { // Down
-                    myGameCharacter.angle = (1 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if (keys.KeyA || keys.ArrowLeft) { // Left
-                    myGameCharacter.angle = (1.5 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                } else if (keys.KeyD || keys.ArrowRight) { // Right
-                    myGameCharacter.angle = (0.5 * Math.PI);
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
-                }
-            }
-            if (mouseMovement) {
-                if (myGameCharacter.hasTarget && playerTargetX != null && playerTargetY != null) {
-                    // Calculate the difference in x and y between the current position and the target
-                    let dx = playerTargetX - myGameCharacter.x;
-                    let dy = playerTargetY - myGameCharacter.y;
+		function updatePlayerPosition() {
+			if (keyMovement) {
+				if ((keys.KeyW || keys.ArrowUp) && (keys.KeyA || keys.ArrowLeft)) { // Up-Left
+					myGameCharacter.angle = (1.75 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if ((keys.KeyW || keys.ArrowUp) && (keys.KeyD || keys.ArrowRight)) { // Up-Right
+					myGameCharacter.angle = (2.25 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyA || keys.ArrowLeft)) { // Down-Left
+					myGameCharacter.angle = (1.25 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if ((keys.KeyS || keys.ArrowDown) && (keys.KeyD || keys.ArrowRight)) { // Down-Right
+					myGameCharacter.angle = (0.75 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if (keys.KeyW || keys.ArrowUp) { // Up
+					myGameCharacter.angle = (2 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if (keys.KeyS || keys.ArrowDown) { // Down
+					myGameCharacter.angle = (1 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if (keys.KeyA || keys.ArrowLeft) { // Left
+					myGameCharacter.angle = (1.5 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				} else if (keys.KeyD || keys.ArrowRight) { // Right
+					myGameCharacter.angle = (0.5 * Math.PI);
+					myGameCharacter.newSpeed = myGameCharacter.speed;
+				}
+			}
+			if (mouseMovement) {
+				if (myGameCharacter.hasTarget && playerTargetX != null && playerTargetY != null) {
+					// Calculate the difference in x and y between the current position and the target
+					let dx = playerTargetX - myGameCharacter.x;
+					let dy = playerTargetY - myGameCharacter.y;
 
-                    // Calculate the distance to the target
-                    let distance = Math.sqrt(dx * dx + dy * dy);
+					// Calculate the distance to the target
+					let distance = Math.sqrt(dx * dx + dy * dy);
 
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 
-                    // Check if the character has reached the target
-                    if (distance <= myGameCharacter.newSpeed) {
-                        // Snap to target and stop moving
-                        myGameCharacter.x = playerTargetX;
-                        myGameCharacter.y = playerTargetY;
-                        playerTargetX = null;
-                        playerTargetY = null;
-                        myGameCharacter.hasTarget = false;
-                    } else {
-                        // Calculate the angle to the target
-                        myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+					// Check if the character has reached the target
+					if (distance <= myGameCharacter.newSpeed) {
+						// Snap to target and stop moving
+						myGameCharacter.x = playerTargetX;
+						myGameCharacter.y = playerTargetY;
+						playerTargetX = null;
+						playerTargetY = null;
+						myGameCharacter.hasTarget = false;
+					} else {
+						// Calculate the angle to the target
+						myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 
-                        // Move toward the target
-                        myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
-                        myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-                        if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
-                        if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
-                        if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
-                        if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
-                    }
-                }
-            }
-            if (followMouseMovement) {
-                let dx = castMouseX - myGameCharacter.x;
-                let dy = castMouseY - myGameCharacter.y;
+						// Move toward the target
+						myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
+						myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
+						if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
+						if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
+						if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
+						if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+					}
+				}
+			}
+			if (followMouseMovement) {
+				let dx = castMouseX - myGameCharacter.x;
+				let dy = castMouseY - myGameCharacter.y;
 
-                myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
+				myGameCharacter.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 
-                if (keys.KeyW || keys.ArrowUp) {
-                    myGameCharacter.newSpeed = myGameCharacter.speed;
+				if (keys.KeyW || keys.ArrowUp) {
+					myGameCharacter.newSpeed = myGameCharacter.speed;
 
-                    myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
-                    myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-                    if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
-                    if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
-                    if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
-                    if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+					myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
+					myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
+					if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
+					if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
+					if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
+					if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
 
-                }
-            }
-        }
+				}
+			}
+		}
 		function shakeScreen(magnitude, duration) {
-            shake.start(magnitude, duration);
+			shake.start(magnitude, duration);
 		}
 		function evaluatePlayerDamage(player, entity) {
 			// The player’s attack rate is tied to the number of mobs — the more mobs around, the more often the player can “swing.”
 			// The system right now is more like a damage exchange trigger per mob, not a universal player attack cooldown.
 
-            const now = performance.now();
+			const now = performance.now();
 
-            // give each mob its own damage cooldown
-            if (!entity.lastDamageTime) {
-                entity.lastDamageTime = 0;
-            }
+			// give each mob its own damage cooldown
+			if (!entity.lastDamageTime) {
+				entity.lastDamageTime = 0;
+			}
 
-            // only allow damage every 250ms per mob (4x/sec)
-            if (now - entity.lastDamageTime < 250) return;
+			// only allow damage every 250ms per mob (4x/sec)
+			if (now - entity.lastDamageTime < 250) return;
 
 			entity.lastDamageTime = now;
 
-            // Apply damage
-            let entityDamage = Math.max(0, entity.damage - player.defense);
-            let playerDamage = Math.max(0, player.damage - entity.defense);
-            entity.health = Math.max(0, entity.health - playerDamage);
+			// Apply damage
+			let entityDamage = Math.max(0, entity.damage - player.defense);
+			let playerDamage = Math.max(0, player.damage - entity.defense);
+			entity.health = Math.max(0, entity.health - playerDamage);
 			player.health = Math.max(0, player.health - entityDamage);
 
 			// checks if damage is from a mob
-            if (entity.codeClass == "mob" && entity.health <= 0) {
+			if (entity.codeClass == "mob" && entity.health <= 0) {
 				player.experience += entity.experienceDrop;
 				player.score += entity.experienceDrop
-                levelUp();
-                entity.spawn();
-                entity.die();
+				levelUp();
+				entity.spawn();
+				entity.die();
 			}
 			// checks if damage is from a spell
-            if (entity.codeClass == "spell" && entity.health <= 0) {
-                player.speed = constantPlayerSpeed;
-                entity.destroy();
-            }
+			if (entity.codeClass == "spell" && entity.health <= 0) {
+				player.speed = constantPlayerSpeed;
+				entity.destroy();
+			}
 
 			// checks if opponent damage is equal to 5% of player health
-            if (entityDamage >= player.health * 0.05) {
+			if (entityDamage >= player.health * 0.05) {
 				shake.start(5, 200);
 			}
-            
-            if (player.health <= 0) {
-                playerDeath();
-            }
+
+			if (player.health <= 0) {
+				playerDeath();
+			}
 		}
 		function playerDeath() {
 			myGameCharacter.state = "dead";
+
+			StorageManager.saveAll();
+
 			addText(textLibrary.gameOverText);
-            addText(textLibrary.playerScoreText);
+			addText(textLibrary.playerScoreText);
+
 			buttonsMap.clear();
 			addButton(buttonLibrary.exitButton, null);
-            spellBooksArray = [];
+
+			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
 			inventoryArray = [];
 			toBeCraftedMap.clear();
-            for (let key in keys) {
-                keys[key] = false;
+
+			for (let key in keys) {
+				keys[key] = false;
 			}
-            //localStorage.clear();
 		}
 		function levelUp() {
 
-            if (myGameCharacter.experience >= myGameCharacter.maxExperience) {
+			if (myGameCharacter.experience >= myGameCharacter.maxExperience) {
 				do {
-                    myGameCharacter.experience -= myGameCharacter.maxExperience;
+					myGameCharacter.experience -= myGameCharacter.maxExperience;
 					myGameCharacter.maxExperience += 100;
 					myGameCharacter.level += 1;
 					myGameCharacter.maxHealth += 5;
@@ -529,52 +539,54 @@
 
 					if (myGameCharacter.spellBookSlotsUnlocked < 5 && myGameCharacter.level >= 5) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot5, 5);
+						addButton(buttonLibrary.spellBookSlot5, 5);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 6 && myGameCharacter.level >= 15) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot6, 6);
+						addButton(buttonLibrary.spellBookSlot6, 6);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 7 && myGameCharacter.level >= 30) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot7, 7);
+						addButton(buttonLibrary.spellBookSlot7, 7);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 8 && myGameCharacter.level >= 45) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot8, 8);
+						addButton(buttonLibrary.spellBookSlot8, 8);
 						// add new spellBookSlot
 					}
 					if (myGameCharacter.spellBookSlotsUnlocked < 9 && myGameCharacter.level >= 60) {
 						myGameCharacter.spellBookSlotsUnlocked += 1;
-                        addButton(buttonLibrary.spellBookSlot9, 9);
+						addButton(buttonLibrary.spellBookSlot9, 9);
 						// add new spellBookSlot
 					}
-                    //console.log(myGameCharacter.spellBookSlotsUnlocked);
+					//console.log(myGameCharacter.spellBookSlotsUnlocked);
 				}
-                while (myGameCharacter.experience >= myGameCharacter.maxExperience);
+				while (myGameCharacter.experience >= myGameCharacter.maxExperience);
 			}
 		}
-        // add loot to inventory for debugging purposes
-        function addLootToInventory(loot, amount) {
-           let newLoot = new Loot(
-              0, 0,
-              loot.radius, loot.name, loot.spellBookName, loot.rarity,
-              loot.dropChance, loot.appearance, loot.form, loot.type,
-              loot.essenceName, loot.pagesToCraft, loot.essenceToCraft,
-              loot.ignoreCollision, amount, loot.stackLimit, loot.text
-           );
+		// add loot to inventory for debugging purposes
+		function addLootToInventory(loot, amount) {
+			let newLoot = new Loot(
+				0, 0,
+				loot.radius, loot.name, loot.spellBookName, loot.rarity,
+				loot.dropChance, loot.appearance, loot.form, loot.type,
+				loot.essenceName, loot.pagesToCraft, loot.essenceToCraft,
+				loot.ignoreCollision, amount, loot.stackLimit, loot.text
+			);
 			inventoryArray.push(newLoot);
 
-            // Save the whole InventoryArray properly
-            localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
-        }
+			// Save the whole InventoryArray properly
+            savedData.inventoryArray = inventoryArray;
+
+            StorageManager.save("savedPlayerData", savedData);
+		}
 
 		function addButton(button, index) {
-            let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.zIndex, index);
-            buttonsMap.set(button.name, newButton);
+			let newButton = new Button(button.x, button.y, button.width, button.height, button.radii, button.color, button.name, button.group, button.classification, button.text, button.zIndex, index);
+			buttonsMap.set(button.name, newButton);
 		}
 		function addSpellBook(spellBook, index, id = generateID()) {
 			let newSpellBook = new SpellBook(
@@ -587,7 +599,7 @@
 				"black",
 				spellBook.appearance,
 				spellBook.name,
-                id,
+				id,
 				spellBook.spell,
 				spellBook.spellCore,
 				spellBook.cooldown,
@@ -600,66 +612,67 @@
 					newSpellBook.onSlot = true;
 					spellBooksArray.push(newSpellBook);
 
-                    // Save the whole array properly
-                    localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
-				} 
-            } else {
+					// Save the whole array properly
+                    savedData.spellBooksArray = spellBooksArray;
+
+                    StorageManager.save("savedPlayerData", savedData);
+				}
+			} else {
 				inventoryArray.push(newSpellBook);
 
-                // Save the whole InventoryArray properly
-                localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+				// Save the whole InventoryArray properly
+                savedData.inventoryArray = inventoryArray;
+
+                StorageManager.save("savedPlayerData", savedData);
 			}
 		}
         function setUpSpellBooks() {
-            //console.log("check 1", spellBooksArray, JSON.parse(localStorage.getItem("savedSpellBooksArray")));
+            // Load saved data safely, with default structure
+            const savedData = StorageManager.load("savedPlayerData", { spellBooksArray: [] });
 
-            // Load back from storage
-			let saved = JSON.parse(localStorage.getItem("savedSpellBooksArray")) || [];
+            // Fallback if somehow missing or not an array
+            const savedSpellBooks = Array.isArray(savedData.spellBooksArray) ? savedData.spellBooksArray : [];
 
-			saved.map(data => {
-				addSpellBook(data, data.index, data.uniqueID)
-			});
-
-            //console.log("check 2", spellBooksArray, saved);
-		}
-		function setUpInventory() {
-            // Load back from storage
-            let saved = JSON.parse(localStorage.getItem("savedInventoryArray")) || [];
-			//console.log("saved: " + saved);
-			saved.map(data => {
-				//console.log("I exist");
-				if (data.codeClass == "loot") {
-                    //console.log("I exist too");
-					addLootToInventory(data, data.amount);
-				}
-                if (data.codeClass == "spellBook") {
-                    //console.log("I exist too");
-                    addSpellBook(data, data.index, data.uniqueID)
-                }
+            // Recreate spell books
+            savedSpellBooks.forEach(data => {
+                addSpellBook(data, data.index, data.uniqueID);
             });
 		}
 
-        function setUpPlayerName() {
-            let nameInputButton = buttonsMap.get("nameInput");
-            let nameInputButtonText = nameInputButton.text.trim();
+        function setUpInventory() {
+            const inventory = Array.isArray(savedData.inventoryArray) ? savedData.inventoryArray : [];
 
-            // If user input is empty, fallback to unnamed player
-            if (!nameInputButtonText) {
-                nameInputButtonText = "unnamed player";
-            }
-
-            // Update savedData with new or existing name
-            savedData.name = nameInputButtonText;
-
-            // Save to localStorage
-            localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
-
-            // Update the button text to reflect saved value
-            nameInputButton.text = savedData.name;
+            inventory.forEach(data => {
+                if (data.codeClass === "loot") {
+                    addLootToInventory(data, data.amount);
+                } else if (data.codeClass === "spellBook") {
+                    addSpellBook(data, data.index, data.uniqueID);
+                }
+            });
         }
 
+		function setUpPlayerName() {
+			let nameInputButton = buttonsMap.get("nameInput");
+			let nameInputButtonText = nameInputButton.text.trim();
+
+			// If user input is empty, fallback to unnamed player
+			if (!nameInputButtonText) {
+				nameInputButtonText = "unnamed player";
+			}
+
+			// Update savedData with new or existing name
+			savedData.name = nameInputButtonText;
+
+			// Save to localStorage
+         // localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
+            StorageManager.save("savedPlayerData", savedData);
+
+			// Update the button text to reflect saved value
+			nameInputButton.text = savedData.name;
+		}
+
 		function addText(text) {
-            let newText = new Text(text.x, text.y, text.text, text.fontSize, text.fillColor, text.strokeColor, text.border, text.fontFamily, text.name, text.group, text.classification, text.zIndex, text.textInRect);
+			let newText = new Text(text.x, text.y, text.text, text.fontSize, text.fillColor, text.strokeColor, text.border, text.fontFamily, text.name, text.group, text.classification, text.zIndex, text.textInRect);
 			textsMap.set(text.name, newText);
 		}
 		function dropLoot(loot) {
@@ -667,7 +680,7 @@
 			lootsArray.push(newLoot);
 		}
 		function castSpell(spell) {
-            spellsArray.push(spell);
+			spellsArray.push(spell);
 		}
 		function spawnMobs() {
 			for (let i = 0; i < starterMobsArray.length; i++) {
@@ -774,8 +787,10 @@
 							inventoryArray.push(loot);
 						}
 
-                        // Save the whole InventoryArray properly
-                        localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+						// Save the whole InventoryArray properly
+                        savedData.inventoryArray = inventoryArray;
+
+                        StorageManager.save("savedPlayerData", savedData);
 					}
 					lootsArray.splice(index, 1); // Remove loot from the array
 				}
@@ -861,29 +876,29 @@
 							const distance = Math.sqrt(dx * dx + dy * dy);
 
 							if (distance < player.radius) {
-                                evaluatePlayerDamage(player, spell);
+								evaluatePlayerDamage(player, spell);
 							}
 						}
 						function simulateCollision() {
 							// Apply knockback to both spell and player
-							
+
 							const dx = player.x - spell.x;
 							const dy = player.y - spell.y;
 							const angle = Math.atan2(dy, dx);
-							
+
 							if (!spell.ignoreMobCollision) {
-                                spell.x -= Math.cos(angle) * spellKnockbackDistance;
-                                spell.y -= Math.sin(angle) * spellKnockbackDistance;
+								spell.x -= Math.cos(angle) * spellKnockbackDistance;
+								spell.y -= Math.sin(angle) * spellKnockbackDistance;
 							}
 							if (!player.ignoreSpellCollision) {
-                                player.x += Math.cos(angle) * spellKnockbackDistance;
-                                player.y += Math.sin(angle) * spellKnockbackDistance;
+								player.x += Math.cos(angle) * spellKnockbackDistance;
+								player.y += Math.sin(angle) * spellKnockbackDistance;
 								if (player.x < player.radius) player.x = player.radius;
 								if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
 								if (player.y < player.radius) player.y = player.radius;
 								if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
 							}
-                            evaluatePlayerDamage(player, spell);
+							evaluatePlayerDamage(player, spell);
 						}
 					}
 				}
@@ -971,7 +986,7 @@
 								// Remove the spell only if its health is <= 0 after damaging all mobs
 								if (spell.health <= 0) {
 									//temporary solution to bug number 3. make sure to finalize this
-                                    myGameCharacter.speed = constantPlayerSpeed;
+									myGameCharacter.speed = constantPlayerSpeed;
 									spell.destroy();
 								}
 								// Apply knockback to both spell and mob
@@ -981,12 +996,12 @@
 									const angle = Math.atan2(dy, dx);
 
 									if (!spell.ignoreMobCollision) {
-                                        spell.x -= Math.cos(angle) * spellKnockbackDistance;
-                                        spell.y -= Math.sin(angle) * spellKnockbackDistance;
+										spell.x -= Math.cos(angle) * spellKnockbackDistance;
+										spell.y -= Math.sin(angle) * spellKnockbackDistance;
 									}
 									if (!mob.ignoreSpellCollision) {
-                                        mob.x += Math.cos(angle) * spellKnockbackDistance;
-                                        mob.y += Math.sin(angle) * spellKnockbackDistance;
+										mob.x += Math.cos(angle) * spellKnockbackDistance;
+										mob.y += Math.sin(angle) * spellKnockbackDistance;
 										if (mob.x < mob.radius) mob.x = mob.radius;
 										if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
 										if (mob.y < mob.radius) mob.y = mob.radius;

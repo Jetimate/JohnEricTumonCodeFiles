@@ -928,8 +928,10 @@ class Button {
 					buttonsMap.delete("displayCrafting");
 
 					// Save the whole array properly
-					localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
-					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+					savedData.spellBooksArray = spellBooksArray;
+					savedData.inventoryArray = inventoryArray;
+
+					StorageManager.save("savedPlayerData", savedData);
 				}
 			}
 			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
@@ -1014,8 +1016,10 @@ class Button {
 						mouseHeldItem.splice(0, 1);
 
 						// Save the whole array properly
-						localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
-						localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+						savedData.spellBooksArray = spellBooksArray;
+						savedData.inventoryArray = inventoryArray;
+
+						StorageManager.save("savedPlayerData", savedData);
 					}
 					else if (mouseHeldItem[0].from == "spellBookSlot") {
 						mouseHeldItem[0].index = this.index;
@@ -1029,8 +1033,10 @@ class Button {
 						mouseHeldItem.splice(0, 1);
 
 						// Save the whole array properly
-						localStorage.setItem("savedSpellBooksArray", JSON.stringify(spellBooksArray));
-						localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+						savedData.spellBooksArray = spellBooksArray;
+						savedData.inventoryArray = inventoryArray;
+
+						StorageManager.save("savedPlayerData", savedData);
 					}
 				}
 			}
@@ -1048,7 +1054,9 @@ class Button {
 					mouseHeldItem.splice(0, 1);
 
 					// Save the whole InventoryArray properly
-					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+					savedData.inventoryArray = inventoryArray;
+
+					StorageManager.save("savedPlayerData", savedData);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
 					let page = toBeCraftedMap.get("page");
 					page.index = null;
@@ -1059,7 +1067,9 @@ class Button {
 					toBeCraftedMap.delete("page");
 
 					// Save the whole InventoryArray properly
-					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+					savedData.inventoryArray = inventoryArray;
+
+					StorageManager.save("savedPlayerData", savedData);
 				}
 			}
 			if (this.name == "essenceSlot") {
@@ -1076,7 +1086,9 @@ class Button {
 					mouseHeldItem.splice(0, 1);
 
 					// Save the whole InventoryArray properly
-					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+					savedData.inventoryArray = inventoryArray;
+
+					StorageManager.save("savedPlayerData", savedData);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
 
 					let essence = toBeCraftedMap.get("essence");
@@ -1087,7 +1099,9 @@ class Button {
 					toBeCraftedMap.delete("essence");
 
 					// Save the whole InventoryArray properly
-					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+					savedData.inventoryArray = inventoryArray;
+
+					StorageManager.save("savedPlayerData", savedData);
 				}
 			}
 			if (this.name == "activateCraft") {
@@ -1117,7 +1131,9 @@ class Button {
 							craftedItemSlot.slotActive = false;
 
 							// Save the whole InventoryArray properly
-							localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+							savedData.inventoryArray = inventoryArray;
+
+							StorageManager.save("savedPlayerData", savedData);
 						}
 						// crafts a spell book
 						let spellBook = page.spellBookName;
@@ -1152,7 +1168,9 @@ class Button {
 					toBeCraftedMap.delete("spellBook");
 
 					// Save the whole InventoryArray properly
-					localStorage.setItem("savedInventoryArray", JSON.stringify(inventoryArray));
+					savedData.inventoryArray = inventoryArray;
+
+					StorageManager.save("savedPlayerData", savedData);
 				}
 			}
 		}

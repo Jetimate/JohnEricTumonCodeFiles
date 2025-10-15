@@ -13,6 +13,8 @@ savedData.experience ??= 0;
 savedData.maxExperience ??= 100;
 savedData.level ??= 0;
 savedData.score ??= 0;
+savedData.spellBooksArray ??= [];
+savedData.inventoryArray ??= [];
 
 localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
 
@@ -177,15 +179,24 @@ var myGame = {
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	},
 }
+
+window.addEventListener("beforeunload", () => {
+	if (myGameCharacter) {
+		StorageManager.saveAll();
+	}
+});
+
 window.addEventListener("resize", () => {
 	resizePending = true;
 });
+
 window.addEventListener('click', function (event) {
 	const rect = canvas.getBoundingClientRect();
 	mouseReleaseX = event.clientX - rect.left;
 	mouseReleaseY = event.clientY - rect.top;
 	//console.log("mouseRelease", mouseReleaseX, mouseReleaseY);
 });
+
 window.addEventListener('mousedown', (event) => {
 	//console.log("mousedown");
 	isMouseDown = true;
