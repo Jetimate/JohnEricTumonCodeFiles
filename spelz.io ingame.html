@@ -103,13 +103,13 @@
                 "mob/player.svg",
                 false,
                 false,
-                savedData.health,
+                100,
                 0.5,
                 1,
                 20,
                 0,
                 savedData.name,
-                savedData.mana,
+                5,
                 savedData.experience,
                 savedData.level,
                 "alive"
@@ -127,6 +127,16 @@
 
             const mainMenuVariable = document.getElementById("mainMenu");
             if (mainMenuVariable) mainMenuVariable.remove();
+
+			/*
+			// delete this later (debug)
+            addLootToInventory(specterPage, 5); 
+			addLootToInventory(specterHandPage, 5);
+            addLootToInventory(spikePage, 5);
+			addLootToInventory(specterHandPage, 6); 
+            addLootToInventory(specterHandPage, 64); 
+			addLootToInventory(gloomEssence, 64);
+			*/
 
             //console.log("First time playing?", isFirstTimePlaying, "| localStorage:", localStorage.getItem("firstTimePlaying"));
         }
@@ -146,6 +156,27 @@
 			addButton(buttonLibrary.spellBookSlot2, 2);
 			addButton(buttonLibrary.spellBookSlot3, 3);
 			addButton(buttonLibrary.spellBookSlot4, 4);
+			console.log(savedData.spellBookSlotsUnlocked, savedData.level);
+            if (savedData.level >= 5) {
+                addButton(buttonLibrary.spellBookSlot5, 5);
+                // add extra spellBookSlot
+            }
+            if (savedData.level >= 15) {
+                addButton(buttonLibrary.spellBookSlot6, 6);
+                // add extra spellBookSlot
+            }
+            if (savedData.level >= 30) {
+                addButton(buttonLibrary.spellBookSlot7, 7);
+                // add extra spellBookSlot
+            }
+            if (savedData.level >= 45) {
+                addButton(buttonLibrary.spellBookSlot8, 8);
+                // add extra spellBookSlot
+            }
+            if (savedData.level >= 60) {
+                addButton(buttonLibrary.spellBookSlot9, 9);
+                // add extra spellBookSlot
+            }
 		}
 
 		function spellBooksKeeper() {
@@ -312,7 +343,7 @@
 		}
 
 		function updateGameplayScreen() {
-            console.log(savedData.health, savedData.mana, savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.score, savedData.spellBooksArray, savedData.inventoryArray);
+            console.log(savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.spellBookSlotsUnlocked, savedData.score, savedData.spellBooksArray, savedData.inventoryArray);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -506,6 +537,12 @@
 		function playerDeath() {
 			myGameCharacter.state = "dead";
 
+            // Move items from toBeCraftedMap to inventoryArray before saving and exiting
+            for (const [key, item] of toBeCraftedMap.entries()) {
+                inventoryArray.push(item);
+            }
+			toBeCraftedMap.clear();
+
 			StorageManager.saveAll();
 
 			addText(textLibrary.gameOverText);
@@ -526,7 +563,6 @@
 			}
 		}
 		function levelUp() {
-
 			if (myGameCharacter.experience >= myGameCharacter.maxExperience) {
 				do {
 					myGameCharacter.experience -= myGameCharacter.maxExperience;
@@ -566,6 +602,14 @@
 				}
 				while (myGameCharacter.experience >= myGameCharacter.maxExperience);
 			}
+
+            // Save the whole array properly
+			savedData.experience = myGameCharacter.experience;
+            savedData.maxExperience = myGameCharacter.maxExperience;
+			savedData.level = myGameCharacter.level;
+            savedData.spellBookSlotsUnlocked = myGameCharacter.spellBookSlotsUnlocked;
+
+            StorageManager.save("savedPlayerData", savedData);
 		}
 		// add loot to inventory for debugging purposes
 		function addLootToInventory(loot, amount) {

@@ -6,12 +6,13 @@ let isFirstTimePlaying = localStorage.getItem("firstTimePlaying") === null
 //console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
 let savedData = JSON.parse(localStorage.getItem("savedPlayerData")) || {};
 
-savedData.health ??= 100;
-savedData.mana ??= 5;
+//savedData.health ??= 100;
+//savedData.mana ??= 5;
 savedData.name = savedData.name?.trim() || "unnamed player";
 savedData.experience ??= 0;
 savedData.maxExperience ??= 100;
 savedData.level ??= 0;
+savedData.spellBookSlotsUnlocked ??= 4;
 savedData.score ??= 0;
 savedData.spellBooksArray ??= [];
 savedData.inventoryArray ??= [];
@@ -181,7 +182,7 @@ var myGame = {
 }
 
 window.addEventListener("beforeunload", () => {
-	if (myGameCharacter) {
+	if (myGameCharacter && myGameCharacter.state !== "dead") {
 		StorageManager.saveAll();
 	}
 });

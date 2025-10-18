@@ -1115,10 +1115,24 @@ class Button {
 						page.amount -= page.pagesToCraft;
 						essence.amount -= page.essenceToCraft;
 
-						let craftedItemSlot = buttonsMap.get("craftedItemSlot");
+						/*
+						ensures that the slots are set back to inactive so that new spells can be crafted without bugging.
+						without this code, in a situation where the last page or essence amount is all consumed by the last craft,
+						the game will bug and not let any other pages or essence be placed into their respective slot and crafted.
+						*/
+						if (page.amount <= 0) {
+							let pageSlot = buttonsMap.get("pageSlot");
+							pageSlot.slotActive = false;
+						}
+
+						if (essence.amount <= 0) {
+							let essenceSlot = buttonsMap.get("essenceSlot");
+							essenceSlot.slotActive = false;
+						}
 
 						/* checks if there's an item at the craftedItemSlot and properly places the current item back to the inventory 
 						so that there is space for the new crafted item */
+						let craftedItemSlot = buttonsMap.get("craftedItemSlot");
 						if (craftedItemSlot.slotActive) {
 							let spellBook = toBeCraftedMap.get("spellBook");
 

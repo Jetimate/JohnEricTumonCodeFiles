@@ -5,7 +5,7 @@ class PlayableCharacter extends Mob {
 		this.mana = mana;
 		this.manaRegen = 0.005;
 		this.experience = experience;
-		this.maxExperience = 100;
+		this.maxExperience = savedData.maxExperience;
 		this.level = level;
 		this.state = state;
 		this.healthRegen = 0.01;
@@ -19,7 +19,7 @@ class PlayableCharacter extends Mob {
 		this.summonSpace = 0;
 		this.summonLimit = 20; //20
 		this.pickUpRange = 20; //20
-		this.spellBookSlotsUnlocked = 4;
+		this.spellBookSlotsUnlocked = savedData.spellBookSlotsUnlocked;
 		this.codeClass = "playableCharacter";
 		this.hasTarget = false;
 		this.score = 0;

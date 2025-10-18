@@ -9,12 +9,13 @@ class StorageManager {
     }
 
 	static saveAll() {
-		savedData.health = myGameCharacter.health;
-		savedData.mana = myGameCharacter.mana;
+		//savedData.health = myGameCharacter.health;
+		//savedData.mana = myGameCharacter.mana;
 		savedData.name = myGameCharacter.name;
 		savedData.experience = myGameCharacter.experience;
 		savedData.maxExperience = myGameCharacter.maxExperience;
 		savedData.level = myGameCharacter.level;
+		savedData.spellBookSlotsUnlocked = myGameCharacter.spellBookSlotsUnlocked;
 		savedData.score = myGameCharacter.score;
 		savedData.spellBooksArray = spellBooksArray;
 		savedData.inventoryArray = inventoryArray;
