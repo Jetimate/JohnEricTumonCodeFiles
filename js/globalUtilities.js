@@ -1,13 +1,8 @@
-// Check if first time
-let isFirstTimePlaying = localStorage.getItem("firstTimePlaying") === null
-	? true
-	: false;
-
-//console.log("first time playing? " + isFirstTimePlaying, " localStorage: " + localStorage.getItem("firstTimePlaying"));
 let savedData = JSON.parse(localStorage.getItem("savedPlayerData")) || {};
 
 //savedData.health ??= 100;
 //savedData.mana ??= 5;
+savedData.isFirstTimePlaying ??= true;
 savedData.name = savedData.name?.trim() || "unnamed player";
 savedData.experience ??= 0;
 savedData.maxExperience ??= 100;
@@ -277,8 +272,6 @@ window.addEventListener('keydown', (event) => {
 		keys[event.code] = true; // mark key as pressed
 		if (event.code == "KeyX") {
 			console.log(event.code, "Clearing local storage data");
-			// Remove specific data
-			localStorage.removeItem("firstTimePlaying");
 
 			// Clear all local storage
 			localStorage.clear();

@@ -119,10 +119,10 @@
             shake = new ScreenShake();
             spawnMobs();
 
-            if (isFirstTimePlaying === true) {
+            if (savedData.isFirstTimePlaying) {
                 spellBooksKeeper();
-                isFirstTimePlaying = false;
-                localStorage.setItem("firstTimePlaying", "false");
+                savedData.isFirstTimePlaying = false;
+				StorageManager.save("savedPlayerData", savedData);
             }
 
             const mainMenuVariable = document.getElementById("mainMenu");
@@ -137,8 +137,6 @@
             addLootToInventory(specterHandPage, 64); 
 			addLootToInventory(gloomEssence, 64);
 			*/
-
-            //console.log("First time playing?", isFirstTimePlaying, "| localStorage:", localStorage.getItem("firstTimePlaying"));
         }
 
 		function buttonsKeeper() {
@@ -343,7 +341,8 @@
 		}
 
 		function updateGameplayScreen() {
-            console.log(savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.spellBookSlotsUnlocked, savedData.score, savedData.spellBooksArray, savedData.inventoryArray);
+            // console.log(savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.spellBookSlotsUnlocked, savedData.score, savedData.spellBooksArray, savedData.inventoryArray);
+			console.log(savedData);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
