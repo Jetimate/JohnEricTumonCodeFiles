@@ -183,6 +183,13 @@ var myGame = {
 
 window.addEventListener("beforeunload", () => {
 	if (myGameCharacter && myGameCharacter.state !== "dead") {
+		properlyRemoveCraftSlots()
+		// Move items from toBeCraftedMap to inventoryArray before saving and exiting
+		for (const [key, item] of toBeCraftedMap.entries()) {
+			inventoryArray.push(item);
+		}
+		toBeCraftedMap.clear();
+
 		StorageManager.saveAll();
 	}
 });
@@ -329,4 +336,57 @@ function getDistance(circle1, circle2) {
 }
 function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
+}
+
+function properlyRemoveCraftSlots() {
+	let displayCraftingButton = buttonsMap.get("displayCrafting");
+	if (displayCraftingButton) {
+		// removing the page slot properly
+		let page = toBeCraftedMap.get("page");
+		if (page) {
+			let pageSlot = buttonsMap.get("pageSlot");
+
+			page.index = null;
+			page.location = null;
+			pageSlot.slotActive = false;
+
+			inventoryArray.push(page);
+			toBeCraftedMap.delete("page");
+		}
+		// removing the essence slot properly
+		let essence = toBeCraftedMap.get("essence");
+		if (essence) {
+			let essenceSlot = buttonsMap.get("essenceSlot");
+
+			essence.index = null;
+			essence.location = null;
+			essenceSlot.slotActive = false;
+
+			inventoryArray.push(essence);
+			toBeCraftedMap.delete("essence");
+		}
+		// removing the craftedItemSlot properly
+		let spellBook = toBeCraftedMap.get("spellBook");
+		if (spellBook) {
+			let craftedItemSlot = buttonsMap.get("craftedItemSlot");
+
+			spellBook.index = null;
+			spellBook.location = null;
+			craftedItemSlot.slotActive = false;
+
+			inventoryArray.push(spellBook);
+			toBeCraftedMap.delete("spellBook");
+		}
+		buttonsMap.delete("pageSlot");
+		buttonsMap.delete("essenceSlot");
+		buttonsMap.delete("activateCraft");
+		buttonsMap.delete("craftedItemSlot");
+		buttonsMap.delete("displayCrafting");
+
+		// Save the whole array properly
+		savedData.spellBooksArray = spellBooksArray;
+		savedData.inventoryArray = inventoryArray;
+
+		StorageManager.save("savedPlayerData", savedData);
+	}
 }

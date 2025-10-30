@@ -657,10 +657,10 @@ class Button {
 			// the extra height is space for the heading "(lootSize / 2)"
 			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin) + (lootSize / 2); //window.innerHeight / 2;
 
-			const craftedItems = Array.from(toBeCraftedMap.values());
+			const craftingItems = Array.from(toBeCraftedMap.values());
 
-			for (let i = 0; i < craftedItems.length; i++) {
-				let item = craftedItems[i];
+			for (let i = 0; i < craftingItems.length; i++) {
+				let item = craftingItems[i];
 
 				let displayCrafting = buttonsMap.get("displayCrafting");
 				let referenceX = displayCrafting.x;
@@ -699,11 +699,13 @@ class Button {
 					lootSize,
 					lootSize);
 
+				if (item.level == null) item.level = "";
+
 				ctx.fillText(
 					item.amount + "x" + item.text + " " + item.level,
 					item.x,
 					item.y - (slotMargin / 4))
-
+				
 				ctx.closePath();
 			}
 			// heading
@@ -722,10 +724,10 @@ class Button {
 			let referenceY = displayCrafting.y;
 			let referenceWidth = displayCrafting.width;
 			let referenceHeight = displayCrafting.height;
-
 			let totalCraftSlotArray = Array.from(buttonsMap.values())
 				.filter(element => element.group === "craftSlot")
 				.length;
+
 			const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (this.index - 1) - slotMargin;
 			// the extra height is space for the heading "(lootSize / 2)"
 			const yDistance = referenceY + ((referenceHeight - lootSize) / 2) + (lootSize / 2); 
@@ -746,6 +748,7 @@ class Button {
 				const page = toBeCraftedMap.get("page");
 				const essence = toBeCraftedMap.get("essence");
 
+				// checks if the crafting system is ready to craft
 				if (!this.toggle && page && essence) {
 					if (page.amount >= page.pagesToCraft &&
 						essence.name === page.essenceName &&
@@ -799,6 +802,7 @@ class Button {
 				inventoryArray[i].x = xDistance;
 				inventoryArray[i].y = yDistance;
 
+				// TODO: I think there's an inconsistency or ways to improve the code below
 				if (leftClick && mouseHeldItem.length <= 1) {
 					let distance = mouseClickX >= inventoryArray[i].x &&
 						mouseClickX < lootSize + inventoryArray[i].x &&
@@ -813,10 +817,10 @@ class Button {
 						inventoryArray[i].x = mouseMoveX - (lootSize / 2);
 						inventoryArray[i].y = mouseMoveY - (lootSize / 2);
 					}
+				// triggers when the item is unheld
 				} else if (!leftClick && inventoryArray[i].held && mouseHeldItem.length >= 1) {
 					inventoryArray[i].held = false;
 					mouseHeldItem.splice(0, mouseHeldItem.length);
-					//console.log("mousehelditems", mouseHeldItem);
 				}
 
 				ctx.beginPath();
@@ -839,6 +843,8 @@ class Button {
 					inventoryArray[i].y,
 					lootSize,
 					lootSize);
+
+				if (inventoryArray[i].level == null) inventoryArray[i].level = "";
 
 				ctx.fillText(
 					inventoryArray[i].amount + "x" + inventoryArray[i].text + " " + inventoryArray[i].level,
@@ -901,60 +907,7 @@ class Button {
 			mouseClickY >= this.y &&
 			mouseClickY <= this.y + this.height
 		) {
-			//console.log("buttonCheck", mouseClickX, mouseClickY);
-			function properlyRemoveCraftSlots() {
-				let displayCraftingButton = buttonsMap.get("displayCrafting");
-				if (displayCraftingButton) {
-					// removing the page slot properly
-					let page = toBeCraftedMap.get("page");
-					if (page) {
-						let pageSlot = buttonsMap.get("pageSlot");
-
-						page.index = null;
-						page.location = null;
-						pageSlot.slotActive = false;
-
-						inventoryArray.push(page);
-						toBeCraftedMap.delete("page");
-					}
-					// removing the essence slot properly
-					let essence = toBeCraftedMap.get("essence");
-					if (essence) {
-						let essenceSlot = buttonsMap.get("essenceSlot");
-
-						essence.index = null;
-						essence.location = null;
-						essenceSlot.slotActive = false;
-
-						inventoryArray.push(essence);
-						toBeCraftedMap.delete("essence");
-					}
-					// removing the craftedItemSlot properly
-					let spellBook = toBeCraftedMap.get("spellBook");
-					if (spellBook) {
-						let craftedItemSlot = buttonsMap.get("craftedItemSlot");
-
-						spellBook.index = null;
-						spellBook.location = null;
-						craftedItemSlot.slotActive = false;
-
-						inventoryArray.push(spellBook);
-						toBeCraftedMap.delete("spellBook");
-					}
-					buttonsMap.delete("pageSlot");
-					buttonsMap.delete("essenceSlot");
-					buttonsMap.delete("activateCraft");
-					buttonsMap.delete("craftedItemSlot");
-					buttonsMap.delete("displayCrafting");
-
-					// Save the whole array properly
-					savedData.spellBooksArray = spellBooksArray;
-					savedData.inventoryArray = inventoryArray;
-
-					StorageManager.save("savedPlayerData", savedData);
-				}
-			}
-			// TODO: Add a function that makes you be able to add animation to the buttons with less code used
+			// TODO: Add a function that makes you be able to add animation (animation for sliding in or out of the screen) to the buttons with less code used
 			if (this.name == "nameInput" && !this.toggle) {
 				this.toggle = true;
 				this.color = darkenHexColor("#d0def5", 20);
@@ -1061,7 +1014,13 @@ class Button {
 				}
 			}
 			if (this.name == "pageSlot") {
-				if (mouseHeldItem.length > 0 && mouseHeldItem[0].form == "page" && mouseHeldItem[0].amount >= 1 && !this.slotActive) {
+				// checks if an item being placed into the slot is valid or not
+				if (mouseHeldItem.length > 0 &&
+					(mouseHeldItem[0].form == "page" || mouseHeldItem[0].form == "spellBook") &&
+					(mouseHeldItem[0].from == "inventory" || mouseHeldItem[0].from == "spellBookSlot") &&
+					mouseHeldItem[0].amount >= 1 &&
+					!this.slotActive)
+				{
 					mouseHeldItem[0].index = this.index;
 					mouseHeldItem[0].location = this.name;
 
@@ -1069,12 +1028,26 @@ class Button {
 					mouseHeldItem[0].held = false;
 					this.slotActive = true;
 
-					let lootIndex = inventoryArray.findIndex(element => element.index == mouseHeldItem[0].index && element.location == mouseHeldItem[0].location);
-					inventoryArray.splice(lootIndex, 1);
-					mouseHeldItem.splice(0, 1);
+					if (mouseHeldItem[0].from == "inventory") {
+						let itemIndex = inventoryArray.findIndex(element => element.index == mouseHeldItem[0].index && element.location == mouseHeldItem[0].location);
+						inventoryArray.splice(itemIndex, 1);
+					} else if (mouseHeldItem[0].from == "spellBookSlot") {
+						mouseHeldItem[0].held = false;
+						mouseHeldItem[0].index = this.index;
+						mouseHeldItem[0].onSlot = false;
+						mouseHeldItem[0].spawned = false;
 
-					// Save the whole InventoryArray properly
+						let spellCoreIndex = spellsArray.findIndex(element => element.name == mouseHeldItem[0].spellCore.name && element.spellBookID == mouseHeldItem[0].uniqueID);
+						spellsArray.splice(spellCoreIndex, 1);
+
+						let spellBookIndex = spellBooksArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
+						spellBooksArray.splice(spellBookIndex, 1);
+					}
+					mouseHeldItem.splice(0, mouseHeldItem.length);
+
+					// Save the whole array properly
 					savedData.inventoryArray = inventoryArray;
+					savedData.spellBooksArray = spellBooksArray;
 
 					StorageManager.save("savedPlayerData", savedData);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
@@ -1093,7 +1066,13 @@ class Button {
 				}
 			}
 			if (this.name == "essenceSlot") {
-				if (mouseHeldItem.length > 0 && mouseHeldItem[0].form == "essence" && mouseHeldItem[0].amount >= 1 && !this.slotActive) {
+				// checks if an item being placed into the slot is valid or not
+				if (mouseHeldItem.length > 0 &&
+					(mouseHeldItem[0].form == "essence" || mouseHeldItem[0].form == "spellBook") &&
+					(mouseHeldItem[0].from == "inventory" || mouseHeldItem[0].from == "spellBookSlot") &&
+					mouseHeldItem[0].amount >= 1 &&
+					!this.slotActive)
+				{
 					mouseHeldItem[0].index = this.index;
 					mouseHeldItem[0].location = this.name;
 
@@ -1101,12 +1080,26 @@ class Button {
 					mouseHeldItem[0].held = false;
 					this.slotActive = true;
 
-					let lootIndex = inventoryArray.findIndex(element => element.index == mouseHeldItem[0].index && element.location == mouseHeldItem[0].location);
-					inventoryArray.splice(lootIndex, 1);
-					mouseHeldItem.splice(0, 1);
+					if (mouseHeldItem[0].from == "inventory") {
+						let itemIndex = inventoryArray.findIndex(element => element.index == mouseHeldItem[0].index && element.location == mouseHeldItem[0].location);
+						inventoryArray.splice(itemIndex, 1);
+					} else if (mouseHeldItem[0].from == "spellBookSlot") {
+						mouseHeldItem[0].held = false;
+						mouseHeldItem[0].index = this.index;
+						mouseHeldItem[0].onSlot = false;
+						mouseHeldItem[0].spawned = false;
 
-					// Save the whole InventoryArray properly
+						let spellCoreIndex = spellsArray.findIndex(element => element.name == mouseHeldItem[0].spellCore.name && element.spellBookID == mouseHeldItem[0].uniqueID);
+						spellsArray.splice(spellCoreIndex, 1);
+
+						let spellBookIndex = spellBooksArray.findIndex(element => element.name == mouseHeldItem[0].name && element.uniqueID == mouseHeldItem[0].uniqueID);
+						spellBooksArray.splice(spellBookIndex, 1);
+					}
+					mouseHeldItem.splice(0, mouseHeldItem.length);
+
+					// Save the whole array properly
 					savedData.inventoryArray = inventoryArray;
+					savedData.spellBooksArray = spellBooksArray;
 
 					StorageManager.save("savedPlayerData", savedData);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {

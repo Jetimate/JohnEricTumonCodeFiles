@@ -22,7 +22,8 @@ class Loot {
 		this.amount = amount;
 		this.stackLimit = stackLimit;
 		this.text = text;
-		this.level = 1;
+		// loot doesn't have levels yet right?
+		//this.level = 1;
 		this.held = false;
 		this.codeClass = "loot";
 		this.from = "nowhere";

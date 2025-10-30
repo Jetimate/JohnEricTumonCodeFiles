@@ -11,7 +11,6 @@ class StorageManager {
 	static saveAll() {
 		//savedData.health = myGameCharacter.health;
 		//savedData.mana = myGameCharacter.mana;
-		inventoryArray.push(...toBeCraftedMap.values());
 
 		// WIP
 		savedData.maxHealth = myGameCharacter.maxHealth;

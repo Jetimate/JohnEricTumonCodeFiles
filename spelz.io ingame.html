@@ -341,8 +341,8 @@
 		}
 
 		function updateGameplayScreen() {
-            // console.log(savedData.name, savedData.experience, savedData.maxExperience, savedData.level, savedData.spellBookSlotsUnlocked, savedData.score, savedData.spellBooksArray, savedData.inventoryArray);
-			console.log(savedData);
+            console.log(savedData.spellBooksArray, spellBooksArray);
+            //console.log(mouseHeldItem[0]);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;

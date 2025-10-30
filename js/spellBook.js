@@ -27,6 +27,7 @@ class SpellBook {
 		this.held = false;
 		this.codeClass = "spellBook";
 		this.from = "nowhere";
+		this.form = "spellBook";
 		this.location = null;
 		this.uniqueID = uniqueID;
 	}
@@ -45,7 +46,6 @@ class SpellBook {
 				mouseClickY < slotSize + this.y
 				// activates when a spellBook is dragged away from a slot
 			if (distance && mouseHeldItem.length < 1) {
-				//console.log("spellBook is getting dragged away from the slot right now");
 				this.held = true;
 				mouseHeldItem.push(this);
 
@@ -57,20 +57,12 @@ class SpellBook {
 				this.x = mouseMoveX - (slotSize / 2);
 				this.y = mouseMoveY - (slotSize / 2);
 			}
-			// if not held
+			// if spellBook is unheld
 		} else if (!leftClick && this.held && mouseHeldItem.length >= 1) {
-			this.held = false;
-			this.index = null;
-			this.onSlot = false;
-			this.spawned = false;
+			console.log("I've been called");
+			this.removeFromSpellBookSlot();
+			// transfers the spellBook from its' slot to the inventoryArray
 			inventoryArray.push(this);
-			mouseHeldItem.splice(0, mouseHeldItem.length);
-
-			let spellCoreIndex = spellsArray.findIndex(element => element.name == this.spellCore.name && element.spellBookID == this.uniqueID);
-			spellsArray.splice(spellCoreIndex, 1);
-
-			let spellBookIndex = spellBooksArray.findIndex(element => element.name == this.name && element.uniqueID == this.uniqueID);
-			spellBooksArray.splice(spellBookIndex, 1);
 		}
 		ctx.roundRect(
 			this.x,
@@ -536,5 +528,20 @@ class SpellBook {
 				this.cooldownTimer = 0;  // Reset the cooldown timer
 			}
 		}
+	}
+	
+	removeFromSpellBookSlot() {
+		this.held = false;
+		this.index = null;
+		this.onSlot = false;
+		this.spawned = false;
+
+		mouseHeldItem.splice(0, mouseHeldItem.length);
+
+		let spellCoreIndex = spellsArray.findIndex(element => element.name == this.spellCore.name && element.spellBookID == this.uniqueID);
+		spellsArray.splice(spellCoreIndex, 1);
+
+		let spellBookIndex = spellBooksArray.findIndex(element => element.name == this.name && element.uniqueID == this.uniqueID);
+		spellBooksArray.splice(spellBookIndex, 1);
 	}
 }
