@@ -2,6 +2,11 @@ let savedData = JSON.parse(localStorage.getItem("savedPlayerData")) || {};
 
 //savedData.health ??= 100;
 //savedData.mana ??= 5;
+savedData.maxHealth ??= 100;
+savedData.maxMana ??= 5;
+savedData.healthRegen ??= 0.01;
+savedData.manaRegen ??= 0.005;
+
 savedData.isFirstTimePlaying ??= true;
 savedData.name = savedData.name?.trim() || "unnamed player";
 savedData.experience ??= 0;
@@ -128,7 +133,7 @@ let toBeCraftedMap = new Map();
 let manaBuildUp = 0;
 const spellKnockbackDistance = 5;
 
-let baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
+let baseSize = ((screen.width + screen.height) * 0.2) + ((window.innerWidth + window.innerHeight) * 0.8);
 let lootSize = baseSize * 0.025;
 let slotSize = baseSize * 0.03;
 let slotMargin = baseSize * 0.005;

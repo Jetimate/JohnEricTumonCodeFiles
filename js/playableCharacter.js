@@ -3,14 +3,14 @@ class PlayableCharacter extends Mob {
 		super(setMinX, setMaxX, setMinY, setMaxY, x, y, appearance, ignoreSpellCollision, ignoreMobCollision, health, defense, damage, radius, radiusAdjust);
 		this.name = name;
 		this.mana = mana;
-		this.manaRegen = 0.005;
+		this.manaRegen = savedData.manaRegen; // 0.005
+		this.healthRegen = savedData.healthRegen; // 0.01
+		this.maxHealth = savedData.maxHealth;
+		this.maxMana = savedData.maxMana; // 5
 		this.experience = experience;
 		this.maxExperience = savedData.maxExperience;
 		this.level = level;
 		this.state = state;
-		this.healthRegen = 0.01;
-		this.maxHealth = 100;
-		this.maxMana = 5; // 5
 		this.movementX = 0;
 		this.movementY = 0;
 		this.speed = constantPlayerSpeed;	

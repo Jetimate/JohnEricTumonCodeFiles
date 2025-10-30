@@ -454,8 +454,13 @@ class Button {
 		ctx.roundRect(this.x, this.y, this.width, this.height, window.innerHeight / 300);
 
 		if (this.classification != "slot") {
+			ctx.save();
+			if (this.classification == "display") {
+				ctx.globalAlpha = 0.5;
+			}
 			ctx.fillStyle = this.color;
 			ctx.fill();
+			ctx.restore();
 		}
 
 		if (this.group == "spellBookSlot") {
@@ -489,7 +494,7 @@ class Button {
 			ctx.fillText(this.text, this.x + 5, this.y + (this.height / 1.5));
 		}
 
-		// buttons 
+		// buttons
 		if (this.name == "nameInput") {
 			this.x = centerX - ((statsBarWidth * 0.8) / 2);
 			this.y = centerY - (statsBarHeight / 2) - (statsBarHeight * 1.25);
@@ -647,9 +652,10 @@ class Button {
 			let slotsPerRow = 5;
 			let referenceWidth = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
 			this.x = (window.innerWidth / 64 + window.innerWidth / 8) + referenceWidth;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
-			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3; 
-			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerHeight / 2;
+			this.y = (window.innerHeight / 64);
+			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin); //window.innerWidth / 3;
+			// the extra height is space for the heading "(lootSize / 2)"
+			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin) + (lootSize / 2); //window.innerHeight / 2;
 
 			const craftedItems = Array.from(toBeCraftedMap.values());
 
@@ -666,7 +672,8 @@ class Button {
 					.filter(element => element.group === "craftSlot")
 					.length;
 				const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (item.index - 1) - slotMargin;
-				const yDistance = referenceY + ((referenceHeight - lootSize) / 2);
+				// the extra height is space for the heading "(lootSize / 2)"
+				const yDistance = referenceY + ((referenceHeight - lootSize) / 2) + (lootSize / 2); 
 
 				item.x = xDistance;
 				item.y = yDistance;
@@ -699,78 +706,13 @@ class Button {
 
 				ctx.closePath();
 			}
-		}
-		if (this.name == "displayInventory") {
-			this.x = window.innerWidth / 64 + window.innerWidth / 8;
-			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
-			let row = 0;
-			let column = 0;
-			let slotsPerRow = 5;
-			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
-			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
-
-			for (let i = 0; i < inventoryArray.length; i++) {
-
-				if (i >= slotsPerRow && i % slotsPerRow == 0) {
-					row++;
-					column += slotsPerRow;
-				}
-
-				let xDistance = this.x + (lootSize * (i - column)) + (slotMargin * (i - column + 1));
-				let yDistance = this.y + slotMargin + ((slotMargin + lootSize) * row);
-				inventoryArray[i].x = xDistance;
-				inventoryArray[i].y = yDistance;
-
-				if (leftClick && mouseHeldItem.length <= 1) {
-					let distance = mouseClickX >= inventoryArray[i].x &&
-						mouseClickX < lootSize + inventoryArray[i].x &&
-						mouseClickY >= inventoryArray[i].y &&
-						mouseClickY < lootSize + inventoryArray[i].y;
-					if (distance && mouseHeldItem.length < 1) {
-						inventoryArray[i].held = true;
-						inventoryArray[i].from = "inventory";
-						mouseHeldItem.push(inventoryArray[i]);
-						//console.log("youll only see me once");
-						//console.log("mousehelditems", mouseHeldItem);
-					}
-					if (inventoryArray[i].held) {
-						inventoryArray[i].x = mouseMoveX - (lootSize / 2);
-						inventoryArray[i].y = mouseMoveY - (lootSize / 2);
-					}
-				} else if (!leftClick && inventoryArray[i].held && mouseHeldItem.length >= 1) {
-					inventoryArray[i].held = false;
-					mouseHeldItem.splice(0, mouseHeldItem.length);
-					//console.log("mousehelditems", mouseHeldItem);
-				}
-
-				ctx.beginPath();
-				ctx.roundRect(
-					inventoryArray[i].x,
-					inventoryArray[i].y,
-					lootSize,
-					lootSize,
-					radiiSize);
-
-				ctx.strokeStyle = inventoryArray[i].borderColor;
-				ctx.lineWidth = lineThickness;
-				ctx.stroke();
-				ctx.font = (fontSize * 0.8) + "px 'Trebuchet MS'";
-				ctx.fillStyle = "#000000";
-
-				ctx.drawImage(
-					inventoryArray[i].image,
-					inventoryArray[i].x,
-					inventoryArray[i].y,
-					lootSize,
-					lootSize);
-
-				ctx.fillText(
-					inventoryArray[i].amount + "x" + inventoryArray[i].text + " " + inventoryArray[i].level,
-					inventoryArray[i].x,
-					inventoryArray[i].y - (slotMargin / 4))
-
-				ctx.closePath();
-			}
+			// heading
+			ctx.font = (fontSize * 1.5) + "px 'Trebuchet MS'";
+			ctx.fillStyle = "#000000";
+			ctx.fillText(
+				"Craft",
+				this.x + slotMargin,
+				this.y + (slotMargin * 2));
 		}
 		if (this.group == "craftSlot") {
 			let displayCrafting = buttonsMap.get("displayCrafting");
@@ -785,7 +727,8 @@ class Button {
 				.filter(element => element.group === "craftSlot")
 				.length;
 			const xDistance = referenceX + (referenceWidth - lootSize * totalCraftSlotArray) / 2 + (lootSize + slotMargin) * (this.index - 1) - slotMargin;
-			const yDistance = referenceY + ((referenceHeight - lootSize) / 2);
+			// the extra height is space for the heading "(lootSize / 2)"
+			const yDistance = referenceY + ((referenceHeight - lootSize) / 2) + (lootSize / 2); 
 			this.x = xDistance;
 			this.y = yDistance;
 			this.width = lootSize;
@@ -832,6 +775,83 @@ class Button {
 				this.text,
 				textX,
 				textY);
+		}
+		if (this.name == "displayInventory") {
+			this.x = window.innerWidth / 64 + window.innerWidth / 8;
+			this.y = (window.innerHeight / 64) + (window.innerHeight / 18) * 0;
+			let row = 0;
+			let column = 0;
+			let slotsPerRow = 5;
+			this.width = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin);
+			// the extra height is space for the heading "(lootSize / 2)"
+			this.height = (slotsPerRow * lootSize) + ((slotsPerRow + 1) * slotMargin) + (lootSize / 2);
+
+			for (let i = 0; i < inventoryArray.length; i++) {
+
+				if (i >= slotsPerRow && i % slotsPerRow == 0) {
+					row++;
+					column += slotsPerRow;
+				}
+
+				let xDistance = this.x + (lootSize * (i - column)) + (slotMargin * (i - column + 1));
+				// the extra height is space for the heading "(lootSize / 2)"
+				let yDistance = this.y + slotMargin + ((slotMargin + lootSize) * row) + (lootSize / 2);
+				inventoryArray[i].x = xDistance;
+				inventoryArray[i].y = yDistance;
+
+				if (leftClick && mouseHeldItem.length <= 1) {
+					let distance = mouseClickX >= inventoryArray[i].x &&
+						mouseClickX < lootSize + inventoryArray[i].x &&
+						mouseClickY >= inventoryArray[i].y &&
+						mouseClickY < lootSize + inventoryArray[i].y;
+					if (distance && mouseHeldItem.length < 1) {
+						inventoryArray[i].held = true;
+						inventoryArray[i].from = "inventory";
+						mouseHeldItem.push(inventoryArray[i]);
+					}
+					if (inventoryArray[i].held) {
+						inventoryArray[i].x = mouseMoveX - (lootSize / 2);
+						inventoryArray[i].y = mouseMoveY - (lootSize / 2);
+					}
+				} else if (!leftClick && inventoryArray[i].held && mouseHeldItem.length >= 1) {
+					inventoryArray[i].held = false;
+					mouseHeldItem.splice(0, mouseHeldItem.length);
+					//console.log("mousehelditems", mouseHeldItem);
+				}
+
+				ctx.beginPath();
+				ctx.roundRect(
+					inventoryArray[i].x,
+					inventoryArray[i].y,
+					lootSize,
+					lootSize,
+					radiiSize);
+
+				ctx.strokeStyle = inventoryArray[i].borderColor;
+				ctx.lineWidth = lineThickness;
+				ctx.stroke();
+				ctx.font = (fontSize * 0.6) + "px 'Trebuchet MS'";
+				ctx.fillStyle = "#000000";
+
+				ctx.drawImage(
+					inventoryArray[i].image,
+					inventoryArray[i].x,
+					inventoryArray[i].y,
+					lootSize,
+					lootSize);
+
+				ctx.fillText(
+					inventoryArray[i].amount + "x" + inventoryArray[i].text + " " + inventoryArray[i].level,
+					inventoryArray[i].x,
+					inventoryArray[i].y - (slotMargin / 4));
+			}
+			// heading
+			ctx.font = (fontSize * 1.5) + "px 'Trebuchet MS'";
+			ctx.fillStyle = "#000000";
+			ctx.fillText(
+				"Inventory",
+				this.x + slotMargin,
+				this.y + (slotMargin * 2));
 		}
 		if (this.group == "spellBookSlot") {
 			const xDistance = window.innerWidth / 2 - (((slotSize + slotMargin) * myGameCharacter.spellBookSlotsUnlocked) / 2) + (slotSize + slotMargin) * (this.index - 1);

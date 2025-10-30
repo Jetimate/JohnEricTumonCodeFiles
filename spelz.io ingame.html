@@ -103,13 +103,13 @@
                 "mob/player.svg",
                 false,
                 false,
-                100,
+                savedData.maxHealth,
                 0.5,
                 1,
                 20,
                 0,
                 savedData.name,
-                5,
+                savedData.maxMana,
                 savedData.experience,
                 savedData.level,
                 "alive"
@@ -322,7 +322,7 @@
 			myGame.context.setTransform(1, 0, 0, 1, 0, 0);
 			myGame.context.scale(dpr, dpr);
 
-			baseSize = ((screen.width + screen.height) * 0.6) + ((window.innerWidth + window.innerHeight) * 0.4);
+			baseSize = ((screen.width + screen.height) * 0.2) + ((window.innerWidth + window.innerHeight) * 0.8);
 			lootSize = baseSize * 0.025;
 			slotSize = baseSize * 0.03;
 			slotMargin = baseSize * 0.005;
@@ -602,7 +602,13 @@
 				while (myGameCharacter.experience >= myGameCharacter.maxExperience);
 			}
 
-            // Save the whole array properly
+			// Save the whole array properly
+            savedData.maxHealth = myGameCharacter.maxHealth;
+			savedData.maxMana = myGameCharacter.maxMana;
+			// I think health regen doesn't increase. Right now I don't know what to do about that
+            savedData.healthRegen = myGameCharacter.healthRegen;
+			savedData.manaRegen = myGameCharacter.manaRegen;
+
 			savedData.experience = myGameCharacter.experience;
             savedData.maxExperience = myGameCharacter.maxExperience;
 			savedData.level = myGameCharacter.level;
