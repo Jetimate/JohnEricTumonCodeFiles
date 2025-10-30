@@ -308,28 +308,28 @@ const buttonLibrary = {
 		zIndex: 3,
 		index: null
 	},
-	pageSlot: {
+	craftSlot1: {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
 		radii: 0,
 		color: "#000000",
-		name: "pageSlot",
+		name: "craftSlot1",
 		group: "craftSlot",
 		classification: "slot",
 		text: "insert 5 pages",
 		zIndex: 4,
 		index: 1
 	},
-	essenceSlot: {
+	craftSlot2: {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
 		radii: 0,
 		color: "#000000",
-		name: "essenceSlot",
+		name: "craftSlot2",
 		group: "craftSlot",
 		classification: "slot",
 		text: "insert 15 essence",
@@ -745,26 +745,26 @@ class Button {
 				textX = xDistance + (lootSize / 2) - (this.width / 4)
 				textY = yDistance + (lootSize / 2) + (this.height / 5);
 
-				const page = toBeCraftedMap.get("page");
-				const essence = toBeCraftedMap.get("essence");
+				const craftSlot1Item = toBeCraftedMap.get("craftSlot1Item");
+				const craftSlot2Item = toBeCraftedMap.get("craftSlot2Item");
 
 				// checks if the crafting system is ready to craft
-				if (!this.toggle && page && essence) {
-					if (page.amount >= page.pagesToCraft &&
-						essence.name === page.essenceName &&
-						essence.amount >= page.essenceToCraft) {
+				if (!this.toggle && craftSlot1Item && craftSlot2Item) {
+					if (craftSlot1Item.amount >= craftSlot1Item.pagesToCraft &&
+						craftSlot2Item.name === craftSlot1Item.essenceName &&
+						craftSlot2Item.amount >= craftSlot1Item.essenceToCraft) {
 						this.toggle = true;
 						this.originalColor = "#008000";
 						this.color = "#008000";
 					}
-				} else if (this.toggle && (!page || !essence)) {
+				} else if (this.toggle && (!craftSlot1Item || !craftSlot2Item)) {
 					this.toggle = false;
 					this.originalColor = "#808080";
 					this.color = "#808080";
-				} else if (page && essence) {
-					if (page.amount < page.pagesToCraft ||
-						essence.name !== page.essenceName ||
-						essence.amount < page.essenceToCraft) {
+				} else if (craftSlot1Item && craftSlot2Item) {
+					if (craftSlot1Item.amount < craftSlot1Item.pagesToCraft ||
+						craftSlot2Item.name !== craftSlot1Item.essenceName ||
+						craftSlot2Item.amount < craftSlot1Item.essenceToCraft) {
 						this.toggle = false;
 						this.originalColor = "#808080";
 						this.color = "#808080";
@@ -957,8 +957,8 @@ class Button {
 			if (this.name == "craftButton" && !this.toggle) {
 				this.toggle = true;
 				addButton(buttonLibrary.displayCrafting, null);
-				addButton(buttonLibrary.pageSlot, 1);
-				addButton(buttonLibrary.essenceSlot, 2);
+				addButton(buttonLibrary.craftSlot1, 1);
+				addButton(buttonLibrary.craftSlot2, 2);
 				addButton(buttonLibrary.activateCraft, 3);
 				addButton(buttonLibrary.craftedItemSlot, 4);
 
@@ -1013,7 +1013,7 @@ class Button {
 					}
 				}
 			}
-			if (this.name == "pageSlot") {
+			if (this.name == "craftSlot1") {
 				// checks if an item being placed into the slot is valid or not
 				if (mouseHeldItem.length > 0 &&
 					(mouseHeldItem[0].form == "page" || mouseHeldItem[0].form == "spellBook") &&
@@ -1024,7 +1024,7 @@ class Button {
 					mouseHeldItem[0].index = this.index;
 					mouseHeldItem[0].location = this.name;
 
-					toBeCraftedMap.set("page", mouseHeldItem[0]);
+					toBeCraftedMap.set("craftSlot1Item", mouseHeldItem[0]);
 					mouseHeldItem[0].held = false;
 					this.slotActive = true;
 
@@ -1051,13 +1051,13 @@ class Button {
 
 					StorageManager.save("savedPlayerData", savedData);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
-					let page = toBeCraftedMap.get("page");
-					page.index = null;
-					page.location = null;
+					let craftSlot1Item = toBeCraftedMap.get("craftSlot1Item");
+					craftSlot1Item.index = null;
+					craftSlot1Item.location = null;
 					this.slotActive = false;
 
-					inventoryArray.push(page);
-					toBeCraftedMap.delete("page");
+					inventoryArray.push(craftSlot1Item);
+					toBeCraftedMap.delete("craftSlot1Item");
 
 					// Save the whole InventoryArray properly
 					savedData.inventoryArray = inventoryArray;
@@ -1065,7 +1065,7 @@ class Button {
 					StorageManager.save("savedPlayerData", savedData);
 				}
 			}
-			if (this.name == "essenceSlot") {
+			if (this.name == "craftSlot2") {
 				// checks if an item being placed into the slot is valid or not
 				if (mouseHeldItem.length > 0 &&
 					(mouseHeldItem[0].form == "essence" || mouseHeldItem[0].form == "spellBook") &&
@@ -1076,7 +1076,7 @@ class Button {
 					mouseHeldItem[0].index = this.index;
 					mouseHeldItem[0].location = this.name;
 
-					toBeCraftedMap.set("essence", mouseHeldItem[0]);
+					toBeCraftedMap.set("craftSlot2Item", mouseHeldItem[0]);
 					mouseHeldItem[0].held = false;
 					this.slotActive = true;
 
@@ -1104,12 +1104,12 @@ class Button {
 					StorageManager.save("savedPlayerData", savedData);
 				} else if (mouseHeldItem.length == 0 && this.slotActive) {
 
-					let essence = toBeCraftedMap.get("essence");
-					essence.index = null;
-					essence.location = null;
+					let craftSlot2Item = toBeCraftedMap.get("craftSlot2Item");
+					craftSlot2Item.index = null;
+					craftSlot2Item.location = null;
 					this.slotActive = false;
-					inventoryArray.push(essence);
-					toBeCraftedMap.delete("essence");
+					inventoryArray.push(craftSlot2Item);
+					toBeCraftedMap.delete("craftSlot2Item");
 
 					// Save the whole InventoryArray properly
 					savedData.inventoryArray = inventoryArray;
@@ -1118,29 +1118,29 @@ class Button {
 				}
 			}
 			if (this.name == "activateCraft") {
-				let page = toBeCraftedMap.get("page");
-				let essence = toBeCraftedMap.get("essence");
-				if (page && essence) {
-					if (page.amount >= page.pagesToCraft &&
-						essence.name == page.essenceName &&
-						essence.amount >= page.essenceToCraft) {
+				let craftSlot1Item = toBeCraftedMap.get("craftSlot1Item");
+				let craftSlot2Item = toBeCraftedMap.get("craftSlot2Item");
+				if (craftSlot1Item && craftSlot2Item) {
+					if (craftSlot1Item.amount >= craftSlot1Item.pagesToCraft &&
+						craftSlot2Item.name == craftSlot1Item.essenceName &&
+						craftSlot2Item.amount >= craftSlot1Item.essenceToCraft) {
 
-						page.amount -= page.pagesToCraft;
-						essence.amount -= page.essenceToCraft;
+						craftSlot1Item.amount -= craftSlot1Item.pagesToCraft;
+						craftSlot2Item.amount -= craftSlot1Item.essenceToCraft;
 
 						/*
 						ensures that the slots are set back to inactive so that new spells can be crafted without bugging.
 						without this code, in a situation where the last page or essence amount is all consumed by the last craft,
 						the game will bug and not let any other pages or essence be placed into their respective slot and crafted.
 						*/
-						if (page.amount <= 0) {
-							let pageSlot = buttonsMap.get("pageSlot");
-							pageSlot.slotActive = false;
+						if (craftSlot1Item.amount <= 0) {
+							let craftSlot1 = buttonsMap.get("craftSlot1");
+							craftSlot1.slotActive = false;
 						}
 
-						if (essence.amount <= 0) {
-							let essenceSlot = buttonsMap.get("essenceSlot");
-							essenceSlot.slotActive = false;
+						if (craftSlot2Item.amount <= 0) {
+							let craftSlot2 = buttonsMap.get("craftSlot2");
+							craftSlot2.slotActive = false;
 						}
 
 						/* checks if there's an item at the craftedItemSlot and properly places the current item back to the inventory 
@@ -1163,7 +1163,7 @@ class Button {
 							StorageManager.save("savedPlayerData", savedData);
 						}
 						// crafts a spell book
-						let spellBook = page.spellBookName;
+						let spellBook = craftSlot1Item.spellBookName;
 						let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "#000000", spellBook.appearance, spellBook.name, generateID(), spellBook.spell, spellBook.spellCore, spellBook.cooldown, spellBook.text);
 
 						// places the spell book inside the crafted item slot
@@ -1172,11 +1172,11 @@ class Button {
 						toBeCraftedMap.set("spellBook", craftedSpellBook);
 						craftedItemSlot.slotActive = true;
 
-						if (page.amount == 0) {
-							toBeCraftedMap.delete("page");
+						if (craftSlot1Item.amount == 0) {
+							toBeCraftedMap.delete("craftSlot1Item");
 						}
-						if (essence.amount == 0) {
-							toBeCraftedMap.delete("essence");
+						if (craftSlot2Item.amount == 0) {
+							toBeCraftedMap.delete("craftSlot2Item");
 						}
 
 					}

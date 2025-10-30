@@ -341,29 +341,29 @@ function clamp(value, min, max) {
 function properlyRemoveCraftSlots() {
 	let displayCraftingButton = buttonsMap.get("displayCrafting");
 	if (displayCraftingButton) {
-		// removing the page slot properly
-		let page = toBeCraftedMap.get("page");
-		if (page) {
-			let pageSlot = buttonsMap.get("pageSlot");
+		// removing the craftSlot1 properly
+		let craftSlot1Item = toBeCraftedMap.get("craftSlot1Item");
+		if (craftSlot1Item) {
+			let craftSlot1 = buttonsMap.get("craftSlot1");
 
-			page.index = null;
-			page.location = null;
-			pageSlot.slotActive = false;
+			craftSlot1Item.index = null;
+			craftSlot1Item.location = null;
+			craftSlot1.slotActive = false;
 
-			inventoryArray.push(page);
-			toBeCraftedMap.delete("page");
+			inventoryArray.push(craftSlot1Item);
+			toBeCraftedMap.delete("craftSlot1Item");
 		}
-		// removing the essence slot properly
-		let essence = toBeCraftedMap.get("essence");
-		if (essence) {
-			let essenceSlot = buttonsMap.get("essenceSlot");
+		// removing the craftSlot2 properly
+		let craftSlot2Item = toBeCraftedMap.get("craftSlot2Item");
+		if (craftSlot2Item) {
+			let craftSlot2 = buttonsMap.get("craftSlot2");
 
-			essence.index = null;
-			essence.location = null;
-			essenceSlot.slotActive = false;
+			craftSlot2Item.index = null;
+			craftSlot2Item.location = null;
+			craftSlot2.slotActive = false;
 
-			inventoryArray.push(essence);
-			toBeCraftedMap.delete("essence");
+			inventoryArray.push(craftSlot2Item);
+			toBeCraftedMap.delete("craftSlot2Item");
 		}
 		// removing the craftedItemSlot properly
 		let spellBook = toBeCraftedMap.get("spellBook");
@@ -377,8 +377,8 @@ function properlyRemoveCraftSlots() {
 			inventoryArray.push(spellBook);
 			toBeCraftedMap.delete("spellBook");
 		}
-		buttonsMap.delete("pageSlot");
-		buttonsMap.delete("essenceSlot");
+		buttonsMap.delete("craftSlot1");
+		buttonsMap.delete("craftSlot2");
 		buttonsMap.delete("activateCraft");
 		buttonsMap.delete("craftedItemSlot");
 		buttonsMap.delete("displayCrafting");
