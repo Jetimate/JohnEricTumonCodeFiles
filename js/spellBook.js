@@ -22,7 +22,7 @@ class SpellBook {
 		this.spellReady = true;
 		this.spellActive = false;
 		this.onSlot = false;
-		this.amount = 1;
+		this.quantity = 1;
 		this.stackLimit = 1;
 		this.held = false;
 		this.codeClass = "spellBook";
@@ -106,8 +106,8 @@ class SpellBook {
 			this.spellCore.art,
 			this.spellCore.shape,
 			this.spellCore.appearance,
-			this.spellCore.castAmount,
-			this.spellCore.maxAmount,
+			this.spellCore.castQuantity,
+			this.spellCore.maxQuantity,
 			this.spellCore.ignoreSpellCollision,
 			this.spellCore.ignoreMobCollision,
 			this.spellCore.index,
@@ -126,10 +126,10 @@ class SpellBook {
 		let spellCoreIndex = spellsArray.findIndex(element => element.spellBookID == this.uniqueID);
 
 		if (this.spell.ability === "shoot1") {
-			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
+			let spellBookCastQuantity = this.spell.castQuantity + (this.level - 1);
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < spellBookCastAmount) {
+				if (spellCount < spellBookCastQuantity) {
 					// Cast a spell
 					
 					castSpell(new Spell(
@@ -145,8 +145,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -160,17 +160,17 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 50);
 		}
 		if (this.spell.ability === "shoot2") {
-			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
-			this.spell.maxAmount = spellBookCastAmount;
+			let spellBookCastQuantity = this.spell.castQuantity + (this.level - 1);
+			this.spell.maxQuantity = spellBookCastQuantity;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < spellBookCastAmount) {
+				if (spellCount < spellBookCastQuantity) {
 					// Cast a spell
 					this.spell.index += 1;
 					castSpell(new Spell(
@@ -186,8 +186,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -201,17 +201,17 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 50);
 		}
 		if (this.spell.ability === "shoot3") {
-			let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
-			this.spell.maxAmount = spellBookCastAmount;
+			let spellBookCastQuantity = this.spell.castQuantity + (this.level - 1);
+			this.spell.maxQuantity = spellBookCastQuantity;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < spellBookCastAmount) {
+				if (spellCount < spellBookCastQuantity) {
 					// Cast a spell
 					this.spell.index += 1;
 					castSpell(new Spell(
@@ -227,8 +227,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -242,18 +242,17 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 50);
 		}
 		if ((this.spell.art === "summoning") &&
-			(myGameCharacter.summonLimit >= myGameCharacter.summonSpace + this.spell.castAmount * this.spell.summonCost)) {
-			//let spellBookCastAmount = this.spell.castAmount + (this.level - 1);
-			let spellBookCastAmount = this.spell.castAmount;
+			(myGameCharacter.summonLimit >= myGameCharacter.summonSpace + this.spell.castQuantity * this.spell.summonCost)) {
+			let spellBookCastQuantity = this.spell.castQuantity;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < spellBookCastAmount) {
+				if (spellCount < spellBookCastQuantity) {
 					// Cast a spell
 					this.spell.index += 1;
 					let setX = null;
@@ -278,8 +277,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -294,7 +293,7 @@ class SpellBook {
 					spellCount++;
 					myGameCharacter.summonSpace += 1 * this.spell.summonCost;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 50);
@@ -302,7 +301,7 @@ class SpellBook {
 		if (this.spell.ability === "teleport") {
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < this.spell.castAmount) {
+				if (spellCount < this.spell.castQuantity) {
 					// Cast a spell
 					castSpell(new Spell(
 						spellsArray[spellCoreIndex].x,
@@ -317,8 +316,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -332,7 +331,7 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 50);
@@ -340,7 +339,7 @@ class SpellBook {
 		if (this.spell.ability === "AoE1") {
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < this.spell.castAmount) {
+				if (spellCount < this.spell.castQuantity) {
 					// Cast a spell
 					castSpell(new Spell(
 						myGameCharacter.x,
@@ -355,8 +354,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -370,7 +369,7 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 15);
@@ -378,7 +377,7 @@ class SpellBook {
 		if (this.spell.ability === "beam1") {
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < this.spell.castAmount) {
+				if (spellCount < this.spell.castQuantity) {
 					// Cast a spell
 					castSpell(new Spell(
 						spellsArray[spellCoreIndex].x,
@@ -393,8 +392,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -408,7 +407,7 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 15);
@@ -416,7 +415,7 @@ class SpellBook {
 		if (this.spell.ability === "beam2") {
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
-				if (spellCount < this.spell.castAmount) {
+				if (spellCount < this.spell.castQuantity) {
 					// Cast a spell
 					castSpell(new Spell(
 						spellsArray[spellCoreIndex].x,
@@ -431,8 +430,8 @@ class SpellBook {
 						this.spell.art,
 						this.spell.shape,
 						this.spell.appearance,
-						this.spell.castAmount,
-						this.spell.maxAmount,
+						this.spell.castQuantity,
+						this.spell.maxQuantity,
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
@@ -446,7 +445,7 @@ class SpellBook {
 						this.spell.respawnTime));
 					spellCount++;
 				} else {
-					// Stop the interval once the desired amount of spells is cast
+					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
 			}, 300);
@@ -490,9 +489,9 @@ class SpellBook {
 			keyPressed &&
 			keyPressedOnce[digitKey] &&
 			myGameCharacter.mana - manaBuildUp >= this.spell.manaCost &&
-			myGameCharacter.currentActiveSpellAmount < myGameCharacter.activeSpellAmountLimit
+			myGameCharacter.currentActiveSpellQuantity < myGameCharacter.activeSpellQuantityLimit
 		) {
-			myGameCharacter.currentActiveSpellAmount++;
+			myGameCharacter.currentActiveSpellQuantity++;
 			keyPressedOnce[digitKey] = false;
 			if (!this.spellActive) {
 				manaBuildUp += this.spell.manaCost;
@@ -502,7 +501,7 @@ class SpellBook {
 		} else if (leftClick && this.spellActive) {
 			manaBuildUp -= this.spell.manaCost;
 			myGameCharacter.mana -= this.spell.manaCost;
-			myGameCharacter.currentActiveSpellAmount = 0;
+			myGameCharacter.currentActiveSpellQuantity = 0;
 			this.borderColor = "#000000";
 			this.interact();
 			this.spellActive = false;

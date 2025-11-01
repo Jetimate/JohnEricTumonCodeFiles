@@ -19,11 +19,11 @@
 		setMaxHealth,
 		name,
 		side,
-		maxAmount,
+		maxQuantity,
 		type,
 		ability,
 		learnedSpells,
-		castAmount,
+		castQuantity,
 		castDelay,
 		intelligence,
 		experienceDrop,
@@ -52,11 +52,11 @@
 		this.defense = defense;
 		this.damage = damage;
 		this.name = name;
-		this.maxAmount = maxAmount;
+		this.maxQuantity = maxQuantity;
 		this.type = type;
 		this.ability = ability;
 		this.learnedSpells = learnedSpells;
-		this.castAmount = castAmount;
+		this.castQuantity = castQuantity;
 		this.castDelay = castDelay;
 		this.intelligence = intelligence;
 		this.experienceDrop = experienceDrop;
@@ -133,8 +133,7 @@
 	}      
 	spawn() {
 		let totalSpecificMobCount = mobsArray.filter(element => element.name === this.name).length;
-		if ((totalSpecificMobCount - 1) < this.maxAmount) {
-			//console.log(totalSpecificMobCount, this.maxAmount, "called");
+		if ((totalSpecificMobCount - 1) < this.maxQuantity) {
 
 			// Capture the current context's values
 			let randomX = ((biome1.x - camera.x) + (Math.floor((Math.random() * (this.setMaxX - this.setMinX + 1)) + this.setMinX))) + camera.x;
@@ -162,11 +161,11 @@
 				setMaxHealth: this.setMaxHealth,
 				name: this.name,
 				side: this.side,
-				maxAmount: this.maxAmount,
+				maxQuantity: this.maxQuantity,
 				type: this.type,
 				ability: this.ability,
 				learnedSpells: this.learnedSpells,
-				castAmount: this.castAmount,
+				castQuantity: this.castQuantity,
 				castDelay: this.castDelay,
 				intelligence: this.intelligence,
 				experienceDrop: this.experienceDrop,
@@ -196,11 +195,11 @@
 					mobConfig.setMaxHealth,
 					mobConfig.name,
 					mobConfig.side,
-					mobConfig.maxAmount,
+					mobConfig.maxQuantity,
 					mobConfig.type,
 					mobConfig.ability,
 					mobConfig.learnedSpells,
-					mobConfig.castAmount,
+					mobConfig.castQuantity,
 					mobConfig.castDelay,
 					mobConfig.intelligence,
 					mobConfig.experienceDrop,
@@ -209,7 +208,6 @@
 				);
 
 				mobsArray.push(newMob);
-				//console.log(totalSpecificMobCount, mobConfig.maxAmount, "update");
 			}, mobRespawnCooldown);
 		}
 	}
@@ -244,7 +242,7 @@
 					this.lootDrop[i].pagesToCraft,
 					this.lootDrop[i].essenceToCraft,
 					this.lootDrop[i].ignoreCollision,
-					this.lootDrop[i].amount,
+					this.lootDrop[i].quantity,
 					this.lootDrop[i].stackLimit,
 					this.lootDrop[i].text))
 			} else {
@@ -363,10 +361,10 @@
 
 				this.attackTimer++
 				if (this.attackTimer >= this.castDelay) {
-					let spellBookCastAmount = this.castAmount;
+					let spellBookCastQuantity = this.castQuantity;
 					let spellCount = 0; // Keep track of how many spells have been cast
 					const interval = setInterval(() => {
-						if (spellCount < spellBookCastAmount) {
+						if (spellCount < spellBookCastQuantity) {
 							// Cast a spell
 							let newFOVRadius = null;
 							if (this.type != "summoner") {
@@ -387,8 +385,8 @@
 								this.learnedSpells.art,
 								this.learnedSpells.shape,
 								this.learnedSpells.appearance,
-								this.learnedSpells.castAmount,
-								this.learnedSpells.maxAmount,
+								this.learnedSpells.castQuantity,
+								this.learnedSpells.maxQuantity,
 								this.learnedSpells.ignoreSpellCollision,
 								this.learnedSpells.ignoreMobCollision,
 								this.learnedSpells.index,
@@ -401,10 +399,10 @@
 								this.learnedSpells.respawnTime));
 							spellCount++;
 						} else {
-							// Stop the interval once the desired amount of spells is cast
+							// Stop the interval once the desired quantity of spells is cast
 							clearInterval(interval);
 						}
-					}, 75 * this.castAmount);
+					}, 75 * this.castQuantity);
 					this.attackTimer = 0;
 					this.secondsTracker++;
 				}

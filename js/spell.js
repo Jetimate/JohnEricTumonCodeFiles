@@ -1,5 +1,5 @@
 class Spell {
-	constructor(x, y, radius, FOVRadius, name, spellBookID, caster, side, target, art, shape, appearance, castAmount, maxAmount, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
+	constructor(x, y, radius, FOVRadius, name, spellBookID, caster, side, target, art, shape, appearance, castQuantity, maxQuantity, ignoreSpellCollision, ignoreMobCollision, positionIndex, health, defense, damage, speed, ability, manaCost, summonCost, respawnTime) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -14,8 +14,8 @@ class Spell {
 		this.art = art;
 		this.shape = shape;
 		this.appearance = appearance;
-		this.castAmount = castAmount;
-		this.maxAmount = maxAmount;
+		this.castQuantity = castQuantity;
+		this.maxQuantity = maxQuantity;
 		this.ignoreSpellCollision = ignoreSpellCollision;
 		this.ignoreMobCollision = ignoreMobCollision;
 		this.positionIndex = positionIndex;
@@ -48,7 +48,7 @@ class Spell {
 		this.y2 = null;
 		this.newTargetX = null;
 		this.newTargetY = null;
-		this.amount = 1;
+		this.quantity = 1;
 		this.stackLimit = 1;
 		this.codeClass = "spell";
 	}
@@ -280,8 +280,8 @@ class Spell {
 
 			});
 			// Calculate target orbit position
-			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+			let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (myGameCharacter.radius * this.orbitRadius);
+			let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (myGameCharacter.radius * this.orbitRadius);
 
 			// Calculate distance to target orbit position
 			const dx = targetX - this.x;
@@ -334,8 +334,8 @@ class Spell {
 
 			} else {
 				// Calculate target orbit position
-				let targetX = this.caster.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (this.caster.radius * this.orbitRadius);
-				let targetY = this.caster.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (this.caster.radius * this.orbitRadius);
+				let targetX = this.caster.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (this.caster.radius * this.orbitRadius);
+				let targetY = this.caster.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (this.caster.radius * this.orbitRadius);
 
 				// Calculate distance to target orbit position
 				const dx = targetX - this.x;
@@ -415,8 +415,8 @@ class Spell {
 		// orbits the petal and takes time before you're able to aim the shot
 		if (this.ability === "shoot2") {
 			if (this.state === 0) {
-				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
-				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxAmount)) * (myGameCharacter.radius * this.orbitRadius);
+				let targetX = myGameCharacter.x + Math.cos(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (myGameCharacter.radius * this.orbitRadius);
+				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (myGameCharacter.radius * this.orbitRadius);
 
 				if (!this.isCasted) {
 					this.radiusIncrease = this.radius / 50; //0.1

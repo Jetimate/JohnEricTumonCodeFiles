@@ -1,5 +1,5 @@
 class Loot {
-	constructor(x, y, radius, name, spellBookName, rarity, dropChance, appearance, form, type, essenceName, pagesToCraft, essenceToCraft, ignoreCollision, amount, stackLimit, text) {
+	constructor(x, y, radius, name, spellBookName, rarity, dropChance, appearance, form, type, essenceName, pagesToCraft, essenceToCraft, ignoreCollision, quantity, stackLimit, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.angle = 0;
@@ -19,7 +19,7 @@ class Loot {
 		this.pagesToCraft = pagesToCraft;
 		this.essenceToCraft = essenceToCraft;
 		this.ignoreCollision = ignoreCollision;
-		this.amount = amount;
+		this.quantity = quantity;
 		this.stackLimit = stackLimit;
 		this.text = text;
 		// loot doesn't have levels yet right?

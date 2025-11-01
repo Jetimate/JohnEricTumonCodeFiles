@@ -13,7 +13,7 @@ const manaOrb = {
 	pagesToCraft: null,
 	essenceToCraft: null,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "spike"
 };
@@ -31,7 +31,7 @@ const glowEssence = {
 	pagesToCraft: null,
 	essenceToCraft: null,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "Glow Essence"
 };
@@ -48,7 +48,7 @@ const gloomEssence = {
 	pagesToCraft: null,
 	essenceToCraft: null,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "Gloom Essence"
 };
@@ -66,7 +66,7 @@ const spikePage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "spike"
 };
@@ -83,7 +83,7 @@ const luminousEnergyPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "lumenergy"
 };
@@ -100,7 +100,7 @@ const glowShardPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "glow shard"
 };
@@ -117,7 +117,7 @@ const luminousShieldPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "lumshield"
 };
@@ -134,7 +134,7 @@ const luminousSpiritPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "spirit"
 };
@@ -151,7 +151,7 @@ const specterPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "specter"
 };
@@ -168,7 +168,7 @@ const specterHandPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "hand"
 };
@@ -185,7 +185,7 @@ const teleportPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "teleport"
 };
@@ -202,7 +202,7 @@ const smashPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "smash"
 };
@@ -219,7 +219,7 @@ const beamPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "beam"
 };
@@ -236,7 +236,7 @@ const lightningBoltPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "lightning"
 };
@@ -253,7 +253,7 @@ const energyBallPage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "energy ball"
 };
@@ -270,7 +270,7 @@ const treePage = {
 	pagesToCraft: 5,
 	essenceToCraft: 15,
 	ignoreCollision: false,
-	amount: 1,
+	quantity: 1,
 	stackLimit: 64,
 	text: "tree"
 };
