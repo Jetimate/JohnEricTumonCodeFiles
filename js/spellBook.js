@@ -17,7 +17,8 @@ class SpellBook {
 		this.text = text;
 		this.cooldownTimer = 0;
 		this.level = 1;
-		this.maxPages = 3;
+		this.maxLevel = 10;
+//		this.maxPages = 3;
 		this.spawned = false;
 		this.spellReady = true;
 		this.spellActive = false;

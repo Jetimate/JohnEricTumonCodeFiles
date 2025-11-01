@@ -128,15 +128,14 @@
             const mainMenuVariable = document.getElementById("mainMenu");
             if (mainMenuVariable) mainMenuVariable.remove();
 
-			/*
+			
 			// delete this later (debug)
-            addLootToInventory(specterPage, 5); 
-			addLootToInventory(specterHandPage, 5);
-            addLootToInventory(spikePage, 5);
-			addLootToInventory(specterHandPage, 6); 
-            addLootToInventory(specterHandPage, 64); 
+			/*
+            addLootToInventory(specterHandPage, 64);
 			addLootToInventory(gloomEssence, 64);
+            addLootToInventory(gloomEssence, 64);
 			*/
+			
         }
 
 		function buttonsKeeper() {
@@ -342,7 +341,8 @@
 
 		function updateGameplayScreen() {
             //console.log(savedData.spellBooksArray, spellBooksArray);
-            //console.log(mouseHeldItem[0]);
+			//console.log(mouseHeldItem[0]);
+			console.log(spellBooksArray);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -675,6 +675,18 @@
                 StorageManager.save("savedPlayerData", savedData);
 			}
 		}
+
+        function levelUpSpellBook(spellBook) {
+            const upgrades = spellBook.levelStats?.[spellBook.level];
+            if (!upgrades) return spellBook; // no upgrades for this level
+
+            if (upgrades.spell) {
+                Object.assign(spellBook.spell, upgrades.spell);
+            }
+
+            return spellBook;
+		}
+
         function setUpSpellBooks() {
             // Load saved data safely, with default structure
             const savedData = StorageManager.load("savedPlayerData", { spellBooksArray: [] });
