@@ -13,6 +13,7 @@ savedData.experience ??= 0;
 savedData.maxExperience ??= 100;
 savedData.level ??= 0;
 savedData.spellBookSlotsUnlocked ??= 4;
+savedData.summonLimit ??= 20;
 savedData.score ??= 0;
 savedData.spellBooksArray ??= [];
 savedData.inventoryArray ??= [];

@@ -135,7 +135,11 @@
 			addLootToInventory(gloomEssence, 64);
             addLootToInventory(gloomEssence, 64);
 			*/
-			
+			/*
+			addLootToInventory(spikePage, 64);
+            addLootToInventory(gloomEssence, 64);
+			addLootToInventory(gloomEssence, 64);
+			*/
         }
 
 		function buttonsKeeper() {
@@ -179,6 +183,7 @@
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
 			addSpellBook(spikeBook, 1);
+			console.log("I was called");
 			/*
 			addSpellBook(lightningBoltBook, 1);
 			addSpellBook(smashBook, 2);
@@ -342,7 +347,7 @@
 		function updateGameplayScreen() {
             //console.log(savedData.spellBooksArray, spellBooksArray);
 			//console.log(mouseHeldItem[0]);
-			console.log(spellBooksArray);
+			//console.log(spellBooksArray);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -542,6 +547,10 @@
             }
 			toBeCraftedMap.clear();
 
+            while (spellBooksArray.length > 0) {
+                inventoryArray.push(spellBooksArray.shift());
+            }
+
 			StorageManager.saveAll();
 
 			addText(textLibrary.gameOverText);
@@ -550,11 +559,11 @@
 			buttonsMap.clear();
 			addButton(buttonLibrary.exitButton, null);
 
+            //inventoryArray = [];
 			spellBooksArray = [];
 			spellsArray = [];
 			mobsArray = [];
 			lootsArray = [];
-			inventoryArray = [];
 			toBeCraftedMap.clear();
 
 			for (let key in keys) {
@@ -612,7 +621,9 @@
 			savedData.experience = myGameCharacter.experience;
             savedData.maxExperience = myGameCharacter.maxExperience;
 			savedData.level = myGameCharacter.level;
-            savedData.spellBookSlotsUnlocked = myGameCharacter.spellBookSlotsUnlocked;
+			savedData.spellBookSlotsUnlocked = myGameCharacter.spellBookSlotsUnlocked;
+
+			savedData.summonLimit = myGameCharacter.summonLimit;
 
             StorageManager.save("savedPlayerData", savedData);
 		}
@@ -651,6 +662,8 @@
 				id,
 				spellBook.spell,
 				spellBook.spellCore,
+				spellBook.level ?? 1,
+                spellBook.levelStats,
 				spellBook.cooldown,
 				spellBook.text);
 
@@ -677,15 +690,25 @@
 		}
 
         function levelUpSpellBook(spellBook) {
+            console.log("Leveling up:", spellBook.name, "→ Level", spellBook.level);
+
             const upgrades = spellBook.levelStats?.[spellBook.level];
-            if (!upgrades) return spellBook; // no upgrades for this level
+            if (!upgrades) {
+                console.log("No upgrades for this level.");
+                return spellBook;
+            }
 
             if (upgrades.spell) {
-                Object.assign(spellBook.spell, upgrades.spell);
+                for (const [key, multiplier] of Object.entries(upgrades.spell)) {
+                    if (typeof spellBook.spell[key] === "number") {
+                        spellBook.spell[key] *= multiplier;
+                        console.log(`Upgraded ${key}: ×${multiplier}`);
+                    }
+                }
             }
 
             return spellBook;
-		}
+        }
 
         function setUpSpellBooks() {
             // Load saved data safely, with default structure
@@ -1080,12 +1103,13 @@
 		8). add upgrades points. you can earn ugrade points when leveling up
 		14). add spells that can be casted multiple times in a row but they rely heavily on mana (they're a different type from spellBooks)
 		15). make the spellBooks run on cooldown instead of mana
+		16). then there will be natural spells that run on purely mana
 		1000). add a place where npcs will go to when their kingdom is invaded
 		1001). most people arent allowed to go to that place because that place is only for emergencies and they cant risk it getting invaded
 		1002). make npcs killable (someone rich and willing needs to resurect them) (there will be a sign that says theyve been killed or something)
 		1003). squads/teams will be a thing where friends can play together
 		1004). there should be a local gamemode so people can still have fun
-		1005). only add some ads
+		1005). add some ads
 		1006). ranks should be a thing
 		1007). a spellBook that progressively gets stronger the more mobs you kill
 

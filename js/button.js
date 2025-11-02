@@ -1170,7 +1170,7 @@ class Button {
 
 							// crafts a spell book
 							let baseSpellBook = craftSlot1Item.spellBookName;
-							let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "#000000", baseSpellBook.appearance, baseSpellBook.name, generateID(), baseSpellBook.spell, baseSpellBook.spellCore, baseSpellBook.cooldown, baseSpellBook.text);
+							let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "#000000", baseSpellBook.appearance, baseSpellBook.name, generateID(), baseSpellBook.spell, baseSpellBook.spellCore, 1, baseSpellBook.levelStats, baseSpellBook.cooldown, baseSpellBook.text);
 
 							// places the spell book inside the crafted item slot
 							craftedSpellBook.index = craftedItemSlot.index;
@@ -1220,14 +1220,19 @@ class Button {
 
 							// crafts a spell book
 							let baseSpellBook = craftSlot1Item;
-							let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "#000000", baseSpellBook.appearance, baseSpellBook.name, generateID(), baseSpellBook.spell, baseSpellBook.spellCore, baseSpellBook.cooldown, baseSpellBook.text);
-							craftedSpellBook.level = baseSpellBook.level + 1;
+							let craftedSpellBook = new SpellBook(0, 0, null, 0, 0, 0, "#000000",
+								baseSpellBook.appearance, baseSpellBook.name, generateID(),
+								structuredClone(baseSpellBook.spell), structuredClone(baseSpellBook.spellCore),
+								baseSpellBook.level + 1, structuredClone(baseSpellBook.levelStats),
+								baseSpellBook.cooldown, baseSpellBook.text);
+							console.log(craftedSpellBook.spell.speed);
 							levelUpSpellBook(craftedSpellBook);
 
 							// places the spell book inside the crafted item slot
 							craftedSpellBook.index = craftedItemSlot.index;
 							craftedSpellBook.location = craftedItemSlot.name;
 							toBeCraftedMap.set("spellBook", craftedSpellBook);
+							console.log("crafted spellBook:", toBeCraftedMap.get("spellBook"));
 							craftedItemSlot.slotActive = true;
 
 							// deletes the items from craftSlot 1 and 2 once the crafting is complete.

@@ -1,5 +1,5 @@
 class SpellBook {
-	constructor(x, y, index, width, height, radii, borderColor, appearance, name, uniqueID, spell, spellCore, cooldown, text) {
+	constructor(x, y, index, width, height, radii, borderColor, appearance, name, uniqueID, spell, spellCore, level, levelStats, cooldown, text) {
 		this.image = new Image();
 		this.image.src = appearance;
 		this.x = x;
@@ -13,10 +13,11 @@ class SpellBook {
 		this.name = name;
 		this.spell = spell;
 		this.spellCore = spellCore;
+		this.level = level;
+		this.levelStats = levelStats;
 		this.cooldown = cooldown;
 		this.text = text;
 		this.cooldownTimer = 0;
-		this.level = 1;
 		this.maxLevel = 10;
 //		this.maxPages = 3;
 		this.spawned = false;

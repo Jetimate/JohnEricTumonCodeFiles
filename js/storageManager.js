@@ -12,12 +12,11 @@ class StorageManager {
 		//savedData.health = myGameCharacter.health;
 		//savedData.mana = myGameCharacter.mana;
 
-		// WIP
 		savedData.maxHealth = myGameCharacter.maxHealth;
 		savedData.maxMana = myGameCharacter.maxMana;
 		savedData.healthRegen = myGameCharacter.healthRegen;
 		savedData.manaRegen = myGameCharacter.manaRegen;
-		// --------
+		savedData.summonLimit = myGameCharacter.summonLimit;
 		savedData.name = myGameCharacter.name;
 		savedData.experience = myGameCharacter.experience;
 		savedData.maxExperience = myGameCharacter.maxExperience;
@@ -29,28 +28,6 @@ class StorageManager {
 
 		StorageManager.save("savedPlayerData", savedData);
 	}
-
-	/*
-	static loadAll() {
-		const data = StorageManager.load("savedPlayerData");
-
-		if (data) {
-			myGameCharacter.health = data.health ?? myGameCharacter.health;
-			myGameCharacter.mana = data.mana ?? myGameCharacter.mana;
-			myGameCharacter.name = data.name ?? myGameCharacter.name;
-			myGameCharacter.experience = data.experience ?? myGameCharacter.experience;
-			myGameCharacter.maxExperience = data.maxExperience ?? myGameCharacter.maxExperience;
-			myGameCharacter.level = data.level ?? myGameCharacter.level;
-			myGameCharacter.score = data.score ?? myGameCharacter.score;
-
-			spellBooksArray = data.spellBooksArray ?? [];
-			inventoryArray = data.inventoryArray ?? [];
-
-			// Keep the global savedData in sync
-			savedData = data;
-		}
-	}
-	*/
 
     static remove(key) {
         localStorage.removeItem(key);

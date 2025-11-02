@@ -1,4 +1,5 @@
 // spell books
+/*
 const spikeBook = {
 	appearance: "spellBook/spike_spellBook.png",
 	name: "spikeBook",
@@ -52,8 +53,9 @@ const spikeBook = {
 		4: { speed: 10 }
 	}
 }
+*/
 // new variable setup
-/*
+
 const spikeBook = (() => {
 // must be let variable
 	let castSpike = {
@@ -107,23 +109,22 @@ const spikeBook = (() => {
 		text: "spike",
 		spell: castSpike,
 		spellCore: spikeCore,
-	};
-
-	spellBook.levelStats = {
-		2: { spell: { health: spellBook.spell.health * 2 } },
-		3: { spell: { damage: spellBook.spell.damage * 2 } },
-		4: { spell: { speed: spellBook.spell.speed * 2 } }
-		5: { spell: { health: spellBook.spell.health * 2 } },
-		6: { spell: { damage: spellBook.spell.damage * 2 } },
-		7: { spell: { speed: spellBook.spell.speed * 2 } }
-		8: { spell: { health: spellBook.spell.health * 2 } },
-		9: { spell: { damage: spellBook.spell.damage * 2 } },
-		10: { spell: { speed: spellBook.spell.speed * 2 } }
+		levelStats: {
+			2: { spell: { speed: 5 } },
+			3: { spell: { damage: 2 } },
+			4: { spell: { speed: 2 } },
+			5: { spell: { health: 2 } },
+			6: { spell: { damage: 2 } },
+			7: { spell: { speed: 2 } },
+			8: { spell: { health: 2 } },
+			9: { spell: { damage: 2 } },
+			10: { spell: { speed: 2 } }
+		}
 	};
 
 	return spellBook;
 })();
-*/
+
 const luminousEnergyBook = {
 	appearance: "spellBook/luminousEnergy_spellBook.png",
 	name: "luminousEnergyBook",
