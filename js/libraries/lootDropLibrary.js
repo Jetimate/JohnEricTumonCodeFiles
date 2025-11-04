@@ -73,7 +73,7 @@ const spikePage = {
 const luminousEnergyPage = {
 	radius: 20,
 	name: "luminousEnergyPage",
-	spellBookName: luminousEnergyBook,
+	spellBookName: spellBookLibrary.luminousEnergyBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/luminousEnergy_page.png",
@@ -90,7 +90,7 @@ const luminousEnergyPage = {
 const glowShardPage = {
 	radius: 20,
 	name: "glowShardPage",
-	spellBookName: glowShardBook,
+	spellBookName: spellBookLibrary.glowShardBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/glowShard_page.png",
@@ -107,7 +107,7 @@ const glowShardPage = {
 const luminousShieldPage = {
 	radius: 20,
 	name: "luminousShieldPage",
-	spellBookName: luminousShieldBook,
+	spellBookName: spellBookLibrary.luminousShieldBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/luminousShield_page.png",
@@ -124,7 +124,7 @@ const luminousShieldPage = {
 const luminousSpiritPage = {
 	radius: 20,
 	name: "luminousSpiritPage",
-	spellBookName: luminousSpiritBook,
+	spellBookName: spellBookLibrary.luminousSpiritBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/luminousSpirit_page.png",
@@ -141,7 +141,7 @@ const luminousSpiritPage = {
 const specterPage = {
 	radius: 20,
 	name: "specterPage",
-	spellBookName: specterBook,
+	spellBookName: spellBookLibrary.specterBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/specter_page.png",
@@ -158,7 +158,7 @@ const specterPage = {
 const specterHandPage = {
 	radius: 20,
 	name: "specterHandPage",
-	spellBookName: specterHandBook,
+	spellBookName: spellBookLibrary.specterHandBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/specterHand_page.png",
@@ -175,7 +175,7 @@ const specterHandPage = {
 const teleportPage = {
 	radius: 20,
 	name: "teleportPage",
-	spellBookName: teleportBook,
+	spellBookName: spellBookLibrary.castTeleportBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/teleport_page.png",
@@ -192,7 +192,7 @@ const teleportPage = {
 const smashPage = {
 	radius: 20,
 	name: "smashPage",
-	spellBookName: smashBook,
+	spellBookName: spellBookLibrary.castSmashBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/smash_page.png",
@@ -209,7 +209,7 @@ const smashPage = {
 const beamPage = {
 	radius: 20,
 	name: "beamPage",
-	spellBookName: beamBook,
+	spellBookName: spellBookLibrary.beamBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/beam_page.png",
@@ -226,7 +226,7 @@ const beamPage = {
 const lightningBoltPage = {
 	radius: 20,
 	name: "lightningBoltPage",
-	spellBookName: lightningBoltBook,
+	spellBookName: spellBookLibrary.lightningBoltBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/lightningBolt_page.png",
@@ -243,7 +243,7 @@ const lightningBoltPage = {
 const energyBallPage = {
 	radius: 20,
 	name: "energyBallPage",
-	spellBookName: energyBallBook,
+	spellBookName: spellBookLibrary.energyBallBook,
 	rarity: "uncommon",
 	dropChance: 25,
 	appearance: "lootDrop/energyBall_page.png",
@@ -260,7 +260,7 @@ const energyBallPage = {
 const treePage = {
 	radius: 20,
 	name: "treePage",
-	spellBookName: treeBook,
+	spellBookName: spellBookLibrary.treeBook,
 	rarity: "rare",
 	dropChance: 10,
 	appearance: "lootDrop/summonTree_page.png",

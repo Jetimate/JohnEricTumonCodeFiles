@@ -30,8 +30,7 @@
 	<script type="text/javascript" src="js/text.js"></script>
 	<script type="text/javascript" src="js/background.js"></script>
 	<script type="text/javascript" src="js/camera.js"></script>
-	<script type="text/javascript" src="js/libraries/spellBooksLibrary.js"></script>
-
+	<script type="text/javascript" src="js/libraries/spellBookLibrary.js"></script>
 	<script type="text/javascript" src="js/libraries/lootDropLibrary.js"></script>
 	<script type="text/javascript" src="js/loot.js"></script>
 	<script type="text/javascript" src="js/libraries/mobLibrary.js"></script>
@@ -184,30 +183,31 @@
 
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-            addSpellBook(spellBookLibrary.spikeBook, 1);
+			addSpellBook(spellBookLibrary.spikeBook, 1);
+            addSpellBook(spellBookLibrary.beamBook, 2);
 			console.log("I was called");
 			/*
-			addSpellBook(lightningBoltBook, 1);
-			addSpellBook(smashBook, 2);
-			addSpellBook(specterBook, 3);
-			addSpellBook(luminousShieldBook, 4);
+			addSpellBook(spellBookLibrary.lightningBoltBook, 1);
+			addSpellBook(spellBookLibrary.smashBook, 2);
+			addSpellBook(spellBookLibrary.specterBook, 3);
+			addSpellBook(spellBookLibrary.luminousShieldBook, 4);
 			*/
 
 			/*
-			addSpellBook(lightningBoltBook, 1);
-			addSpellBook(lightningBoltBook, 2);
-			addSpellBook(lightningBoltBook, 3);
-			addSpellBook(lightningBoltBook, 4);
+			addSpellBook(spellBookLibrary.lightningBoltBook, 1);
+			addSpellBook(spellBookLibrary.lightningBoltBook, 2);
+			addSpellBook(spellBookLibrary.lightningBoltBook, 3);
+			addSpellBook(spellBookLibrary.lightningBoltBook, 4);
 			*/
 
 			/*
-			addSpellBook(energyBallBook, null);
-			addSpellBook(specterBook, null);
-			addSpellBook(teleportBook, null);
-			addSpellBook(luminousEnergyBook, null);
-			addSpellBook(spikeBook, null);
-			addSpellBook(specterHandBook, null);
-			addSpellBook(treeBook, null);
+			addSpellBook(spellBookLibrary.energyBallBook, null);
+			addSpellBook(spellBookLibrary.specterBook, null);
+			addSpellBook(spellBookLibrary.teleportBook, null);
+			addSpellBook(spellBookLibrary.luminousEnergyBook, null);
+			addSpellBook(spellBookLibrary.spikeBook, null);
+			addSpellBook(spellBookLibrary.specterHandBook, null);
+			addSpellBook(spellBookLibrary.treeBook, null);
 			*/
 		}
 
