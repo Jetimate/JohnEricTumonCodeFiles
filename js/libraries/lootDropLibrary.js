@@ -56,7 +56,7 @@ const gloomEssence = {
 const spikePage = {
 	radius: 20,
 	name: "spikePage",
-	spellBookName: spikeBook,
+	spellBookName: spellBookLibrary.spikeBook,
 	rarity: "uncommon",
 	dropChance: 250,
 	appearance: "lootDrop/spike_page.png",

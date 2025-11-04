@@ -128,7 +128,7 @@ class SpellBook {
 		let spellCoreIndex = spellsArray.findIndex(element => element.spellBookID == this.uniqueID);
 
 		if (this.spell.ability === "shoot1") {
-			let spellBookCastQuantity = this.spell.castQuantity + (this.level - 1);
+			let spellBookCastQuantity = this.spell.castQuantity;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
 				if (spellCount < spellBookCastQuantity) {
@@ -168,7 +168,7 @@ class SpellBook {
 			}, 50);
 		}
 		if (this.spell.ability === "shoot2") {
-			let spellBookCastQuantity = this.spell.castQuantity + (this.level - 1);
+			let spellBookCastQuantity = this.spell.castQuantity;
 			this.spell.maxQuantity = spellBookCastQuantity;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
@@ -209,7 +209,7 @@ class SpellBook {
 			}, 50);
 		}
 		if (this.spell.ability === "shoot3") {
-			let spellBookCastQuantity = this.spell.castQuantity + (this.level - 1);
+			let spellBookCastQuantity = this.spell.castQuantity;
 			this.spell.maxQuantity = spellBookCastQuantity;
 			let spellCount = 0; // Keep track of how many spells have been cast
 			const interval = setInterval(() => {
@@ -284,10 +284,10 @@ class SpellBook {
 						this.spell.ignoreSpellCollision,
 						this.spell.ignoreMobCollision,
 						this.spell.index,
-						this.spell.health + (this.level - 1),
+						this.spell.health,
 						this.spell.defense,
-						this.spell.damage + (this.level - 1),
-						this.spell.speed + ((this.level - 1) * 0.25),
+						this.spell.damage,
+						this.spell.speed,
 						this.spell.ability,
 						this.spell.manaCost,
 						this.spell.summonCost,

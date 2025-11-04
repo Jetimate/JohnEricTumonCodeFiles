@@ -135,11 +135,13 @@
 			addLootToInventory(gloomEssence, 64);
             addLootToInventory(gloomEssence, 64);
 			*/
-			/*
-			addLootToInventory(spikePage, 64);
-            addLootToInventory(gloomEssence, 64);
-			addLootToInventory(gloomEssence, 64);
-			*/
+			
+			//addLootToInventory(spikePage, 60);
+            //addLootToInventory(gloomEssence, 60);
+			//addLootToInventory(gloomEssence, 60);
+            //addLootToInventory(gloomEssence, 60);
+            //addLootToInventory(gloomEssence, 60);
+			
         }
 
 		function buttonsKeeper() {
@@ -182,7 +184,7 @@
 
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
-			addSpellBook(spikeBook, 1);
+            addSpellBook(spellBookLibrary.spikeBook, 1);
 			console.log("I was called");
 			/*
 			addSpellBook(lightningBoltBook, 1);
@@ -348,6 +350,7 @@
             //console.log(savedData.spellBooksArray, spellBooksArray);
 			//console.log(mouseHeldItem[0]);
 			//console.log(spellBooksArray);
+			console.log(inventoryArray);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -656,7 +659,7 @@
 				spellBook.width,
 				spellBook.height,
 				spellBook.radii,
-				"black",
+				"#000000",
 				spellBook.appearance,
 				spellBook.name,
 				id,
@@ -690,19 +693,24 @@
 		}
 
         function levelUpSpellBook(spellBook) {
-            console.log("Leveling up:", spellBook.name, "→ Level", spellBook.level);
+            //console.log("Leveling up:", spellBook.name, "→ Level", spellBook.level);
 
             const upgrades = spellBook.levelStats?.[spellBook.level];
             if (!upgrades) {
-                console.log("No upgrades for this level.");
+                //console.log("No upgrades for this level.");
                 return spellBook;
             }
 
             if (upgrades.spell) {
-                for (const [key, multiplier] of Object.entries(upgrades.spell)) {
-                    if (typeof spellBook.spell[key] === "number") {
+				for (const [key, multiplier] of Object.entries(upgrades.spell)) {
+					console.log(key);
+                    if (key === "castQuantity") {
+                        // special logic for spellQuantity
+                        spellBook.spell.castQuantity += multiplier; // example: add instead of multiply
+                        //console.log(`Increased spellQuantity by ${multiplier}`);
+                    } else if (typeof spellBook.spell[key] === "number") {
                         spellBook.spell[key] *= multiplier;
-                        console.log(`Upgraded ${key}: ×${multiplier}`);
+                        //console.log(`Upgraded ${key}: ×${multiplier}`);
                     }
                 }
             }
@@ -719,16 +727,69 @@
 
             // Recreate spell books
             savedSpellBooks.forEach(data => {
+                const baseTemplate = spellBookLibrary[data.name];
+
+                if (!baseTemplate) {
+                    console.warn(`Missing base template for: ${data.name}`);
+                    return;
+                }
+
+                // Always refresh the latest static data
+                data.levelStats = structuredClone(baseTemplate.levelStats);
+                data.spellCore = { ...structuredClone(baseTemplate.spellCore), ...data.spellCore };
+
+                // Start from base spell template (clean)
+                let newSpell = structuredClone(baseTemplate.spell);
+
+                // Reapply upgrades from level 2 → current level
+                for (let lvl = 2; lvl <= (data.level ?? 1); lvl++) {
+                    const upgrades = data.levelStats[lvl];
+                    if (!upgrades) continue;
+
+                    if (upgrades.spell) {
+                        for (const [key, multiplier] of Object.entries(upgrades.spell)) {
+                            if (key === "castQuantity") {
+                                // Special handling: additive rather than multiplicative
+                                newSpell.castQuantity = (newSpell.castQuantity ?? 0) + multiplier;
+                            } else if (typeof newSpell[key] === "number") {
+                                newSpell[key] *= multiplier;
+                            } else {
+                                newSpell[key] = multiplier; // overwrite if non-number
+                            }
+                        }
+                    }
+                }
+
+                // Update the spell with recalculated stats
+                data.spell = newSpell;
+
+                // Add spell book to the player inventory
                 addSpellBook(data, data.index, data.uniqueID);
             });
-		}
+        }
 
         function setUpInventory() {
+            const savedData = StorageManager.load("savedPlayerData", { inventoryArray: [] });
             const inventory = Array.isArray(savedData.inventoryArray) ? savedData.inventoryArray : [];
 
             inventory.forEach(data => {
                 if (data.codeClass === "loot") {
-                    addLootToInventory(data, data.quantity);
+                    if (data.form === "page") {
+                        // 🪄 Relink to latest spellBook template
+                        if (typeof data.spellBookName === "string") {
+                            // If somehow it was saved as a string name, resolve it
+                            data.spellBookName = spellBookLibrary[data.spellBookName];
+                        } else if (data.spellBookName?.name) {
+                            // Otherwise, replace the old reference with the new template
+                            const updatedSpellBook = spellBookLibrary[data.spellBookName.name];
+                            if (updatedSpellBook) data.spellBookName = updatedSpellBook;
+                            else console.warn(`Missing spellBook template for ${data.spellBookName.name}`);
+                        }
+
+                        addLootToInventory(data, data.quantity);
+                    } else {
+                        addLootToInventory(data, data.quantity);
+                    }
                 } else if (data.codeClass === "spellBook") {
                     addSpellBook(data, data.index, data.uniqueID);
                 }

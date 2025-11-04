@@ -56,74 +56,90 @@ const spikeBook = {
 */
 // new variable setup
 
-const spikeBook = (() => {
-// must be let variable
-	let castSpike = {
-		radius: 12,
-		FOVRadius: 0,
-		name: "castSpike",
-		art: "projecting",
-		shape: "circle",
-		appearance: "spell/spike.svg",
-		castQuantity: 1,
-		maxQuantity: 0,
-		ignoreSpellCollision: false,
-		ignoreMobCollision: false,
-		index: 1,
-		health: 5,
-		defense: 0,
-		damage: 3,
-		speed: 10,
-		ability: "shoot1",
-		manaCost: 0.1,
-		summonCost: 0,
-		respawnTime: 500
-	};
+const spellBookLibrary = {
+	spikeBook = (() => {
+		// must be let variable
+		let castSpike = {
+			radius: 12,
+			FOVRadius: 0,
+			name: "castSpike",
+			art: "projecting",
+			shape: "circle",
+			appearance: "spell/spike.svg",
+			castQuantity: 1,
+			maxQuantity: 0,
+			ignoreSpellCollision: false,
+			ignoreMobCollision: false,
+			index: 1,
+			health: 1,
+			defense: 0,
+			damage: 4,
+			speed: 10,
+			ability: "shoot1",
+			manaCost: 0.1,
+			summonCost: 0,
+			respawnTime: 500
+		};
 
-	const spikeCore = {
-		radius: 25,
-		FOVRadius: 0,
-		name: "spikeCore",
-		art: "books",
-		shape: "circle",
-		appearance: "spellBook/spike_spellBook.png",
-		castQuantity: 1,
-		maxQuantity: 1,
-		ignoreSpellCollision: true,
-		ignoreMobCollision: true,
-		index: 1,
-		health: 100,
-		defense: 100,
-		damage: 0,
-		speed: 12,
-		ability: null,
-		manaCost: 1,
-		summonCost: 0,
-		respawnTime: null
-	};
-// must be let variable
-	let spellBook = {
-		appearance: "spellBook/spike_spellBook.png",
-		name: "spikeBook",
-		cooldown: 30,
-		text: "spike",
-		spell: castSpike,
-		spellCore: spikeCore,
-		levelStats: {
-			2: { spell: { speed: 5 } },
-			3: { spell: { damage: 2 } },
-			4: { spell: { speed: 2 } },
-			5: { spell: { health: 2 } },
-			6: { spell: { damage: 2 } },
-			7: { spell: { speed: 2 } },
-			8: { spell: { health: 2 } },
-			9: { spell: { damage: 2 } },
-			10: { spell: { speed: 2 } }
-		}
-	};
+		const spikeCore = {
+			radius: 25,
+			FOVRadius: 0,
+			name: "spikeCore",
+			art: "books",
+			shape: "circle",
+			appearance: "spellBook/spike_spellBook.png",
+			castQuantity: 1,
+			maxQuantity: 1,
+			ignoreSpellCollision: true,
+			ignoreMobCollision: true,
+			index: 1,
+			health: 100,
+			defense: 100,
+			damage: 0,
+			speed: 12,
+			ability: null,
+			manaCost: 1,
+			summonCost: 0,
+			respawnTime: null
+		};
+		// must be let variable
+		let spellBook = {
+			appearance: "spellBook/spike_spellBook.png",
+			name: "spikeBook",
+			cooldown: 30,
+			text: "spike",
+			spell: castSpike,
+			spellCore: spikeCore,
+			levelStats: {
+				2: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } }, // remove castQuantity. it is temporary for debugging
+				3: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } }, // remove castQuantity. it is temporary for debugging
+				4: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				5: { spell: { castQuantity: 1, speed: 2 } },
+				6: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				7: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				8: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				9: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				10: { spell: { castQuantity: 3, speed: 2, damage: 2 } }
+			}
+		};
 
-	return spellBook;
-})();
+		return spellBook;
+	})(),
+	/*
+	luminousEnergyBook,
+	glowShardBook,
+	luminousShieldBook,
+	luminousSpiritBook,
+	specterBook,
+	specterHandBook,
+	teleportBook,
+	smashBook,
+	beamBook,
+	lightningBoltBook,
+	energyBallBook,
+	treeBook
+	*/
+}
 
 const luminousEnergyBook = {
 	appearance: "spellBook/luminousEnergy_spellBook.png",
