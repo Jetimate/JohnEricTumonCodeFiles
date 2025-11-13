@@ -373,17 +373,11 @@ class Spell {
 					}
 				}
 			}
-			/* Ensure the entity stays within the canvas boundaries
-			this.x = clamp(this.x, this.radius, biome1.width - this.radius);
-			this.y = clamp(this.y, this.radius, biome1.height - this.radius);
-			*/
+			stayWithinMap(this, biome1);
 		}
 		if (this.ability === "summon2") {
 			// Ensure the entity stays within the canvas boundaries
-			if (this.x < this.radius) this.x = this.radius;
-			if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-			if (this.y < this.radius) this.y = this.radius;
-			if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+			stayWithinMap(this, biome1);
 		}
 		// basic shooting
 		if (this.ability === "shoot1") {

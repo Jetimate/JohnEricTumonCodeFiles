@@ -467,10 +467,8 @@
 						// Move toward the target
 						myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
 						myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-						if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
-						if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
-						if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
-						if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
+
+						stayWithinMap(myGameCharacter, biome1);
 					}
 				}
 			}
@@ -485,11 +483,8 @@
 
 					myGameCharacter.x += myGameCharacter.newSpeed * Math.sin(myGameCharacter.angle);
 					myGameCharacter.y -= myGameCharacter.newSpeed * Math.cos(myGameCharacter.angle);
-					if (myGameCharacter.x < myGameCharacter.radius) myGameCharacter.x = myGameCharacter.radius;
-					if (myGameCharacter.x > biome1.width - myGameCharacter.radius) myGameCharacter.x = biome1.width - myGameCharacter.radius;
-					if (myGameCharacter.y < myGameCharacter.radius) myGameCharacter.y = myGameCharacter.radius;
-					if (myGameCharacter.y > biome1.height - myGameCharacter.radius) myGameCharacter.y = biome1.height - myGameCharacter.radius;
 
+                    stayWithinMap(myGameCharacter, biome1);
 				}
 			}
 		}
@@ -829,7 +824,7 @@
 		}
 		function spawnMobs() {
 			for (let i = 0; i < starterMobsArray.length; i++) {
-                for (let j = 0; j < (starterMobsArray[i].maxQuantity) * 3; j++) {
+                for (let j = 0; j < (starterMobsArray[i].maxQuantity * mobDensity); j++) {
 					let mobRandomX = ((biome1.x - camera.x) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxX - starterMobsArray[i].setMinX + 1)) + starterMobsArray[i].setMinX))) + camera.x;
 					let mobRandomY = ((biome1.y - camera.y) + (Math.floor((Math.random() * (starterMobsArray[i].setMaxY - starterMobsArray[i].setMinY + 1)) + starterMobsArray[i].setMinY))) + camera.y;
 					let mobRandomRadiusXHealth = Math.floor((Math.random() * (starterMobsArray[i].setMaxHealth - starterMobsArray[i].setMinHealth + 1)) + starterMobsArray[i].setMinHealth);
@@ -866,39 +861,45 @@
 				}
 			}
 		}
-		function crashWith(mob1Array, mob2Array) {
-			mob1Array.forEach(mob1 => {
-				mob2Array.forEach(mob2 => {
-					let dx = mob2.x - mob1.x;
-					let dy = mob2.y - mob1.y;
-					let distance = Math.sqrt(dx * dx + dy * dy);
-					let radii = mob1.radius + mob2.radius;
+        function crashWith(mob1Array, mob2Array) {
+            mob1Array.forEach(mob1 => {
+                mob2Array.forEach(mob2 => {
+                    let dx = mob2.x - mob1.x;
+                    let dy = mob2.y - mob1.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    const radii = mob1.radius + mob2.radius;
 
 					if (distance < radii) {
-
-						// Apply knockback
-						const angle = Math.atan2(dy, dx);
-						const knockbackDistance = (radii - distance) / 2; // Prevent overlap
-						if (!mob1.ignoreMobCollision) {
-							mob1.x -= Math.cos(angle) * knockbackDistance;
-							mob1.y -= Math.sin(angle) * knockbackDistance;
-							if (mob1.x < mob1.radius) mob1.x = mob1.radius;
-							if (mob1.x > biome1.width - mob1.radius) mob1.x = biome1.width - mob1.radius;
-							if (mob1.y < mob1.radius) mob1.y = mob1.radius;
-							if (mob1.y > biome1.height - mob1.radius) mob1.y = biome1.height - mob1.radius;
+						// Handle zero-distance (stacked mobs)
+						if (distance === 0) {
+							const angle = Math.random() * 2 * Math.PI;
+							dx = Math.cos(angle);
+							dy = Math.sin(angle);
+							distance = 1; // prevent division by zero
 						}
+
+						const overlap = radii - distance;
+
+						// Weight-based knockback (larger mob moves less)
+						const totalRadius = mob1.radius + mob2.radius;
+						const weight1 = mob2.radius / totalRadius; // how much mob1 moves
+						const weight2 = mob1.radius / totalRadius; // how much mob2 moves
+
+						if (!mob1.ignoreMobCollision) {
+							mob1.x -= (dx / distance) * overlap * weight1;
+							mob1.y -= (dy / distance) * overlap * weight1;
+						}
+
 						if (!mob2.ignoreMobCollision) {
-							mob2.x += Math.cos(angle) * knockbackDistance;
-							mob2.y += Math.sin(angle) * knockbackDistance;
-							if (mob2.x < mob2.radius) mob2.x = mob2.radius;
-							if (mob2.x > biome1.width - mob2.radius) mob2.x = biome1.width - mob2.radius;
-							if (mob2.y < mob2.radius) mob2.y = mob2.radius;
-							if (mob2.y > biome1.height - mob2.radius) mob2.y = biome1.height - mob2.radius;
+							mob2.x += (dx / distance) * overlap * weight2;
+							mob2.y += (dy / distance) * overlap * weight2;
 						}
 					}
-				});
-			});
-		}
+					//stayWithinMap(mob1, biome1);
+                    //stayWithinMap(mob2, biome1);
+                });
+            });
+        }
 		function playerCollideWithLoot(mob, lootsArray) {
 			lootsArray.forEach((loot, index) => {
 				let dx = loot.x - mob.x;
@@ -954,18 +955,14 @@
 					if (!player.ignoreMobCollision) {
 						player.x -= Math.cos(angle) * knockbackDistance;
 						player.y -= Math.sin(angle) * knockbackDistance;
-						if (player.x < player.radius) player.x = player.radius;
-						if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
-						if (player.y < player.radius) player.y = player.radius;
-						if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
+						
+                        //stayWithinMap(player, biome1);
 					}
 					if (!mob.ignoreMobCollision) {
 						mob.x += Math.cos(angle) * knockbackDistance;
 						mob.y += Math.sin(angle) * knockbackDistance;
-						if (mob.x < mob.radius) mob.x = mob.radius;
-						if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
-						if (mob.y < mob.radius) mob.y = mob.radius;
-						if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
+
+                        //stayWithinMap(mob, biome1);
 					}
 					evaluatePlayerDamage(player, mob);
 				}
@@ -1038,10 +1035,8 @@
 							if (!player.ignoreSpellCollision) {
 								player.x += Math.cos(angle) * spellKnockbackDistance;
 								player.y += Math.sin(angle) * spellKnockbackDistance;
-								if (player.x < player.radius) player.x = player.radius;
-								if (player.x > biome1.width - player.radius) player.x = biome1.width - player.radius;
-								if (player.y < player.radius) player.y = player.radius;
-								if (player.y > biome1.height - player.radius) player.y = biome1.height - player.radius;
+
+                                //stayWithinMap(player, biome1);
 							}
 							evaluatePlayerDamage(player, spell);
 						}
@@ -1145,13 +1140,9 @@
 										spell.y -= Math.sin(angle) * spellKnockbackDistance;
 									}
 									if (!mob.ignoreSpellCollision) {
-                                        console.log("what??");
 										mob.x += Math.cos(angle) * spellKnockbackDistance;
 										mob.y += Math.sin(angle) * spellKnockbackDistance;
-										if (mob.x < mob.radius) mob.x = mob.radius;
-										if (mob.x > biome1.width - mob.radius) mob.x = biome1.width - mob.radius;
-										if (mob.y < mob.radius) mob.y = mob.radius;
-										if (mob.y > biome1.height - mob.radius) mob.y = biome1.height - mob.radius;
+                                        //stayWithinMap(mob, biome1);
 									}
 								}
 							}

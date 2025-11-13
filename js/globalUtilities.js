@@ -20,6 +20,8 @@ savedData.inventoryArray ??= [];
 
 localStorage.setItem("savedPlayerData", JSON.stringify(savedData));
 
+const mobDensity = 3;
+
 const constantPlayerSpeed = 7.5; //5
 let keyMovement = true;
 let mouseMovement = false;

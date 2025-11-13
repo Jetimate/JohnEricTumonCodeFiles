@@ -77,6 +77,7 @@
 		this.side = side;
 		this.codeClass = "mob";
 		this.lastDamageTime = 0;
+		this.debugMob = false;
 	}		
 	draw(ctx) {
 		if (this.isDead) {
@@ -228,6 +229,7 @@
 		this.angle += this.moveAngle * Math.PI / 180;
 		this.x += this.speed * Math.sin(this.angle);
 		this.y -= this.speed * Math.cos(this.angle);
+		stayWithinMap(this, biome1);
 	}
 	setTarget(x, y) {
 		this.targetX = x;
@@ -303,11 +305,10 @@
 				case 1:
 					if (this.frames < 120) {
 						this.speed = this.movementSpeed;
+
 						// Ensure the entity stays within the canvas boundaries
-						//if (this.x < this.radius) this.x = this.radius;
-						//if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-						//if (this.y < this.radius) this.y = this.radius;
-						//if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+						//stayWithinMap(this, biome1);
+
 						this.frames++;
 					} else {
 						this.speed = 0;
@@ -335,12 +336,9 @@
 				let dx = myGameCharacter.x - this.x;
 				let dy = myGameCharacter.y - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
-				// Ensure the entity stays within the canvas boundaries
 
-				//if (this.x < 0) this.x = this.radius;
-				//if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-				//if (this.y < 0) this.y = this.radius;
-				//if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+				// Ensure the entity stays within the canvas boundaries
+				//stayWithinMap(this, biome1);
 			}
 		}
 		if (this.ability == "aimedCasting") {

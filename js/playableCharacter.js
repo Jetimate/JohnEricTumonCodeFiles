@@ -39,7 +39,7 @@ class PlayableCharacter extends Mob {
 			myGameCharacter.y += myGameCharacter.movementY;
 
 			// Ensure the entity stays within the canvas boundaries
-			//stayWithinMap(this, biome1);
+			stayWithinMap(this, biome1);
 		}
 	}
 	regenerateHealth() {
