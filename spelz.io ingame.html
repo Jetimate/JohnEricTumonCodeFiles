@@ -89,7 +89,7 @@
             }
 
             // Create background
-            biome1 = new Background(10, 10, 10000, 10000, "grayBG.png");
+            biome1 = new Background(0, 0, 10000, 10000, "grayBG.png");
 
             // Initialize player with saved data (cleaner and direct)
             myGameCharacter = new PlayableCharacter(
@@ -184,8 +184,8 @@
 		function spellBooksKeeper() {
 			//below this comment is the primary spell
 			addSpellBook(spellBookLibrary.spikeBook, 1);
-            addSpellBook(spellBookLibrary.beamBook, 2);
-			console.log("I was called");
+            //addSpellBook(spellBookLibrary.beamBook, 2);
+			
 			/*
 			addSpellBook(spellBookLibrary.lightningBoltBook, 1);
 			addSpellBook(spellBookLibrary.smashBook, 2);
@@ -300,6 +300,10 @@
 				button.draw(ctx);
 			}
 
+            spellBooksArray.forEach(spellBook => {
+                spellBook.update();
+			});
+
 			// texts
 			const textsArray = Array.from(textsMap.values());
 
@@ -350,7 +354,7 @@
             //console.log(savedData.spellBooksArray, spellBooksArray);
 			//console.log(mouseHeldItem[0]);
 			//console.log(spellBooksArray);
-			console.log(inventoryArray);
+			//console.log(spellBooksArray);
 
 			// Calculate world coordinates
 			mouseWorldX = (mouseMoveX / camera.zoom) + camera.x;
@@ -385,10 +389,6 @@
 			camera.resetTransform(ctx);
 			shake.reset(ctx);     // Reset any screen shake transforms
 			ctx.restore();        // Restore context state
-
-			spellBooksArray.forEach(spellBook => {
-				spellBook.update();
-			});
 
 			// logic part
 			// --- Logic only every 50ms (20fps) ---
@@ -1145,6 +1145,7 @@
 										spell.y -= Math.sin(angle) * spellKnockbackDistance;
 									}
 									if (!mob.ignoreSpellCollision) {
+                                        console.log("what??");
 										mob.x += Math.cos(angle) * spellKnockbackDistance;
 										mob.y += Math.sin(angle) * spellKnockbackDistance;
 										if (mob.x < mob.radius) mob.x = mob.radius;

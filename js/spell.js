@@ -419,9 +419,9 @@ class Spell {
 				let targetY = myGameCharacter.y + Math.sin(this.positionIndex * (Math.PI * 2 / this.maxQuantity)) * (myGameCharacter.radius * this.orbitRadius);
 
 				if (!this.isCasted) {
-					this.radiusIncrease = this.radius / 50; //0.1
-					this.orbitRadiusIncrease = this.orbitRadius / 500; //0.01
-					this.damageIncrease = this.damage / 30; //0.03
+					this.radiusIncrease = this.radius / 25;
+					this.orbitRadiusIncrease = this.orbitRadius / 500;
+					this.damageIncrease = this.damage / 15;
 					this.isCasted = true;
 				}
 

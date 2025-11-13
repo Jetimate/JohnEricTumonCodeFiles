@@ -52,14 +52,14 @@ const spellBookLibrary = {
 			spell: castSpike,
 			spellCore: spikeCore,
 			levelStats: {
-				2: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } }, // remove castQuantity. it is temporary for debugging
-				3: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } }, // remove castQuantity. it is temporary for debugging
-				4: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				2: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
+				3: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
+				4: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
 				5: { spell: { castQuantity: 1, speed: 2 } },
-				6: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				7: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				8: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				9: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				6: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
+				7: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
+				8: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
+				9: { spell: { health: 1.5, damage: 1.5, manaCost: 1.75 } },
 				10: { spell: { castQuantity: 3, speed: 2, damage: 2 } }
 			}
 		};
@@ -119,15 +119,15 @@ const spellBookLibrary = {
 			spell: castLuminousEnergy,
 			spellCore: luminousEnergyCore,
 			levelStats: {
-				2: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				3: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				4: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				5: { spell: { castQuantity: 1, speed: 2 } },
-				6: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				7: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				8: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				9: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				10: { spell: { castQuantity: 3, speed: 2, damage: 2 } }
+				2: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				3: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				4: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				5: { spell: { castQuantity: 5, speed: 1.2} },
+				6: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				7: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				8: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				9: { spell: { castQuantity: 2, speed: 1.2, health: 1.2, damage: 1.2, manaCost: 1.25 } },
+				10: { spell: { castQuantity: 5, speed: 1.2, damage: 2 } }
 			}
 		};
 
@@ -320,15 +320,15 @@ const spellBookLibrary = {
 			spell: summonSpirit,
 			spellCore: luminousSpiritCore,
 			levelStats: {
-				2: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				3: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				4: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				5: { spell: { castQuantity: 1, speed: 2 } },
-				6: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				7: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				8: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				9: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				10: { spell: { castQuantity: 3, speed: 2, damage: 2 } }
+				2: { spell: { health: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				3: { spell: { health: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				4: { spell: { health: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				5: { spell: { castQuantity: 3, speed: 1.5, damage: 1.25, radius: 2} },
+				6: { spell: { health: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				7: { spell: { health: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				8: { spell: { health: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				9: { spell: { hhealth: 1.25, damage: 1.25, manaCost: 1.5, speed: 1.2 } },
+				10: { spell: { castQuantity: 3, speed: 1.5, damage: 2 } }
 			}
 		};
 
@@ -454,14 +454,14 @@ const spellBookLibrary = {
 			spell: castSpecterHand,
 			spellCore: specterHandCore,
 			levelStats: {
-				2: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				3: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				4: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				2: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
+				3: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
+				4: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
 				5: { spell: { castQuantity: 1, speed: 2 } },
-				6: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				7: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				8: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				9: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
+				6: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
+				7: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
+				8: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
+				9: { spell: { health: 1.5, damage: 1.25, manaCost: 1.5 } },
 				10: { spell: { castQuantity: 3, speed: 2, damage: 2 } }
 			}
 		};
@@ -677,7 +677,7 @@ const spellBookLibrary = {
 			art: "beams",
 			shape: "line",
 			appearance: "spell/lightningBolt.png",
-			castQuantity: 5,
+			castQuantity: 3,
 			maxQuantity: 0,
 			ignoreSpellCollision: true,
 			ignoreMobCollision: true,
@@ -722,15 +722,15 @@ const spellBookLibrary = {
 			spell: castLightningBolt,
 			spellCore: lightningBoltCore,
 			levelStats: {
-				2: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				3: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				4: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				5: { spell: { castQuantity: 1, speed: 2 } },
-				6: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				7: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				8: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				9: { spell: { health: 1.5, damage: 1.5, manaCost: 2 } },
-				10: { spell: { castQuantity: 3, speed: 2, damage: 2 } }
+				2: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				3: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				4: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				5: { spell: { castQuantity: 1, damage: 2} },
+				6: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				7: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				8: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				9: { spell: { health: 1.25, damage: 2, manaCost: 1.25 } },
+				10: { spell: { castQuantity: 3, damage: 1.25 } }
 			}
 		};
 

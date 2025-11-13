@@ -49,6 +49,7 @@
 		this.setMinHealth = setMinHealth;
 		this.setMaxHealth = setMaxHealth;
 		this.health = health;
+		this.maxHealth = health
 		this.defense = defense;
 		this.damage = damage;
 		this.name = name;
@@ -81,12 +82,23 @@
 		if (this.isDead) {
 			return;
 		}
+		let barWidth = (this.health / this.maxHealth) * (this.radius * 2);
+		let barX = this.x - this.radius;
+		let barY = this.y - (this.radius + this.radiusAdjust + 15);
+
+		// Draw health bar background (optional)
+		//ctx.fillStyle = "red";
+		//ctx.fillRect(barX, barY, this.radius * 2, 10);
+
+		// Draw current health
 		ctx.fillStyle = "green";
-		ctx.fillRect(this.x - this.health, this.y - (this.radius + this.radiusAdjust + 15), this.health * 2, 10);
+		ctx.fillRect(barX, barY, barWidth, 10);
+
+		// Draw border
 		ctx.beginPath();
-		ctx.lineWidth = "1";
+		ctx.lineWidth = 1;
 		ctx.strokeStyle = "black";
-		ctx.rect(this.x - this.health, this.y - (this.radius + this.radiusAdjust + 15), this.health * 2, 10);
+		ctx.rect(barX, barY, this.radius * 2, 10);
 		ctx.stroke();
 
 		if (this.name) {
@@ -104,6 +116,7 @@
 		ctx.translate(this.x, this.y);
 		ctx.rotate(this.angle);	
 		ctx.drawImage(this.image, -this.radius - this.radiusAdjust, -this.radius - this.radiusAdjust, (this.radius + this.radiusAdjust) * 2, (this.radius + this.radiusAdjust) * 2);
+
 		// health bar
 		//ctx.rect(0, 0 - (this.radius / 4), this.health, this.radius / 8);
 
@@ -291,10 +304,10 @@
 					if (this.frames < 120) {
 						this.speed = this.movementSpeed;
 						// Ensure the entity stays within the canvas boundaries
-						if (this.x < this.radius) this.x = this.radius;
-						if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-						if (this.y < this.radius) this.y = this.radius;
-						if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+						//if (this.x < this.radius) this.x = this.radius;
+						//if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
+						//if (this.y < this.radius) this.y = this.radius;
+						//if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 						this.frames++;
 					} else {
 						this.speed = 0;
@@ -323,10 +336,11 @@
 				let dy = myGameCharacter.y - this.y;
 				this.angle = Math.atan2(dy, dx) - (1.5 * Math.PI);
 				// Ensure the entity stays within the canvas boundaries
-				if (this.x < this.radius) this.x = this.radius;
-				if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
-				if (this.y < this.radius) this.y = this.radius;
-				if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
+
+				//if (this.x < 0) this.x = this.radius;
+				//if (this.x > biome1.width - this.radius) this.x = biome1.width - this.radius;
+				//if (this.y < 0) this.y = this.radius;
+				//if (this.y > biome1.height - this.radius) this.y = biome1.height - this.radius;
 			}
 		}
 		if (this.ability == "aimedCasting") {
@@ -402,7 +416,7 @@
 							// Stop the interval once the desired quantity of spells is cast
 							clearInterval(interval);
 						}
-					}, 75 * this.castQuantity);
+					}, 50 * this.castQuantity);
 					this.attackTimer = 0;
 					this.secondsTracker++;
 				}

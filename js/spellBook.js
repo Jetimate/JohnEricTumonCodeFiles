@@ -450,7 +450,7 @@ class SpellBook {
 					// Stop the interval once the desired quantity of spells is cast
 					clearInterval(interval);
 				}
-			}, 300);
+			}, 120);
 		}
 	}
 

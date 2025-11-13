@@ -391,3 +391,11 @@ function properlyRemoveCraftSlots() {
 		StorageManager.save("savedPlayerData", savedData);
 	}
 }
+
+function stayWithinMap(entity, map) {
+	// Ensure the entity stays within the canvas boundaries
+	if (entity.x < entity.radius) entity.x = entity.radius;
+	if (entity.x > map.width - entity.radius) entity.x = map.width - entity.radius;
+	if (entity.y < entity.radius) entity.y = entity.radius;
+	if (entity.y > map.height - entity.radius) entity.y = map.height - entity.radius;
+}
